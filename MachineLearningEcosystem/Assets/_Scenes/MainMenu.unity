@@ -864,7 +864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea8b053c7199234591213015e8bb769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  nextScene: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
+  nextScene: {fileID: 102900000, guid: 056bd76e80d17874ca2b175555a74d49, type: 3}
   menuScene: {fileID: 102900000, guid: b337f9a4de4b12e419967d4329257486, type: 3}
 --- !u!1 &1521529811 stripped
 GameObject:
