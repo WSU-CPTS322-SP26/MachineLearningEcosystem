@@ -11,7 +11,7 @@ public class ProceduralGeneration : MonoBehaviour
     // constraints for terrain placement
     private static int iter = 0;
     private static int maxIter;
-    public static void CollapseWaveFunction(Terrain[,] map, Terrain[] options)
+    public static void CollapseWaveFunction(WFCCell[,] map, List<Terrain> options)
     {
         int rows = map.GetLength(0);
         int columns = map.GetLength(1);
@@ -32,17 +32,6 @@ public class ProceduralGeneration : MonoBehaviour
             else
             {
                 // Actual collapse algorithim
-            }
-        }
-    }
-    public static void RandomizeTiles(Terrain[,] map, Terrain[] options)
-    {
-        Debug.Log("Called");
-        for (int i = 0; i < map.GetLength(0); i++) {
-            for (int j = 0; j < map.GetLength(1); j++)
-            {
-                map[i,j] = Instantiate(options[UnityEngine.Random.Range(0, options.Length)], Vector3.zero, Quaternion.identity);
-                Debug.Log("Placing");
             }
         }
     }
