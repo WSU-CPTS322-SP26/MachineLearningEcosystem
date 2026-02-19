@@ -223,6 +223,59 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &508927687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 508927689}
+  - component: {fileID: 508927688}
+  m_Layer: 0
+  m_Name: MapManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &508927688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508927687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 894272e260b23394db763967a70d30e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapManager
+  xDim: 10
+  yDim: 8
+  terrainSize: 64
+  terrainOptions:
+  - {fileID: 8046373186742994004, guid: 5d401cfb626bbc341b735ea754eabce6, type: 3}
+  - {fileID: 520535393458267404, guid: 11edef3cdf47c3c4e837150984ca3940, type: 3}
+  - {fileID: 8966090627038672182, guid: 01b057b41d3ca314ab3b54dc7aa2ec1b, type: 3}
+  - {fileID: 2363484301563307604, guid: 64478deae80f2a04eb71428ee3cf9984, type: 3}
+  - {fileID: 1826887689997219161, guid: 3486018c32564e24ebdc47b38dfb3aea, type: 3}
+--- !u!4 &508927689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508927687}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.57146, y: 1.25516, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &628673358
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,7 +871,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 400
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1280,3 +1333,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1385720551}
   - {fileID: 1605920131}
+  - {fileID: 508927689}

@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class ProceduralGeneration : MonoBehaviour
@@ -6,19 +9,20 @@ public class ProceduralGeneration : MonoBehaviour
     // Using the procedural generation model of wave function collapse, this program is
     // designed to generate an x by y sized tilemap of different terrains based on
     // constraints for terrain placement
-    [SerializeField] private int xDimension = 5;
-    [SerializeField] private int yDimension = 5;
-    private int iter = 0;
-    private int maxIter;
-
-    void Start()
+    private static int iter = 0;
+    private static int maxIter;
+    public static void CollapseWaveFunction(Terrain[,] map, Terrain[] options)
     {
-        maxIter = xDimension * yDimension;
-    }
-
-    void CollapseWaveFunction()
-    {
+        int rows = map.GetLength(0);
+        int columns = map.GetLength(1);
+        maxIter = rows * columns;
         bool fullyCollapsed = false;
+
+        // the stack of unaddressed tiles
+        Stack<Vector2Int> fringe = new Stack<Vector2Int>();
+        // A set of the tiles already addressed to account for duplicates
+        HashSet<Vector2Int> duplicateTiles = new HashSet<Vector2Int>();
+
         while (!fullyCollapsed)
         {
             if (iter >= maxIter)
@@ -30,6 +34,16 @@ public class ProceduralGeneration : MonoBehaviour
                 // Actual collapse algorithim
             }
         }
-
+    }
+    public static void RandomizeTiles(Terrain[,] map, Terrain[] options)
+    {
+        Debug.Log("Called");
+        for (int i = 0; i < map.GetLength(0); i++) {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                map[i,j] = Instantiate(options[UnityEngine.Random.Range(0, options.Length)], Vector3.zero, Quaternion.identity);
+                Debug.Log("Placing");
+            }
+        }
     }
 }
