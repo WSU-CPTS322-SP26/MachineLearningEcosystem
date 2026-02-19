@@ -9,8 +9,16 @@ public class CreatureMovement : MonoBehaviour
 
 
     [SerializeField] private GameObject creature;
+    [SerializeField] private int width;
+    [SerializeField] private int height;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+
+    //need to add boundries mayvbe as a serialized game object then look at that objects boundries or smth 
+    //also need to 
+
+
+
     void Start()
     {
         
@@ -20,7 +28,6 @@ public class CreatureMovement : MonoBehaviour
     void Update()
     {
         Move();
-        new WaitForSeconds(1f);
     }
 
 
@@ -29,7 +36,14 @@ public class CreatureMovement : MonoBehaviour
         if (timer >= moveTime)
         {
             Vector2 direction = Random.insideUnitCircle.normalized;
-            creature.transform.Translate(direction * 1);
+            Vector2 moveAttempt = direction * 2;
+
+            while (!CheckBoundries(moveAttempt))
+            {
+                direction = Random.insideUnitCircle.normalized;
+                moveAttempt = direction * 2;
+            }
+            creature.transform.Translate(moveAttempt);
             timer = 0;
         }
         else
@@ -46,4 +60,14 @@ public class CreatureMovement : MonoBehaviour
     {
 
     }
+
+    private bool CheckBoundries(Vector2 moveAttempt)
+    {
+        if (moveAttempt.x + creature.transform.position.x < 0 || moveAttempt.x + creature.transform.position.x > width || moveAttempt.y + creature.transform.position.y  < 0 || moveAttempt.y + creature.transform.position.y > height)
+        {
+            return false;
+        }
+        return true;
+    }
+
 }
