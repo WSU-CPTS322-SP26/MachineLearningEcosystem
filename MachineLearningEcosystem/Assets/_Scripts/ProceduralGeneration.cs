@@ -11,22 +11,12 @@ using Random = UnityEngine.Random;
 
 public class ProceduralGeneration : MonoBehaviour
 {
-    private struct Snapshot
-    {
-        public WFCCell decision;
-        public string decidedTile;
-        public WFCCell[,] cells;
-    }
-
     // Using the procedural generation model of wave function collapse, this program is
     // designed to generate an x by y sized tilemap of different terrains based on
     // constraints for terrain placement
     private static int iter = 0;
     private static int maxIter;
     private static WFCCell[,] cells;
-    // Stack is snapshots
-    private static Stack<Snapshot> history = new();
-
     public static void CollapseWaveFunction(WFCCell[,] cs)
     {
         cells = cs;
@@ -40,8 +30,8 @@ public class ProceduralGeneration : MonoBehaviour
         {
             if (iter >= maxIter)
             {
-                fullyCollapsed = true;
                 Debug.Log("Did not properly collapse!");
+                break;
             }
             
             WFCCell cell = GetLowestEntropy();
@@ -49,7 +39,6 @@ public class ProceduralGeneration : MonoBehaviour
             {
                 fullyCollapsed = true;
                 Debug.Log("Finished collapsing");
-                history.Clear();
             }
             else
             {
@@ -103,10 +92,7 @@ public class ProceduralGeneration : MonoBehaviour
             duplicateTiles.Remove(index);
             if (cell.possibleTiles.Count == 1 && !cell.collapsed)
             {
-                //var s = new Snapshot { decision = cell, decidedTile = cell.possibleTiles[0].GetTerrainType(), cells = WFCCell.DeepCopyCells(cells) };
                 cell.Collapse();
-                //s.decidedTile = cell.GetTerrain().GetTerrainType();
-                //history.Push(s);
             }
 
             if (changed)
@@ -152,16 +138,6 @@ public class ProceduralGeneration : MonoBehaviour
         foreach (WFCCell c in cells)
         {
             Debug.Log(c.placement + ", " + c.GetTerrain());
-        }
-    }
-    public static void UndoCollapse()
-    {
-        if (history.Count > 0)
-        {
-            Snapshot historySnapshot = history.Pop();
-            cells = historySnapshot.cells;
-            Vector2Int placement = historySnapshot.decision.placement;
-            cells[placement.x, placement.y].removePossibleTile(historySnapshot.decidedTile);
         }
     }
 }

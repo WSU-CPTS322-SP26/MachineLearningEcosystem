@@ -16,4 +16,6 @@ MonoBehaviour:
   possibleNs:
   - rocks
   - forest
-  possibleNsWeights: 0100000001000000
+  possibleNsWeights:
+  - 0
+  - 1

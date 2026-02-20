@@ -17,4 +17,7 @@ MonoBehaviour:
   - forest
   - grass
   - rocks
-  possibleNsWeights: 030000000100000000000000
+  possibleNsWeights:
+  - 3
+  - 2
+  - 1

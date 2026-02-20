@@ -81,28 +81,41 @@ public class WFCCell
         collapsed = true;
         possibleTiles.Clear();
     }
-    public bool ValidatePossibilitySpace(List<WFCCell> neighborType)
+    public bool ValidatePossibilitySpace(List<WFCCell> neighborCell)
     {
         bool changed = false;
         for (int i = 0; i < possibleTiles.Count; i++)
         {
-            MapTerrain t = possibleTiles[i];
+            MapTerrain possibleTile = possibleTiles[i];
             bool valid = true;
-            foreach (WFCCell n in neighborType)
+            foreach (WFCCell nc in neighborCell)
             {
-                if (n.GetTerrain() != null && n.collapsed && !t.GetPossibleNS().Contains(n.GetTerrain().GetTerrainType()))
+                MapTerrain neighboringTerrain = nc.GetTerrain();
+                if (neighboringTerrain != null && nc.collapsed && possibleTile.GetPossibleNS() != null)
                 {
-                    valid = false;
-                    break;
+                    if (!possibleTile.GetPossibleNS().ContainsKey(neighboringTerrain.GetTerrainType()))
+                    {
+                        // selected possibleTile in array does not contain the neighber, so it is not an option to place there
+                        valid = false;
+                        break;
+                    }
+                    else
+                    {
+                        // selected possibleTile in array does contain the neighbor, update weights based on neighboringTerrain's dictionary
+                        neighboringTerrain.GetPossibleNS().TryGetValue(possibleTile.GetTerrainType(), out float weightAddition);
+                        possibleTile.SetWeight(possibleTile.GetWeight() + weightAddition);
+                        Debug.Log("Adding weight of " + weightAddition + " to " + possibleTile.GetTerrainType() + " at " + placement + " based on neighbor " + neighboringTerrain.GetTerrainType());
+                    }
                 }
             }
             if (!valid)
             {
-                possibleTiles.Remove(t);
+                possibleTiles.Remove(possibleTile);
                 //Debug.Log("Removing " + t.GetTerrainType() + " from possible tiles at " + placement + " tiles remaining: " + possibleTiles.Count);
                 i--;
                 changed = true;
             }
+
         }
         return changed;
     }

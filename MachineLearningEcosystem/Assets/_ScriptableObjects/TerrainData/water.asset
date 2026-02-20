@@ -16,4 +16,6 @@ MonoBehaviour:
   possibleNs:
   - water
   - sand
-  possibleNsWeights: 0300000001000000
+  possibleNsWeights:
+  - 2
+  - 1

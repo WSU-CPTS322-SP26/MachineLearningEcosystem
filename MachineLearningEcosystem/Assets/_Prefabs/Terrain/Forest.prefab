@@ -104,10 +104,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4b0e4fbedec0164b964d57b594b79bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Terrain
-  terrainType: forest
-  possibleNs:
-  - rocks
-  - grass
-  - forest
-  weight: 1
-  sprite: {fileID: 7530326290859987472}
+  terrainData: {fileID: 11400000, guid: fdc7bc1436cced240aea1391c3e8dc12, type: 2}

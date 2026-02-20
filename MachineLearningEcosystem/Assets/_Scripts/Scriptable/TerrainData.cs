@@ -7,19 +7,21 @@ public class TerrainData : ScriptableObject
 {
     [SerializeField] private string terrainType;
     [SerializeField] private List<string> possibleNs; // possible neighbors
-    [SerializeField] private List<int> possibleNsWeights; // possible neighbors weights
+    [SerializeField] private List<float> possibleNsWeights; // possible neighbors weights
 
     public string GetTerrainType()
     {
         return terrainType;
     }
-    public List<Tuple<string, int>> GetPossibleNS()
+    public void GetPossibleNS(Dictionary<string, float> dict)
     {
-        List<Tuple<string, int>> options = new();
+        if (dict == null)
+        {
+            dict = new Dictionary<string, float>();
+        }
         for (int i = 0; i < possibleNs.Count; i++)
         {
-            options.Add(new Tuple<string, int>(possibleNs[i], possibleNsWeights[i]));
+            dict.Add(possibleNs[i], possibleNsWeights[i]);
         }
-        return options;
     }
 }
