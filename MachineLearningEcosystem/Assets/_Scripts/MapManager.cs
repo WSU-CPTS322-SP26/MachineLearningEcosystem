@@ -7,7 +7,6 @@ using UnityEngine.Rendering.VirtualTexturing;
 
 public class MapManager : MonoBehaviour
 {
-    public static MapManager instance;
     [SerializeField] private int xDim = 5;
     [SerializeField] private int yDim = 5;
     [SerializeField] private int terrainSize = 64;
@@ -17,14 +16,6 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
         cells = new WFCCell[xDim,yDim];
         map = new MapTerrain[xDim,yDim];
         InitializeCells();
@@ -60,9 +51,5 @@ public class MapManager : MonoBehaviour
                 cells[i,j].possibleTiles = new List<MapTerrain>(terrainOptions);
             }
         }
-    }
-    public WFCCell[,] GetCells()
-    {
-        return cells;
     }
 }

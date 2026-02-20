@@ -11,15 +11,25 @@ using Random = UnityEngine.Random;
 
 public class ProceduralGeneration : MonoBehaviour
 {
+    private struct Snapshot
+    {
+        public WFCCell decision;
+        public string decidedTile;
+        public WFCCell[,] cells;
+    }
+
     // Using the procedural generation model of wave function collapse, this program is
     // designed to generate an x by y sized tilemap of different terrains based on
     // constraints for terrain placement
     private static int iter = 0;
     private static int maxIter;
-    // Stack is: Old state copy, chosen terrain, cell reference
-    private static Stack<Tuple<WFCCell, string, WFCCell>> history = new(); // history of collapsed cells for dealing with contradictions
-    public static void CollapseWaveFunction(WFCCell[,] cells)
+    private static WFCCell[,] cells;
+    // Stack is snapshots
+    private static Stack<Snapshot> history = new();
+
+    public static void CollapseWaveFunction(WFCCell[,] cs)
     {
+        cells = cs;
         int rows = cells.GetLength(0);
         int columns = cells.GetLength(1);
         iter = 0;
@@ -34,7 +44,7 @@ public class ProceduralGeneration : MonoBehaviour
                 Debug.Log("Did not properly collapse!");
             }
             
-            WFCCell cell = GetLowestEntropy(cells);
+            WFCCell cell = GetLowestEntropy();
             if (cell.placement == new Vector2Int(-1, -1))
             {
                 fullyCollapsed = true;
@@ -43,17 +53,17 @@ public class ProceduralGeneration : MonoBehaviour
             }
             else
             {
-                WFCCell cellCopy = new(cell);
+                var s = new Snapshot { decision = cell, decidedTile = cell.possibleTiles[0].GetTerrainType(), cells = WFCCell.DeepCopyCells(cells) };
                 cell.Collapse();
-                Tuple<WFCCell, string, WFCCell> cellState = new(cellCopy, cell.GetTerrain().GetTerrainType(), cell);
-                history.Push(cellState);
-                PropagateChanges(cell, cells);
+                s.decidedTile = cell.GetTerrain().GetTerrainType();
+                history.Push(s);
+                PropagateChanges(cell);
                 iter++;
             }
         }
     }
 
-    private static WFCCell GetLowestEntropy(WFCCell[,] cells)
+    private static WFCCell GetLowestEntropy()
     {
         float lowestEntropy = float.MaxValue;
         WFCCell targetCell = new WFCCell(-1, -1);
@@ -70,14 +80,14 @@ public class ProceduralGeneration : MonoBehaviour
         return targetCell;
     }
 
-    private static void PropagateChanges(WFCCell cell, WFCCell[,] cells)
+    private static void PropagateChanges(WFCCell cell)
     {
         // the stack of unaddressed tiles
         Queue<Vector2Int> fringe = new Queue<Vector2Int>();
         // A set of the tiles already addressed to account for duplicates
         HashSet<Vector2Int> duplicateTiles = new HashSet<Vector2Int>();
         // add neighbors of the collapsed cell to the fringe
-        List<WFCCell> neighbors = GetNeighbors(cell, cells);
+        List<WFCCell> neighbors = GetNeighbors(cell);
         foreach (WFCCell c in neighbors)
         {
             fringe.Enqueue(c.placement);
@@ -88,20 +98,20 @@ public class ProceduralGeneration : MonoBehaviour
             index = fringe.Dequeue();
             cell = cells[index.x, index.y];
 
-            bool changed = cell.ValidatePossibilitySpace(GetNeighbors(cell, cells)); // determine if tiles can be removed from the possible tiles
+            bool changed = cell.ValidatePossibilitySpace(GetNeighbors(cell)); // determine if tiles can be removed from the possible tiles
 
             duplicateTiles.Remove(index);
             if (cell.possibleTiles.Count == 1 && !cell.collapsed)
             {
-                WFCCell cellCopy = new(cell);
+                var s = new Snapshot { decision = cell, decidedTile = cell.possibleTiles[0].GetTerrainType(), cells = WFCCell.DeepCopyCells(cells) };
                 cell.Collapse();
-                Tuple<WFCCell, string, WFCCell> cellState = new(cellCopy, cell.GetTerrain().GetTerrainType(), cell);
-                history.Push(cellState);
+                s.decidedTile = cell.GetTerrain().GetTerrainType();
+                history.Push(s);
             }
 
             if (changed)
             {
-                neighbors = GetNeighbors(cell, cells);
+                neighbors = GetNeighbors(cell);
                 for (int i = 0; i < neighbors.Count; i++)
                 {
                     Vector2Int neighborPlacement = neighbors[i].placement;
@@ -115,7 +125,7 @@ public class ProceduralGeneration : MonoBehaviour
         }
     }
 
-    private static List<WFCCell> GetNeighbors(WFCCell cell, WFCCell[,] cells)
+    private static List<WFCCell> GetNeighbors(WFCCell cell)
     {
         Vector2Int pos = cell.placement;
         List<WFCCell> neighbors = new();
@@ -148,22 +158,10 @@ public class ProceduralGeneration : MonoBehaviour
     {
         if (history.Count > 0)
         {
-            Tuple<WFCCell, string, WFCCell> lastCell = history.Pop();
-            WFCCell oldCell = lastCell.Item1;
-            string terrainType = lastCell.Item2;
-            WFCCell cellRef = lastCell.Item3;
-            cellRef.possibleTiles = new List<MapTerrain>(oldCell.possibleTiles);
-            cellRef.removePossibleTile(terrainType);
-            cellRef.collapsed = false;
-            cellRef.SetTerrain(null);
-
-            Debug.Log("Redoing collapse at " + cellRef.placement + " of terrain type " + terrainType);
-            WFCCell cellCopy = new(cellRef);
-            cellRef.Collapse();
-            Tuple<WFCCell, string, WFCCell> cellState = new(cellCopy, cellRef.GetTerrain().GetTerrainType(), cellRef);
-            history.Push(cellState);
-            Debug.Log("Redo complete at " + cellRef.placement + " of terrain type " + terrainType);
-            PropagateChanges(cellRef, MapManager.instance.GetCells());
+            Snapshot historySnapshot = history.Pop();
+            cells = historySnapshot.cells;
+            Vector2Int placement = historySnapshot.decision.placement;
+            cells[placement.x, placement.y].removePossibleTile(historySnapshot.decidedTile);
         }
     }
 }

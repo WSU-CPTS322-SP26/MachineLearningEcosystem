@@ -44,6 +44,7 @@ public class WFCCell
         {
             Debug.Log("No possible tiles at " + placement);
             ProceduralGeneration.UndoCollapse();
+            return;
         }
         if (possibleTiles.Count == 1)
         {
@@ -77,7 +78,7 @@ public class WFCCell
             }
             if (!valid)
             {
-                Debug.Log("Removing " + t.GetTerrainType() + " from possible tiles at " + placement);
+                // Debug.Log("Removing " + t.GetTerrainType() + " from possible tiles at " + placement);
                 possibleTiles.Remove(t);
                 i--;
                 changed = true;
@@ -94,5 +95,16 @@ public class WFCCell
     public void removePossibleTile(string t)
     {
         possibleTiles.Remove(possibleTiles.Find(tile => tile.GetTerrainType() == t));
+    }
+    public static WFCCell[,] DeepCopyCells(WFCCell[,] cells)
+    {
+        WFCCell[,] copy = new WFCCell[cells.GetLength(0), cells.GetLength(1)];
+        for (int i = 0; i < cells.GetLength(0); i++) {
+            for (int j = 0; j < cells.GetLength(1); j++)
+            {
+                copy[i,j] = new WFCCell(cells[i,j]);
+            }
+        }
+        return copy;
     }
 }
