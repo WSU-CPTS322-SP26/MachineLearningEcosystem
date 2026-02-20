@@ -53,10 +53,10 @@ public class ProceduralGeneration : MonoBehaviour
             }
             else
             {
-                var s = new Snapshot { decision = cell, decidedTile = cell.possibleTiles[0].GetTerrainType(), cells = WFCCell.DeepCopyCells(cells) };
+                //var s = new Snapshot { decision = cell, decidedTile = cell.possibleTiles[0].GetTerrainType(), cells = WFCCell.DeepCopyCells(cells) };
                 cell.Collapse();
-                s.decidedTile = cell.GetTerrain().GetTerrainType();
-                history.Push(s);
+                //s.decidedTile = cell.GetTerrain().GetTerrainType();
+                //history.Push(s);
                 PropagateChanges(cell);
                 iter++;
             }
@@ -71,7 +71,7 @@ public class ProceduralGeneration : MonoBehaviour
         {
             float noise = 0.00000000000001f * Random.Range(0f, 1f);
             float entropy = c.GetEntropy() + noise;
-            if (entropy < lowestEntropy && c.GetEntropy() != 0f)
+            if (entropy < lowestEntropy && !c.collapsed)
             {
                 lowestEntropy = entropy;
                 targetCell = c;
@@ -103,10 +103,10 @@ public class ProceduralGeneration : MonoBehaviour
             duplicateTiles.Remove(index);
             if (cell.possibleTiles.Count == 1 && !cell.collapsed)
             {
-                var s = new Snapshot { decision = cell, decidedTile = cell.possibleTiles[0].GetTerrainType(), cells = WFCCell.DeepCopyCells(cells) };
+                //var s = new Snapshot { decision = cell, decidedTile = cell.possibleTiles[0].GetTerrainType(), cells = WFCCell.DeepCopyCells(cells) };
                 cell.Collapse();
-                s.decidedTile = cell.GetTerrain().GetTerrainType();
-                history.Push(s);
+                //s.decidedTile = cell.GetTerrain().GetTerrainType();
+                //history.Push(s);
             }
 
             if (changed)
@@ -125,7 +125,7 @@ public class ProceduralGeneration : MonoBehaviour
         }
     }
 
-    private static List<WFCCell> GetNeighbors(WFCCell cell)
+    public static List<WFCCell> GetNeighbors(WFCCell cell)
     {
         Vector2Int pos = cell.placement;
         List<WFCCell> neighbors = new();
