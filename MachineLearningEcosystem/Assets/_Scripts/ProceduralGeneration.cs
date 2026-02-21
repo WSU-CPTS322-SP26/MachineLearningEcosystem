@@ -42,10 +42,7 @@ public class ProceduralGeneration : MonoBehaviour
             }
             else
             {
-                //var s = new Snapshot { decision = cell, decidedTile = cell.possibleTiles[0].GetTerrainType(), cells = WFCCell.DeepCopyCells(cells) };
                 cell.Collapse();
-                //s.decidedTile = cell.GetTerrain().GetTerrainType();
-                //history.Push(s);
                 PropagateChanges(cell);
                 iter++;
             }

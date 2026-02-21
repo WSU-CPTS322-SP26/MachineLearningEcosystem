@@ -54,8 +54,17 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < cells.GetLength(0); i++) {
             for (int j = 0; j < cells.GetLength(1); j++)
             {
-                cells[i,j] = new WFCCell(i,j);
-                cells[i,j].possibleTiles = new List<TerrainData>(terrainOptions);
+                cells[i, j] = new WFCCell(i, j)
+                {
+                    possibleTiles = new List<TerrainData>()
+                };
+                foreach (TerrainData t in terrainOptions)
+                {
+                    t.SetWeight(1f);
+                    TerrainData temp = ScriptableObject.CreateInstance<TerrainData>();
+                    temp.Copy(t);
+                    cells[i,j].possibleTiles.Add(temp);
+                }
             }
         }
     }

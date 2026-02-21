@@ -17,6 +17,6 @@ MonoBehaviour:
   - water
   - sand
   possibleNsWeights:
-  - 5
+  - 4
   - 1
   sprite: {fileID: 21300000, guid: a5f20765233cb5f40925f3ecbcea4a81, type: 3}

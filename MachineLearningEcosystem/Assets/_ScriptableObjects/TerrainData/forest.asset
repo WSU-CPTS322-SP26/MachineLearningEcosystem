@@ -18,7 +18,7 @@ MonoBehaviour:
   - grass
   - rocks
   possibleNsWeights:
-  - 3
-  - 2
-  - 0
+  - 5
+  - 4
+  - 1
   sprite: {fileID: 21300000, guid: 83e2be9eef4785c46ae3e8042ea5a2ee, type: 3}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,7 +12,26 @@ public class TerrainData : ScriptableObject
     [SerializeField] private List<float> possibleNsWeights; // possible neighbors weights
     [SerializeField] private Sprite sprite;
     private float weight = 1f;
-
+    public TerrainData(string type, List<string> possibleNeighbors, List<float> possibleNeighborsWeights, Sprite s)
+    {
+        terrainType = type;
+        possibleNs = possibleNeighbors;
+        possibleNsWeights = possibleNeighborsWeights;
+        sprite = s;
+        weight = 1f;
+    }
+    public void Copy(TerrainData data)
+    {
+        terrainType = data.GetTerrainType();
+        possibleNs = data.GetPossibleNS().Keys.ToList();
+        possibleNsWeights = new List<float>();
+        foreach (string key in possibleNs)
+        {
+            possibleNsWeights.Add(data.GetPossibleNS()[key]);
+        }
+        sprite = data.GetSprite();
+        weight = 1f;
+    }
     public string GetTerrainType()
     {
         return terrainType;

@@ -252,8 +252,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894272e260b23394db763967a70d30e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
-  xDim: 50
-  yDim: 50
+  xDim: 40
+  yDim: 40
   terrainSize: 64
   terrainOptions:
   - {fileID: 11400000, guid: fdc7bc1436cced240aea1391c3e8dc12, type: 2}

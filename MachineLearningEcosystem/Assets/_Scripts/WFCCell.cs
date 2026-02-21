@@ -17,13 +17,6 @@ public class WFCCell
         terrain = null;
         collapsed = false;
     }
-    public WFCCell(WFCCell c)
-    {
-        placement = c.placement;
-        terrain = c.terrain;
-        collapsed = c.collapsed;
-        possibleTiles = new List<TerrainData>(c.possibleTiles);
-    }
     public void SetTerrain(TerrainData t)
     {
         terrain = t;
@@ -95,6 +88,7 @@ public class WFCCell
             terrain = possibleTiles[selectedTileIndex];
         }
         collapsed = true;
+        Debug.Log("Random tile option selected: " + terrain.GetTerrainType() + " from " + possibleTiles.Count + " options at " + placement + " with weight " + terrain.GetWeight());
         possibleTiles.Clear();
     }
     public bool ValidatePossibilitySpace(List<WFCCell> neighborCell)
@@ -120,7 +114,7 @@ public class WFCCell
                         // selected possibleTile in array does contain the neighbor, update weights based on neighboringTerrain's dictionary
                         neighboringTerrain.GetPossibleNS().TryGetValue(possibleTile.GetTerrainType(), out float weightAddition);
                         possibleTile.SetWeight(possibleTile.GetWeight() + weightAddition);
-                        //Debug.Log("Adding weight of " + weightAddition + " to " + possibleTile.GetTerrainType() + " at " + placement + " based on neighbor " + neighboringTerrain.GetTerrainType());
+                        Debug.Log("Adding weight of " + weightAddition + " to " + possibleTile.GetTerrainType() + " at " + placement + " based on neighbor " + neighboringTerrain.GetTerrainType());
                     }
                 }
             }
