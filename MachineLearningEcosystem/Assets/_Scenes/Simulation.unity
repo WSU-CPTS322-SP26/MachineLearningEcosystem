@@ -256,11 +256,12 @@ MonoBehaviour:
   yDim: 50
   terrainSize: 64
   terrainOptions:
-  - {fileID: 8046373186742994004, guid: 5d401cfb626bbc341b735ea754eabce6, type: 3}
-  - {fileID: 520535393458267404, guid: 11edef3cdf47c3c4e837150984ca3940, type: 3}
-  - {fileID: 8966090627038672182, guid: 01b057b41d3ca314ab3b54dc7aa2ec1b, type: 3}
-  - {fileID: 2363484301563307604, guid: 64478deae80f2a04eb71428ee3cf9984, type: 3}
-  - {fileID: 1826887689997219161, guid: 3486018c32564e24ebdc47b38dfb3aea, type: 3}
+  - {fileID: 11400000, guid: fdc7bc1436cced240aea1391c3e8dc12, type: 2}
+  - {fileID: 11400000, guid: 33959da24f4c75a43abaf9d5de228fa9, type: 2}
+  - {fileID: 11400000, guid: 1e5699130e965714e919604453c1425a, type: 2}
+  - {fileID: 11400000, guid: 85c3c2b9a8104744ba76e87dbbb4a83d, type: 2}
+  - {fileID: 11400000, guid: 66046466123ffe040a7947081cc03e01, type: 2}
+  terrainPrefab: {fileID: 2998336367103962731, guid: 5d401cfb626bbc341b735ea754eabce6, type: 3}
 --- !u!4 &508927689
 Transform:
   m_ObjectHideFlags: 0

@@ -11,7 +11,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int xDim = 5;
     [SerializeField] private int yDim = 5;
     [SerializeField] private int terrainSize = 64;
-    [SerializeField] private List<MapTerrain> terrainOptions;
+    [SerializeField] private List<TerrainData> terrainOptions;
+    [SerializeField] private GameObject terrainPrefab;
     private WFCCell[,] cells;
     private MapTerrain[,] map;
 
@@ -39,9 +40,10 @@ public class MapManager : MonoBehaviour
                     {
                         Debug.Log("Error: Cell at " + cells[i,j].placement + " has no terrain assigned");
                     }
-                    map[i,j] = Instantiate(cells[i,j].GetTerrain(),
+                    map[i,j] = Instantiate(terrainPrefab,
                         new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0),
-                        Quaternion.identity, gameObject.transform);
+                        Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+                    map[i,j].SetTerrainData(cells[i,j].GetTerrain());
                     map[i,j].gameObject.SetActive(true);
                 }
             }
@@ -53,11 +55,11 @@ public class MapManager : MonoBehaviour
             for (int j = 0; j < cells.GetLength(1); j++)
             {
                 cells[i,j] = new WFCCell(i,j);
-                cells[i,j].possibleTiles = new List<MapTerrain>(terrainOptions);
+                cells[i,j].possibleTiles = new List<TerrainData>(terrainOptions);
             }
         }
     }
-    public List<MapTerrain> GetTerrainOptions()
+    public List<TerrainData> GetTerrainOptions()
     {
         return terrainOptions;
     }

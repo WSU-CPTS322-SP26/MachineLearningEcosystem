@@ -7,41 +7,24 @@ using UnityEngine;
 public class MapTerrain : MonoBehaviour
 {
     [SerializeField] private Dictionary<string, float> possibleNs; // possible neighbors
-    [SerializeField] private TerrainData terrainData;
-    private float weight = 1f;
-    private string terrainType;
-    public MapTerrain()
+    private TerrainData terrainData = null;
+    public MapTerrain(TerrainData data)
     {
-        terrainType = "empty";
-        terrainData = null;
-        weight = 1f;
-    }
-    private void Start()
-    {
-        if (terrainData == null)
-        {
-            Debug.Log("Error: No terrain data assigned to " + gameObject.name);
-        }
-        else
-        {
-            terrainType = terrainData.GetTerrainType();
-            terrainData.GetPossibleNS(possibleNs);
-        }
-    }
-    public float GetWeight()
-    {
-        return weight;
+        terrainData = data;
+        possibleNs = terrainData.GetPossibleNS();
     }
     public Dictionary<string, float> GetPossibleNS()
     {
+        possibleNs = terrainData.GetPossibleNS();
         return possibleNs;
     }
-    public void SetWeight(float newWeight)
+    public void SetTerrainData(TerrainData data)
     {
-        weight = newWeight;
+        gameObject.GetComponent<SpriteRenderer>().sprite = data.GetSprite();
+        terrainData = data;
     }
-    public string GetTerrainType()
+    public TerrainData GetTerrainData()
     {
-        return terrainType;
+        return terrainData;
     }
 }

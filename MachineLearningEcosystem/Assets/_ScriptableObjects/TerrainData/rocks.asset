@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9251a056ac7ee1a43b51dbf4145f8944, type: 3}
   m_Name: rocks
   m_EditorClassIdentifier: Assembly-CSharp::TerrainData
-  terrainType: forest
+  terrainType: rocks
   possibleNs:
   - rocks
   - forest
   possibleNsWeights:
   - 0
-  - 1
+  - 500
+  sprite: {fileID: 21300000, guid: 79d9d5c4ee5095b4ab842e1d4a0d6181, type: 3}

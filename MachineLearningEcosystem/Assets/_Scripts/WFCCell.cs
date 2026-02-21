@@ -6,8 +6,8 @@ using UnityEngine.Rendering.VirtualTexturing;
 public class WFCCell
 {
     public Vector2Int placement;
-    public List<MapTerrain> possibleTiles;
-    private MapTerrain terrain;
+    public List<TerrainData> possibleTiles;
+    private TerrainData terrain;
     public bool collapsed;
     private float entropy;
 
@@ -22,13 +22,13 @@ public class WFCCell
         placement = c.placement;
         terrain = c.terrain;
         collapsed = c.collapsed;
-        possibleTiles = new List<MapTerrain>(c.possibleTiles);
+        possibleTiles = new List<TerrainData>(c.possibleTiles);
     }
-    public void SetTerrain(MapTerrain t)
+    public void SetTerrain(TerrainData t)
     {
         terrain = t;
     }
-    public MapTerrain GetTerrain()
+    public TerrainData GetTerrain()
     {
         return terrain;
     }
@@ -62,7 +62,7 @@ public class WFCCell
             if (neighbors.Count == 0)
             {
                 //Debug.Log("No neighbors with assigned tiles at " + placement + ", choosing totally random tile");
-                var options = new List<MapTerrain>(MapManager.instance.GetTerrainOptions());
+                List<TerrainData> options = MapManager.instance.GetTerrainOptions();
                 terrain = options[Random.Range(0, options.Count)];
             }
         }
@@ -74,9 +74,25 @@ public class WFCCell
         }
         else
         {
-            int rand = Random.Range(0, possibleTiles.Count);
-            terrain = possibleTiles[rand];
-            //Debug.Log("Random tile option selected: " + terrain.GetTerrainType() + " from " + possibleTiles.Count + " options at " + placement);
+            // Need to account for weight
+            float totalWeight = 0f;
+            foreach (TerrainData t in possibleTiles)
+            {
+                totalWeight += t.GetWeight();
+            }
+            float rand = Random.Range(0f, totalWeight);
+            float currentWeight = 0f;
+            int selectedTileIndex = 0;
+            for (int j = 0; j < possibleTiles.Count; j++)
+            {
+                currentWeight += possibleTiles[j].GetWeight();
+                if (rand < currentWeight)
+                {
+                    selectedTileIndex = j;
+                    break;
+                }
+            }
+            terrain = possibleTiles[selectedTileIndex];
         }
         collapsed = true;
         possibleTiles.Clear();
@@ -86,11 +102,11 @@ public class WFCCell
         bool changed = false;
         for (int i = 0; i < possibleTiles.Count; i++)
         {
-            MapTerrain possibleTile = possibleTiles[i];
+            TerrainData possibleTile = possibleTiles[i];
             bool valid = true;
             foreach (WFCCell nc in neighborCell)
             {
-                MapTerrain neighboringTerrain = nc.GetTerrain();
+                TerrainData neighboringTerrain = nc.GetTerrain();
                 if (neighboringTerrain != null && nc.collapsed && possibleTile.GetPossibleNS() != null)
                 {
                     if (!possibleTile.GetPossibleNS().ContainsKey(neighboringTerrain.GetTerrainType()))
@@ -104,7 +120,7 @@ public class WFCCell
                         // selected possibleTile in array does contain the neighbor, update weights based on neighboringTerrain's dictionary
                         neighboringTerrain.GetPossibleNS().TryGetValue(possibleTile.GetTerrainType(), out float weightAddition);
                         possibleTile.SetWeight(possibleTile.GetWeight() + weightAddition);
-                        Debug.Log("Adding weight of " + weightAddition + " to " + possibleTile.GetTerrainType() + " at " + placement + " based on neighbor " + neighboringTerrain.GetTerrainType());
+                        //Debug.Log("Adding weight of " + weightAddition + " to " + possibleTile.GetTerrainType() + " at " + placement + " based on neighbor " + neighboringTerrain.GetTerrainType());
                     }
                 }
             }
@@ -118,20 +134,5 @@ public class WFCCell
 
         }
         return changed;
-    }
-    public void removePossibleTile(string t)
-    {
-        possibleTiles.Remove(possibleTiles.Find(tile => tile.GetTerrainType() == t));
-    }
-    public static WFCCell[,] DeepCopyCells(WFCCell[,] cells)
-    {
-        WFCCell[,] copy = new WFCCell[cells.GetLength(0), cells.GetLength(1)];
-        for (int i = 0; i < cells.GetLength(0); i++) {
-            for (int j = 0; j < cells.GetLength(1); j++)
-            {
-                copy[i,j] = new WFCCell(cells[i,j]);
-            }
-        }
-        return copy;
     }
 }
