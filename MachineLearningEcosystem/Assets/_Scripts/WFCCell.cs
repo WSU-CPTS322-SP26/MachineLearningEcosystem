@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.VirtualTexturing;
+using Random = UnityEngine.Random;
 
 public class WFCCell
 {
@@ -9,7 +11,6 @@ public class WFCCell
     public List<TerrainData> possibleTiles;
     private TerrainData terrain;
     public bool collapsed;
-    private float entropy;
 
     public WFCCell(int x, int y)
     {
@@ -28,8 +29,7 @@ public class WFCCell
     public float GetEntropy()
     {
         // calculates then returns
-        entropy = possibleTiles.Count;
-        return entropy;
+        return (float)possibleTiles.Count;
     }
     public void Collapse()
     {
@@ -88,13 +88,43 @@ public class WFCCell
             terrain = possibleTiles[selectedTileIndex];
         }
         collapsed = true;
-        Debug.Log("Random tile option selected: " + terrain.GetTerrainType() + " from " + possibleTiles.Count + " options at " + placement + " with weight " + terrain.GetWeight());
+        //Debug.Log("Random tile option selected: " + terrain.GetTerrainType() + " from " + possibleTiles.Count + " options at " + placement + " with weight " + terrain.GetWeight());
         possibleTiles.Clear();
     }
     public bool ValidatePossibilitySpace(List<WFCCell> neighborCell)
     {
         bool changed = false;
-        for (int i = 0; i < possibleTiles.Count; i++)
+        // Calculating dominant neighbor type to create more cohesive bodies of terrain, especially for water
+        Dictionary<string, Tuple<TerrainData, int>> dominantType = new();
+        foreach (WFCCell nc in neighborCell)
+        {
+            if (nc.GetTerrain() != null)
+            {
+                string neighborTerrainType = nc.GetTerrain().GetTerrainType();
+                if (!dominantType.ContainsKey(neighborTerrainType))
+                {
+                    dominantType.Add(neighborTerrainType, new Tuple<TerrainData, int>(nc.GetTerrain(), 1));
+                }
+                else
+                {
+                    dominantType[neighborTerrainType] = new Tuple<TerrainData, int>(dominantType[neighborTerrainType].Item1, dominantType[neighborTerrainType].Item2 + 1);
+                }
+            }
+        }
+        foreach (var keyValuePair in dominantType)
+        {
+            // Create bundles of the same type of tile
+            if (keyValuePair.Value.Item2 >= 3 || (keyValuePair.Value.Item1.GetTerrainType() == "water" && keyValuePair.Value.Item2 >= 2))
+            {
+                //Debug.Log("Collapsing " + placement + " to " + keyValuePair.Value.Item1.GetTerrainType() + " based on dominant neighbor type");
+                possibleTiles.Clear();
+                possibleTiles.Add(keyValuePair.Value.Item1);
+                return true;
+            }
+        }
+
+        // Calculating weights for each possible tile based on neighbors and their weights if there is no dominant neighbor type
+        for (int i = 0; i < possibleTiles.Count; i++) // possible tiles to be picked for the current cell
         {
             TerrainData possibleTile = possibleTiles[i];
             bool valid = true;
@@ -114,7 +144,7 @@ public class WFCCell
                         // selected possibleTile in array does contain the neighbor, update weights based on neighboringTerrain's dictionary
                         neighboringTerrain.GetPossibleNS().TryGetValue(possibleTile.GetTerrainType(), out float weightAddition);
                         possibleTile.SetWeight(possibleTile.GetWeight() + weightAddition);
-                        Debug.Log("Adding weight of " + weightAddition + " to " + possibleTile.GetTerrainType() + " at " + placement + " based on neighbor " + neighboringTerrain.GetTerrainType());
+                        //Debug.Log("Adding weight of " + weightAddition + " to " + possibleTile.GetTerrainType() + " at " + placement + " based on neighbor " + neighboringTerrain.GetTerrainType());
                     }
                 }
             }
@@ -125,7 +155,6 @@ public class WFCCell
                 i--;
                 changed = true;
             }
-
         }
         return changed;
     }

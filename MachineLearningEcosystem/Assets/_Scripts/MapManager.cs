@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor.TerrainTools;
 using UnityEditor.U2D.Aseprite;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.UI;
 using UnityEngine.Rendering.VirtualTexturing;
 
@@ -10,7 +11,7 @@ public class MapManager : MonoBehaviour
     public static MapManager instance;
     [SerializeField] private int xDim = 5;
     [SerializeField] private int yDim = 5;
-    [SerializeField] private int terrainSize = 64;
+    [SerializeField] private float terrainSize = 64;
     [SerializeField] private List<TerrainData> terrainOptions;
     [SerializeField] private GameObject terrainPrefab;
     private WFCCell[,] cells;
@@ -28,6 +29,16 @@ public class MapManager : MonoBehaviour
         ProceduralGeneration.CollapseWaveFunction(cells);
         DisplayMap();
     }
+    private void Update()
+    {
+        if (Keyboard.current.gKey.wasPressedThisFrame)
+        {
+            Debug.Log("Regenerating map");
+            InitializeCells();
+            ProceduralGeneration.CollapseWaveFunction(cells);
+            DisplayMap();
+        }
+    }
 
     private void DisplayMap()
     {
@@ -43,7 +54,15 @@ public class MapManager : MonoBehaviour
                     map[i,j] = Instantiate(terrainPrefab,
                         new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0),
                         Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+                    map[i,j].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
                     map[i,j].SetTerrainData(cells[i,j].GetTerrain());
+                    map[i,j].gameObject.SetActive(true);
+                }
+                else
+                {
+                    map[i,j].SetTerrainData(cells[i,j].GetTerrain());
+                    map[i,j].gameObject.transform.position = new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0);
+                    map[i,j].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
                     map[i,j].gameObject.SetActive(true);
                 }
             }

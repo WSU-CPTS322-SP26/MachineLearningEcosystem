@@ -53,14 +53,18 @@ public class ProceduralGeneration : MonoBehaviour
     {
         float lowestEntropy = float.MaxValue;
         WFCCell targetCell = new WFCCell(-1, -1);
-        foreach (WFCCell c in cells)
+        for (int i = 0; i < cells.GetLength(0); i++)
         {
-            float noise = 0.00000000000001f * Random.Range(0f, 1f);
-            float entropy = c.GetEntropy() + noise;
-            if (entropy < lowestEntropy && !c.collapsed)
+            for (int j = 0; j < cells.GetLength(1); j++)
             {
-                lowestEntropy = entropy;
-                targetCell = c;
+                WFCCell c = cells[i, j];
+                float noise = 0.0001f * Random.Range(-1f, 1f);
+                float entropy = c.GetEntropy() + noise;
+                if (entropy < lowestEntropy && !c.collapsed)
+                {
+                    lowestEntropy = entropy;
+                    targetCell = c;
+                }
             }
         }
         return targetCell;

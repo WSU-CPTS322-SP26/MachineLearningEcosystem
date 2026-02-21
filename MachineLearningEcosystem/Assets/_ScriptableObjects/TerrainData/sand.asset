@@ -18,7 +18,7 @@ MonoBehaviour:
   - grass
   - water
   possibleNsWeights:
-  - 1
-  - 5
-  - 3
+  - 30
+  - 30
+  - 14
   sprite: {fileID: 21300000, guid: 7d300c9534268d9488a21e648fd9dc77, type: 3}

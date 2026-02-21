@@ -252,9 +252,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894272e260b23394db763967a70d30e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
-  xDim: 40
-  yDim: 40
-  terrainSize: 64
+  xDim: 80
+  yDim: 50
+  terrainSize: 3
   terrainOptions:
   - {fileID: 11400000, guid: fdc7bc1436cced240aea1391c3e8dc12, type: 2}
   - {fileID: 11400000, guid: 33959da24f4c75a43abaf9d5de228fa9, type: 2}
@@ -872,7 +872,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 400
+  orthographic size: 100
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

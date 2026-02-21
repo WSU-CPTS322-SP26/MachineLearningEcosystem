@@ -18,7 +18,7 @@ MonoBehaviour:
   - forest
   - sand
   possibleNsWeights:
-  - 5
-  - 4
-  - 2
+  - 100
+  - 40
+  - 25
   sprite: {fileID: 21300000, guid: 0ac5cd6dd707a854a9a098dff04f92a9, type: 3}
