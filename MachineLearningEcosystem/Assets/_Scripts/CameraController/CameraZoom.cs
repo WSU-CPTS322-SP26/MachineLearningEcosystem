@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraZoom : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class CameraZoom : MonoBehaviour
         Camera cam = GetComponent<Camera>();
         if (!cam.orthographic) return;
 
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        float scroll = Mouse.current.scroll.ReadValue().y;
         if(scroll != 0)
         {
             Vector3 mouseWorldPos = cam.ScreenToWorldPoint(Input.mousePosition);

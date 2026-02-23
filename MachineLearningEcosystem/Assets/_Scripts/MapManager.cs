@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Data;
+using System.Runtime.CompilerServices;
 using UnityEditor.TerrainTools;
 using UnityEditor.U2D.Aseprite;
 using UnityEngine;
@@ -23,20 +25,13 @@ public class MapManager : MonoBehaviour
         {
             instance = this;
         }
-        cells = new WFCCell[xDim,yDim];
-        map = new MapTerrain[xDim,yDim];
-        InitializeCells();
-        ProceduralGeneration.CollapseWaveFunction(cells);
-        DisplayMap();
+        GenerateMap();
     }
     private void Update()
     {
         if (Keyboard.current.gKey.wasPressedThisFrame)
         {
-            Debug.Log("Regenerating map");
-            InitializeCells();
-            ProceduralGeneration.CollapseWaveFunction(cells);
-            DisplayMap();
+            GenerateMap();
         }
     }
 
@@ -70,6 +65,18 @@ public class MapManager : MonoBehaviour
     }
     private void InitializeCells()
     {
+        if (map != null)
+        {
+            for (int i = 0; i < cells.GetLength(0); i++)
+            {
+                for (int j = 0; j < cells.GetLength(1); j++)
+                {
+                    Destroy(map[i, j].gameObject);
+                }
+            }
+        }
+        cells = new WFCCell[xDim,yDim];
+        map = new MapTerrain[xDim,yDim];
         for (int i = 0; i < cells.GetLength(0); i++) {
             for (int j = 0; j < cells.GetLength(1); j++)
             {
@@ -90,5 +97,11 @@ public class MapManager : MonoBehaviour
     public List<TerrainData> GetTerrainOptions()
     {
         return terrainOptions;
+    }
+    private void GenerateMap()
+    {
+        InitializeCells();
+        ProceduralGeneration.CollapseWaveFunction(cells);
+        DisplayMap();
     }
 }
