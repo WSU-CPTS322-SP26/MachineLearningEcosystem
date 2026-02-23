@@ -11,12 +11,10 @@ public class PauseButton : MonoBehaviour
     void Start()
     {
         pausePanel.SetActive(false);
-        Debug.Log("here1");
     }
 
     void Update()
     {
-        Debug.Log("here");
         //esc pressed and not already shown: show
         if (Keyboard.current.escapeKey.wasPressedThisFrame && !pausePanel.activeSelf)
         {

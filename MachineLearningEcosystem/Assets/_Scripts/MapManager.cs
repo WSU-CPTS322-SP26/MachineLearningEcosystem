@@ -1,0 +1,94 @@
+using System.Collections.Generic;
+using UnityEditor.TerrainTools;
+using UnityEditor.U2D.Aseprite;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering.UI;
+using UnityEngine.Rendering.VirtualTexturing;
+
+public class MapManager : MonoBehaviour
+{
+    public static MapManager instance;
+    [SerializeField] private int xDim = 5;
+    [SerializeField] private int yDim = 5;
+    [SerializeField] private float terrainSize = 64;
+    [SerializeField] private List<TerrainData> terrainOptions;
+    [SerializeField] private GameObject terrainPrefab;
+    private WFCCell[,] cells;
+    private MapTerrain[,] map;
+
+    private void Start()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        cells = new WFCCell[xDim,yDim];
+        map = new MapTerrain[xDim,yDim];
+        InitializeCells();
+        ProceduralGeneration.CollapseWaveFunction(cells);
+        DisplayMap();
+    }
+    private void Update()
+    {
+        if (Keyboard.current.gKey.wasPressedThisFrame)
+        {
+            Debug.Log("Regenerating map");
+            InitializeCells();
+            ProceduralGeneration.CollapseWaveFunction(cells);
+            DisplayMap();
+        }
+    }
+
+    private void DisplayMap()
+    {
+        for (int i = 0; i < cells.GetLength(0); i++) {
+            for (int j = 0; j < cells.GetLength(1); j++)
+            {
+                if (map[i,j] == null)
+                {
+                    if (cells[i,j].GetTerrain() == null)
+                    {
+                        Debug.Log("Error: Cell at " + cells[i,j].placement + " has no terrain assigned");
+                    }
+                    map[i,j] = Instantiate(terrainPrefab,
+                        new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0),
+                        Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+                    map[i,j].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
+                    map[i,j].SetTerrainData(cells[i,j].GetTerrain());
+                    map[i,j].gameObject.SetActive(true);
+                }
+                else
+                {
+                    map[i,j].SetTerrainData(cells[i,j].GetTerrain());
+                    map[i,j].gameObject.transform.position = new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0);
+                    map[i,j].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
+                    map[i,j].gameObject.SetActive(true);
+                }
+            }
+        }
+    }
+    private void InitializeCells()
+    {
+        for (int i = 0; i < cells.GetLength(0); i++) {
+            for (int j = 0; j < cells.GetLength(1); j++)
+            {
+                cells[i, j] = new WFCCell(i, j)
+                {
+                    possibleTiles = new List<TerrainData>()
+                };
+                foreach (TerrainData t in terrainOptions)
+                {
+                    t.SetWeight(1f);
+                    TerrainData temp = ScriptableObject.CreateInstance<TerrainData>();
+                    temp.Copy(t);
+                    cells[i,j].possibleTiles.Add(temp);
+                }
+            }
+        }
+    }
+    public List<TerrainData> GetTerrainOptions()
+    {
+        return terrainOptions;
+    }
+}
