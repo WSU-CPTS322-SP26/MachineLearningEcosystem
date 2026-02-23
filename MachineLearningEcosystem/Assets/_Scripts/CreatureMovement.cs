@@ -14,9 +14,7 @@ public class CreatureMovement : MonoBehaviour
 
 
 
-    //need to add boundries mayvbe as a serialized game object then look at that objects boundries or smth 
-    //also need to 
-
+    //doesn't work when pausing in simulation (doesn't restart after unpause) and doesn't start when entering from main menu
 
 
     void Start()
