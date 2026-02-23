@@ -25,7 +25,7 @@ public class PauseButton : MonoBehaviour
         else if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             pausePanel.SetActive(false);
-            Time.timeScale = 0f;
+            Time.timeScale = 1f;
         }
 
     }
