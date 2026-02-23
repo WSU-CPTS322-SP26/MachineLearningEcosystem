@@ -25,7 +25,6 @@ public class MapManager : MonoBehaviour
         {
             instance = this;
         }
-        GenerateMap();
     }
     private void Update()
     {
@@ -98,10 +97,26 @@ public class MapManager : MonoBehaviour
     {
         return terrainOptions;
     }
-    private void GenerateMap()
+    public void GenerateMap()
     {
         InitializeCells();
         ProceduralGeneration.CollapseWaveFunction(cells);
         DisplayMap();
+    }
+    public int GetXDim()
+    {
+        return xDim;
+    }
+    public int GetYDim()
+    {
+        return yDim;
+    }
+    public void SetXDim(int x)
+    {
+        xDim = x;
+    }
+    public void SetYDim(int y)
+    {
+        yDim = y;
     }
 }
