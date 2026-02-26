@@ -88,6 +88,7 @@ public class WFCCell
             terrain = possibleTiles[selectedTileIndex];
         }
         collapsed = true;
+        MapManager.instance.DisplayCell(this);
         //Debug.Log("Random tile option selected: " + terrain.GetTerrainType() + " from " + possibleTiles.Count + " options at " + placement + " with weight " + terrain.GetWeight());
         possibleTiles.Clear();
     }

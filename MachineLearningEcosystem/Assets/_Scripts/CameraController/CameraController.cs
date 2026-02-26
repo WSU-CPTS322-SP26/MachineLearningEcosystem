@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
@@ -19,22 +20,22 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
+        if (Keyboard.current.wKey.isPressed)
         {
             CameraPosition.y += CameraSpeed * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.S))
+        if (Keyboard.current.sKey.isPressed)
         {
             CameraPosition.y -= CameraSpeed * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (Keyboard.current.aKey.isPressed)
         {
             CameraPosition.x -= CameraSpeed * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.D))
+        if (Keyboard.current.dKey.isPressed)
         {
             CameraPosition.x += CameraSpeed * Time.deltaTime;
         }

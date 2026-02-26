@@ -20,8 +20,16 @@ public class MapTerrain : MonoBehaviour
     }
     public void SetTerrainData(TerrainData data)
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = data.GetSprite();
-        terrainData = data;
+        if (data != null)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = data.GetSprite();
+            terrainData = data;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = null;
+            terrainData = null;
+        }
     }
     public TerrainData GetTerrainData()
     {

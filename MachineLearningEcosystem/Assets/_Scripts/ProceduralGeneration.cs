@@ -14,11 +14,16 @@ public class ProceduralGeneration : MonoBehaviour
     // Using the procedural generation model of wave function collapse, this program is
     // designed to generate an x by y sized tilemap of different terrains based on
     // constraints for terrain placement
+    private static int animation_speed = 20;
+    private static int max_animation_speed = 100;
+    private static bool animated = true;
     private static int iter = 0;
     private static int maxIter;
+    private static bool isGenerating = false;
     private static WFCCell[,] cells;
-    public static void CollapseWaveFunction(WFCCell[,] cs)
+    public static IEnumerator CollapseWaveFunction(WFCCell[,] cs)
     {
+        isGenerating = true;
         cells = cs;
         int rows = cells.GetLength(0);
         int columns = cells.GetLength(1);
@@ -30,7 +35,7 @@ public class ProceduralGeneration : MonoBehaviour
         {
             if (iter >= maxIter)
             {
-                Debug.Log("Did not properly collapse!");
+                Debug.Log("Error: Did not properly collapse!");
                 break;
             }
             
@@ -38,7 +43,7 @@ public class ProceduralGeneration : MonoBehaviour
             if (cell.placement == new Vector2Int(-1, -1))
             {
                 fullyCollapsed = true;
-                Debug.Log("Finished collapsing");
+                //Debug.Log("Finished collapsing");
             }
             else
             {
@@ -46,7 +51,13 @@ public class ProceduralGeneration : MonoBehaviour
                 PropagateChanges(cell);
                 iter++;
             }
+            if (animated && iter % animation_speed == 0)
+            {
+                yield return null;
+            }
         }
+        isGenerating = false;
+        yield return null;
     }
 
     private static WFCCell GetLowestEntropy()
@@ -140,5 +151,29 @@ public class ProceduralGeneration : MonoBehaviour
         {
             Debug.Log(c.placement + ", " + c.GetTerrain());
         }
+    }
+    public static bool IsGenerating()
+    {
+        return isGenerating;
+    }
+    public static int GetAnimationSpeed()
+    {
+        return animation_speed;
+    }
+    public static int GetMaxAnimationSpeed()
+    {
+        return max_animation_speed;
+    }
+    public static bool GetAnimated()
+    {
+        return animated;
+    }
+    public static void SetAnimated(bool isAnimated)
+    {
+        animated = isAnimated;
+    }
+    public static void SetAnimationSpeed(int speed)
+    {
+        animation_speed = speed;
     }
 }

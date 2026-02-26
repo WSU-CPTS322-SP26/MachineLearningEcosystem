@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Data;
+using System.Runtime.CompilerServices;
 using UnityEditor.TerrainTools;
 using UnityEditor.U2D.Aseprite;
 using UnityEngine;
@@ -9,11 +11,12 @@ using UnityEngine.Rendering.VirtualTexturing;
 public class MapManager : MonoBehaviour
 {
     public static MapManager instance;
-    [SerializeField] private int xDim = 5;
-    [SerializeField] private int yDim = 5;
+    [SerializeField] private static int xDim = 80;
+    [SerializeField] private static int yDim = 50;
     [SerializeField] private float terrainSize = 64;
     [SerializeField] private List<TerrainData> terrainOptions;
     [SerializeField] private GameObject terrainPrefab;
+    [SerializeField] private TerrainData emptyData;
     private WFCCell[,] cells;
     private MapTerrain[,] map;
 
@@ -23,24 +26,8 @@ public class MapManager : MonoBehaviour
         {
             instance = this;
         }
-        cells = new WFCCell[xDim,yDim];
-        map = new MapTerrain[xDim,yDim];
-        InitializeCells();
-        ProceduralGeneration.CollapseWaveFunction(cells);
-        DisplayMap();
     }
-    private void Update()
-    {
-        if (Keyboard.current.gKey.wasPressedThisFrame)
-        {
-            Debug.Log("Regenerating map");
-            InitializeCells();
-            ProceduralGeneration.CollapseWaveFunction(cells);
-            DisplayMap();
-        }
-    }
-
-    private void DisplayMap()
+    public void DisplayMap()
     {
         for (int i = 0; i < cells.GetLength(0); i++) {
             for (int j = 0; j < cells.GetLength(1); j++)
@@ -68,11 +55,52 @@ public class MapManager : MonoBehaviour
             }
         }
     }
+    public void DisplayBlankMap()
+    {
+        for (int i = 0; i < map.GetLength(0); i++) {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                map[i,j].SetTerrainData(emptyData);
+                map[i,j].gameObject.transform.position = new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0);
+                map[i,j].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
+                map[i,j].gameObject.SetActive(true);
+            }
+        }
+    }
+    public void DisplayCell(WFCCell cell)
+    {
+        Vector2Int pos = cell.placement;
+        if (map[pos.x, pos.y] == null)
+        {
+            map[pos.x, pos.y] = Instantiate(terrainPrefab,
+                new Vector3(pos.x * terrainSize - (xDim / 2f * terrainSize), pos.y * terrainSize - (yDim / 2f * terrainSize), 0),
+                Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+            map[pos.x, pos.y].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
+        }
+        map[pos.x, pos.y].SetTerrainData(cell.GetTerrain());
+        map[pos.x, pos.y].gameObject.SetActive(true);
+    }
     private void InitializeCells()
     {
+        if (map != null)
+        {
+            for (int i = 0; i < cells.GetLength(0); i++)
+            {
+                for (int j = 0; j < cells.GetLength(1); j++)
+                {
+                    Destroy(map[i, j].gameObject);
+                }
+            }
+        }
+        cells = new WFCCell[xDim,yDim];
+        map = new MapTerrain[xDim,yDim];
         for (int i = 0; i < cells.GetLength(0); i++) {
             for (int j = 0; j < cells.GetLength(1); j++)
             {
+                map[i, j] = Instantiate(terrainPrefab,
+                    new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0),
+                    Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+                map[i,j].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
                 cells[i, j] = new WFCCell(i, j)
                 {
                     possibleTiles = new List<TerrainData>()
@@ -90,5 +118,27 @@ public class MapManager : MonoBehaviour
     public List<TerrainData> GetTerrainOptions()
     {
         return terrainOptions;
+    }
+    public void GenerateMap()
+    {
+        InitializeCells();
+        DisplayBlankMap();
+        StartCoroutine(ProceduralGeneration.CollapseWaveFunction(cells));
+    }
+    public static int GetXDim()
+    {
+        return xDim;
+    }
+    public static int GetYDim()
+    {
+        return yDim;
+    }
+    public void SetXDim(int x)
+    {
+        xDim = x;
+    }
+    public void SetYDim(int y)
+    {
+        yDim = y;
     }
 }
