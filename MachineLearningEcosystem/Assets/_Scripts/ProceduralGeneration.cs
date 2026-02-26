@@ -51,7 +51,7 @@ public class ProceduralGeneration : MonoBehaviour
                 PropagateChanges(cell);
                 iter++;
             }
-            if (iter % animation_speed == 0)
+            if (animated && iter % animation_speed == 0)
             {
                 yield return null;
             }
