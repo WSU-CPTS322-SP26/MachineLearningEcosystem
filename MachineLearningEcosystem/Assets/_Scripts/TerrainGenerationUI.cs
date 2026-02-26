@@ -13,8 +13,8 @@ public class TerrainGenerationUI : MonoBehaviour
     {
         GenerateButton.onClick.AddListener(OnGenerateButtonClicked);
         PlayButton.onClick.AddListener(OnPlayButtonClicked);
-        xDimInput.text = MapManager.instance.GetXDim().ToString();
-        yDimInput.text = MapManager.instance.GetYDim().ToString();
+        xDimInput.text = MapManager.GetXDim().ToString();
+        yDimInput.text = MapManager.GetYDim().ToString();
     }
     private void OnGenerateButtonClicked()
     {
@@ -22,15 +22,15 @@ public class TerrainGenerationUI : MonoBehaviour
         int yDim = int.Parse(yDimInput.text);
         xDim = Mathf.Clamp(xDim, 40, 200);
         yDim = Mathf.Clamp(yDim, 40, 200);
-        xDimInput.text = MapManager.instance.GetXDim().ToString();
-        yDimInput.text = MapManager.instance.GetYDim().ToString();
+        xDimInput.text = xDim.ToString();
+        yDimInput.text = yDim.ToString();
         MapManager.instance.SetXDim(xDim);
         MapManager.instance.SetYDim(yDim);
         MapManager.instance.GenerateMap();
     }
     private void OnPlayButtonClicked()
     {
-        //MapManager.instance.PlayMap();
+        gameObject.SetActive(false);
     }
     void OnDestroy()
     {

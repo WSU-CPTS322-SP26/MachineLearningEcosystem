@@ -11,8 +11,8 @@ using UnityEngine.Rendering.VirtualTexturing;
 public class MapManager : MonoBehaviour
 {
     public static MapManager instance;
-    [SerializeField] private int xDim = 5;
-    [SerializeField] private int yDim = 5;
+    [SerializeField] private static int xDim = 80;
+    [SerializeField] private static int yDim = 50;
     [SerializeField] private float terrainSize = 64;
     [SerializeField] private List<TerrainData> terrainOptions;
     [SerializeField] private GameObject terrainPrefab;
@@ -26,14 +26,6 @@ public class MapManager : MonoBehaviour
             instance = this;
         }
     }
-    private void Update()
-    {
-        if (Keyboard.current.gKey.wasPressedThisFrame)
-        {
-            GenerateMap();
-        }
-    }
-
     private void DisplayMap()
     {
         for (int i = 0; i < cells.GetLength(0); i++) {
@@ -103,11 +95,11 @@ public class MapManager : MonoBehaviour
         ProceduralGeneration.CollapseWaveFunction(cells);
         DisplayMap();
     }
-    public int GetXDim()
+    public static int GetXDim()
     {
         return xDim;
     }
-    public int GetYDim()
+    public static int GetYDim()
     {
         return yDim;
     }
