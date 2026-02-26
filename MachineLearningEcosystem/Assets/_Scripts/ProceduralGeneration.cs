@@ -35,7 +35,7 @@ public class ProceduralGeneration : MonoBehaviour
         {
             if (iter >= maxIter)
             {
-                Debug.Log("Did not properly collapse!");
+                Debug.Log("Error: Did not properly collapse!");
                 break;
             }
             
@@ -43,7 +43,7 @@ public class ProceduralGeneration : MonoBehaviour
             if (cell.placement == new Vector2Int(-1, -1))
             {
                 fullyCollapsed = true;
-                Debug.Log("Finished collapsing");
+                //Debug.Log("Finished collapsing");
             }
             else
             {
