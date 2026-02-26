@@ -148,8 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894272e260b23394db763967a70d30e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
-  xDim: 80
-  yDim: 50
   terrainSize: 3
   terrainOptions:
   - {fileID: 11400000, guid: fdc7bc1436cced240aea1391c3e8dc12, type: 2}
@@ -158,6 +156,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 85c3c2b9a8104744ba76e87dbbb4a83d, type: 2}
   - {fileID: 11400000, guid: 66046466123ffe040a7947081cc03e01, type: 2}
   terrainPrefab: {fileID: 2998336367103962731, guid: 5d401cfb626bbc341b735ea754eabce6, type: 3}
+  emptyData: {fileID: 11400000, guid: 854d6725112be99489e53523caadd239, type: 2}
 --- !u!4 &508927689
 Transform:
   m_ObjectHideFlags: 0
