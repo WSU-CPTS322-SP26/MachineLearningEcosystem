@@ -14,11 +14,14 @@ public class ProceduralGeneration : MonoBehaviour
     // Using the procedural generation model of wave function collapse, this program is
     // designed to generate an x by y sized tilemap of different terrains based on
     // constraints for terrain placement
+    private static int animation_speed = 20;
     private static int iter = 0;
     private static int maxIter;
+    private static bool isGenerating = false;
     private static WFCCell[,] cells;
-    public static void CollapseWaveFunction(WFCCell[,] cs)
+    public static IEnumerator CollapseWaveFunction(WFCCell[,] cs)
     {
+        isGenerating = true;
         cells = cs;
         int rows = cells.GetLength(0);
         int columns = cells.GetLength(1);
@@ -46,7 +49,13 @@ public class ProceduralGeneration : MonoBehaviour
                 PropagateChanges(cell);
                 iter++;
             }
+            if (iter % animation_speed == 0)
+            {
+                yield return null;
+            }
         }
+        isGenerating = false;
+        yield return null;
     }
 
     private static WFCCell GetLowestEntropy()
@@ -140,5 +149,9 @@ public class ProceduralGeneration : MonoBehaviour
         {
             Debug.Log(c.placement + ", " + c.GetTerrain());
         }
+    }
+    public static bool IsGenerating()
+    {
+        return isGenerating;
     }
 }

@@ -18,6 +18,11 @@ public class TerrainGenerationUI : MonoBehaviour
     }
     private void OnGenerateButtonClicked()
     {
+        if (ProceduralGeneration.IsGenerating())
+        {
+            Debug.Log("Already generating map, please wait");
+            return;
+        }
         int xDim = int.Parse(xDimInput.text);
         int yDim = int.Parse(yDimInput.text);
         xDim = Mathf.Clamp(xDim, 40, 200);
