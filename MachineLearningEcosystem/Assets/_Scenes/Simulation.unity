@@ -184,6 +184,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: UICanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4275462865623520270, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5337313672023552427, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5628368071170599231, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -422,7 +430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraZoom
   Speed: 5
   MinZoom: 2
-  MaxZoom: 100
+  MaxZoom: 200
 --- !u!114 &1385720554
 MonoBehaviour:
   m_ObjectHideFlags: 0

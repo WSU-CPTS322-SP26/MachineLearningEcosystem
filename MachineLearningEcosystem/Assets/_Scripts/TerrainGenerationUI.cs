@@ -20,6 +20,8 @@ public class TerrainGenerationUI : MonoBehaviour
         playButton.onClick.AddListener(OnPlayButtonClicked);
         animationToggle.onValueChanged.AddListener(OnAnimationToggleChanged);
         animationSpeedSlider.onValueChanged.AddListener(OnAnimationSpeedChanged);
+        animationSpeedSlider.value = (float)ProceduralGeneration.GetAnimationSpeed() / ProceduralGeneration.GetMaxAnimationSpeed();
+        animationToggle.isOn = ProceduralGeneration.GetAnimated();
         xDimInput.text = MapManager.GetXDim().ToString();
         yDimInput.text = MapManager.GetYDim().ToString();
         originalColor = generateButton.image.color;
