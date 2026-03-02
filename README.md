@@ -22,9 +22,9 @@ Allows the user to enter the procedural generation phase of the simulation, wher
 - When you pause, the generation animation continues to run
 ## Additional Documentation
 Sprint reports:
-* "Sprint1.md", youtube video
+* "Sprint1.md", [Youtube Lideo](https://www.youtube.com/watch?v=MkfPcHMPpAM)
 
 User links:
-* Used as a basis for WFC: https://www.uproomgames.com/dev-log/wave-function-collapse
+* [Used as a basis for WFC](https://www.uproomgames.com/dev-log/wave-function-collapse)
 ## License
 MIT License, described in LICENSE.txt
