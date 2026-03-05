@@ -15,7 +15,7 @@ public class ProceduralGeneration : MonoBehaviour
     // designed to generate an x by y sized tilemap of different terrains based on
     // constraints for terrain placement
     private static int animation_speed = 20;
-    private static int max_animation_speed = 100;
+    private static int max_animation_speed = 50;
     private static bool animated = true;
     private static int iter = 0;
     private static int maxIter;
