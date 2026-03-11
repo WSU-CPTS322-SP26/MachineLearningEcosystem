@@ -15,12 +15,17 @@ public class ProceduralGeneration : MonoBehaviour
     // designed to generate an x by y sized tilemap of different terrains based on
     // constraints for terrain placement
     private static int animation_speed = 20;
-    private static int max_animation_speed = 100;
+    private static int max_animation_speed = 50;
     private static bool animated = true;
     private static int iter = 0;
     private static int maxIter;
     private static bool isGenerating = false;
     private static WFCCell[,] cells;
+
+    private void Start()
+    {
+        isGenerating = false;
+    }
     public static IEnumerator CollapseWaveFunction(WFCCell[,] cs)
     {
         isGenerating = true;
@@ -175,5 +180,10 @@ public class ProceduralGeneration : MonoBehaviour
     public static void SetAnimationSpeed(int speed)
     {
         animation_speed = speed;
+    }
+    public static void ResetGeneration()
+    {
+        isGenerating = false;
+        iter = 0;
     }
 }

@@ -1,71 +1,94 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.TerrainUtils;
 
 public class CreatureMovement : MonoBehaviour
 {
 
-    [SerializeField] private float moveTime = 0;
-    private float timer;
-
-
+    [SerializeField] private float movespeed = 1f;
     [SerializeField] private GameObject creature;
-    [SerializeField] private int width;
-    [SerializeField] private int height;
-
-
-
-    //doesn't work when pausing in simulation (doesn't restart after unpause) and doesn't start when entering from main menu
-
-
-    void Start()
+    // [SerializeField] private int width;
+    // [SerializeField] private int height;
+    [SerializeField] private FieldOfView fov;
+    private CreatureStatstics stats;
+    private void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Move();
-    }
-
-
-    private void Move()
-    {
-        if (timer >= moveTime)
+        stats = creature.GetComponent<CreatureStatstics>();
+        if (stats == null)
         {
-            Vector2 direction = Random.insideUnitCircle.normalized;
-            Vector2 moveAttempt = direction * 2;
+            stats = creature.AddComponent<CreatureStatstics>();
+        }
+    }
 
-            while (!CheckBoundries(moveAttempt))
+    private void Start()
+    {
+        fov.SetViewDistance(stats.ViewDistance);
+        fov.UpdateViewDirection(0, stats.ViewAngle);
+    }
+
+    private void Update()
+    {
+        MapTerrain currentTile = DetectTile(creature.transform.position);
+        Move(Random.insideUnitCircle.normalized);
+        UpdateFov(Random.Range(0, 360));
+    }
+
+    private void UpdateFov(int v)
+    {
+        fov.UpdateViewDirection(v, stats.ViewAngle);
+    }
+
+    private MapTerrain DetectTile(Vector3 position)
+    {
+        MapTerrain tile = null;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 0.1f);
+        // Process the detected colliders to determine the current tile
+        foreach (Collider2D collider in colliders)
+        {
+            tile = collider.GetComponent<MapTerrain>();
+            if (tile != null)
             {
-                direction = Random.insideUnitCircle.normalized;
-                moveAttempt = direction * 2;
+                break;
             }
-            creature.transform.Translate(moveAttempt);
-            timer = 0;
         }
-        else
-        {
-            timer += Time.deltaTime;
-        }
-        
-
-       
-
+        return tile;
     }
 
-    private void Move(Vector2 direction)
+    private bool Move(Vector2 direction)
     {
+        direction = direction.normalized;
+        Vector2 moveAttempt = movespeed * Time.deltaTime * direction;
 
+        if (!CheckBoundries(moveAttempt))
+        {
+            return false;
+        }
+        creature.transform.Translate(moveAttempt);
+        return true;
     }
 
     private bool CheckBoundries(Vector2 moveAttempt)
     {
-        if (moveAttempt.x + creature.transform.position.x < 0 || moveAttempt.x + creature.transform.position.x > width || moveAttempt.y + creature.transform.position.y  < 0 || moveAttempt.y + creature.transform.position.y > height)
+        Vector2 newPosition = moveAttempt + (Vector2)creature.transform.position;
+        // if (newPosition.x < 0
+        //     || newPosition.x > width
+        //     || newPosition.y < 0
+        //     || newPosition.y > height)
+        // {
+        //     Debug.Log("Cannot move to target: Out of bounds");
+        //     return false;
+        // }
+        MapTerrain tile = DetectTile(newPosition);
+        if (tile == null || tile.GetTerrainData() == null || tile.GetTerrainData().GetTerrainType() == "water" || tile.GetTerrainData().GetTerrainType() == "Empty")
         {
-            return false;
+            Debug.Log("Cannot move to target");
+            return false; // Must have a tile
+        }
+        else
+        {
+            Debug.Log("Moved to target: " + tile.GetTerrainData().GetTerrainType());
         }
         return true;
     }
-
 }
