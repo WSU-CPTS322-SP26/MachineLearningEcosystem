@@ -24,8 +24,9 @@ public class FieldOfView : MonoBehaviour
 
     void Update()
     {
-        SpinFov();
+        //SpinFov();
         CreateWedge();
+        // Detection logic
     }
     
     private void CreateWedge()

@@ -1,5 +1,7 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.TerrainUtils;
 
 public class CreatureMovement : MonoBehaviour
 {
@@ -27,7 +29,28 @@ public class CreatureMovement : MonoBehaviour
 
     private void Update()
     {
+        MapTerrain currentTile = DetectTile();
+        if (currentTile != null)
+        {
+            Debug.Log("Current tile: " + currentTile.GetTerrainData().GetTerrainType());
+        }
         Move(Random.insideUnitCircle.normalized);
+    }
+
+    private MapTerrain DetectTile()
+    {
+        MapTerrain tile = null;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(creature.transform.position, 0.1f);
+        // Process the detected colliders to determine the current tile
+        foreach (Collider2D collider in colliders)
+        {
+            tile = collider.GetComponent<MapTerrain>();
+            if (tile != null)
+            {
+                break;
+            }
+        }
+        return tile;
     }
 
     private bool Move(Vector2 direction)
