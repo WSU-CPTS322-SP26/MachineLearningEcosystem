@@ -146,4 +146,14 @@ public class MapManager : MonoBehaviour
     {
         yDim = y;
     }
+
+    public Vector2[] GetCorners()
+    {
+        Vector2[] corners = new Vector2[4];
+        corners[0] = new Vector2(-xDim / 2f * terrainSize, -yDim / 2f * terrainSize); // Bottom left
+        corners[1] = new Vector2(xDim / 2f * terrainSize, -yDim / 2f * terrainSize); // Bottom right
+        corners[2] = new Vector2(xDim / 2f * terrainSize, yDim / 2f * terrainSize); // Top right
+        corners[3] = new Vector2(-xDim / 2f * terrainSize, yDim / 2f * terrainSize); // Top left
+        return corners;
+    }
 }

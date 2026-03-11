@@ -31,6 +31,12 @@ public class CreatureMovement : MonoBehaviour
     {
         MapTerrain currentTile = DetectTile(creature.transform.position);
         Move(Random.insideUnitCircle.normalized);
+        UpdateFov(Random.Range(0, 360));
+    }
+
+    private void UpdateFov(int v)
+    {
+        fov.UpdateViewDirection(v, stats.ViewAngle);
     }
 
     private MapTerrain DetectTile(Vector3 position)
