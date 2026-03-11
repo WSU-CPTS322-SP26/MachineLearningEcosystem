@@ -20,7 +20,7 @@ public class ProceduralGeneration : MonoBehaviour
     private static int iter = 0;
     private static int maxIter;
     private static bool isGenerating = false;
-    private static WFCCell[,] cells;
+    public static WFCCell[,] cells;
     public static IEnumerator CollapseWaveFunction(WFCCell[,] cs)
     {
         isGenerating = true;

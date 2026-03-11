@@ -14,13 +14,13 @@ public class MapManager : MonoBehaviour
     [SerializeField] private static int xDim = 80;
     [SerializeField] private static int yDim = 50;
     [SerializeField] private float terrainSize = 64;
-    [SerializeField] private List<TerrainData> terrainOptions;
+    [SerializeField] public List<TerrainData> terrainOptions;
     [SerializeField] private GameObject terrainPrefab;
     [SerializeField] private TerrainData emptyData;
     private WFCCell[,] cells;
     private MapTerrain[,] map;
 
-    private void Start()
+    private void Awake()
     {
         if (instance == null)
         {

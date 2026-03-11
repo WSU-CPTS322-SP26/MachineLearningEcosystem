@@ -375,8 +375,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 106.9348, y: 0.3849}
-  m_SizeDelta: {x: 53.8697, y: 47.6907}
+  m_AnchoredPosition: {x: 143.5989, y: 0.9087}
+  m_SizeDelta: {x: 127.1978, y: 46.6431}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &165457397
 MonoBehaviour:
@@ -965,7 +965,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureMovement
   moveTime: 0.25
-  simulationSpeedText: {fileID: 0}
   creature: {fileID: 790589681}
   width: 5
   height: 5
