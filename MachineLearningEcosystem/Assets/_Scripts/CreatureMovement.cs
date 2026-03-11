@@ -10,18 +10,22 @@ public class CreatureMovement : MonoBehaviour
     [SerializeField] private int height;
     [SerializeField] private FieldOfView fov;
     private CreatureStatstics stats;
-    void Awake()
+    private void Awake()
     {
         stats = creature.GetComponent<CreatureStatstics>();
         if (stats == null)
         {
             stats = creature.AddComponent<CreatureStatstics>();
         }
-
-        fov.SetViewAngle(50);
     }
 
-    void Update()
+    private void Start()
+    {
+        fov.SetViewDistance(stats.ViewDistance);
+        fov.UpdateViewDirection(0, stats.ViewAngle);
+    }
+
+    private void Update()
     {
         Move(Random.insideUnitCircle.normalized);
     }
@@ -29,7 +33,7 @@ public class CreatureMovement : MonoBehaviour
     private bool Move(Vector2 direction)
     {
         direction = direction.normalized;
-        Vector2 moveAttempt = direction * movespeed * Time.deltaTime;
+        Vector2 moveAttempt = movespeed * Time.deltaTime * direction;
 
         if (CheckBoundries(moveAttempt))
         {

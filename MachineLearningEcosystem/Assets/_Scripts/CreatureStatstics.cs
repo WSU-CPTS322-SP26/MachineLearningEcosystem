@@ -9,22 +9,24 @@ public class CreatureStatstics : MonoBehaviour
 
     [SerializeField] private string _creatureName;
 
-    void Start()
+    private void Awake()
     {
+        stats.Add("Health", 0);
+        stats.Add("maxHealth", 0);
 
-        stats["Health"] = 0;
-        stats["maxHealth"] = 0;
+        stats.Add("ViewDistance", 20);
+        stats.Add("ViewAngle", 70);
 
-        stats["Speed"] = 0;
-        stats["maxSpeed"] = 0;
+        stats.Add("Speed", 0);
+        stats.Add("maxSpeed", 0);
 
-        stats["Thirst"] = 0;
-        stats["maxThirst"] = 0;
+        stats.Add("Thirst", 0);
+        stats.Add("maxThirst", 0);
 
-        stats["Hunger"] = 0;
-        stats["maxHunger"] = 0;
+        stats.Add("Hunger", 0);
+        stats.Add("maxHunger", 0);
 
-        stats["Size"] = 0;
+        stats.Add("Size", 0);
     }
 
     //setters and getters
