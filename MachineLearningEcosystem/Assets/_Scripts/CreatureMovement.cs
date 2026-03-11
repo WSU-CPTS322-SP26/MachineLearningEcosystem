@@ -4,64 +4,48 @@ using UnityEngine;
 public class CreatureMovement : MonoBehaviour
 {
 
-    [SerializeField] private float moveTime = 0;
-    private float timer;
-
-
+    [SerializeField] private float movespeed = 1f;
     [SerializeField] private GameObject creature;
     [SerializeField] private int width;
     [SerializeField] private int height;
-
-
-
-    //doesn't work when pausing in simulation (doesn't restart after unpause) and doesn't start when entering from main menu
-
-
-    void Start()
+    [SerializeField] private FieldOfView fov;
+    private CreatureStatstics stats;
+    void Awake()
     {
-        
+        stats = creature.GetComponent<CreatureStatstics>();
+        if (stats == null)
+        {
+            stats = creature.AddComponent<CreatureStatstics>();
+        }
+
+        fov.SetViewAngle(50);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Move();
+        Move(Random.insideUnitCircle.normalized);
     }
 
-
-    private void Move()
+    private bool Move(Vector2 direction)
     {
-        if (timer >= moveTime)
+        direction = direction.normalized;
+        Vector2 moveAttempt = direction * movespeed * Time.deltaTime;
+
+        if (CheckBoundries(moveAttempt))
         {
-            Vector2 direction = Random.insideUnitCircle.normalized;
-            Vector2 moveAttempt = direction * 2;
-
-            while (!CheckBoundries(moveAttempt))
-            {
-                direction = Random.insideUnitCircle.normalized;
-                moveAttempt = direction * 2;
-            }
-            creature.transform.Translate(moveAttempt);
-            timer = 0;
+            return false;
         }
-        else
-        {
-            timer += Time.deltaTime;
-        }
-        
-
-       
-
-    }
-
-    private void Move(Vector2 direction)
-    {
-
+        creature.transform.Translate(moveAttempt);
+        return true;
     }
 
     private bool CheckBoundries(Vector2 moveAttempt)
     {
-        if (moveAttempt.x + creature.transform.position.x < 0 || moveAttempt.x + creature.transform.position.x > width || moveAttempt.y + creature.transform.position.y  < 0 || moveAttempt.y + creature.transform.position.y > height)
+        Vector2 newPosition = moveAttempt + (Vector2)creature.transform.position;
+        if (newPosition.x < 0
+            || newPosition.x > width
+            || newPosition.y < 0
+            || newPosition.y > height)
         {
             return false;
         }

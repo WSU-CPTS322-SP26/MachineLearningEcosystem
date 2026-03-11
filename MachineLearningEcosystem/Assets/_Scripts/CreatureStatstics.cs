@@ -5,9 +5,9 @@ using System.Collections.Generic;
 //EXCEEDING THE MAX AND MIN VALUES OF THE VARIABLES
 public class CreatureStatstics : MonoBehaviour
 {
-    private Dictionary<string, float> stats = new Dictionary<string, float>();
+    private Dictionary<string, float> stats = new();
 
-    private string _creatureName;
+    [SerializeField] private string _creatureName;
 
     void Start()
     {
@@ -27,9 +27,8 @@ public class CreatureStatstics : MonoBehaviour
         stats["Size"] = 0;
     }
 
-
     //setters and getters
-    public string creatureName
+    public string CreatureName
     {
         get { return _creatureName; }
         set { _creatureName = value; }
@@ -40,18 +39,27 @@ public class CreatureStatstics : MonoBehaviour
         get { return stats["Health"]; }
         set { stats["Health"] = value; }
     }
-    public float maxHealth
+    public float MaxHealth
     {
         get { return stats["maxHealth"]; }
         set { stats["maxHealth"] = value; }
     }
-
+    public float ViewDistance
+    {
+        get { return stats["ViewDistance"]; }
+        set { stats["ViewDistance"] = value; }
+    }
+    public float ViewAngle
+    {
+        get { return stats["ViewAngle"]; }
+        set { stats["ViewAngle"] = value; }
+    }
     public float Speed
     {
         get { return stats["Speed"]; }
         set { stats["Speed"] = value; }
     }
-    public float maxSpeed
+    public float MaxSpeed
     {
         get { return stats["maxSpeed"]; }
         set { stats["maxSpeed"] = value; }
@@ -62,7 +70,7 @@ public class CreatureStatstics : MonoBehaviour
         get { return stats["Thirst"]; }
         set { stats["Thirst"] = value; }
     }
-    public float maxThirst
+    public float MaxThirst
     {
         get { return stats["maxThirst"]; }
         set { stats["maxThirst"] = value; }
@@ -73,7 +81,7 @@ public class CreatureStatstics : MonoBehaviour
         get { return stats["Hunger"]; }
         set { stats["Hunger"] = value; }
     }
-    public float maxHunger
+    public float MaxHunger
     {
         get { return stats["maxHunger"]; }
         set { stats["maxHunger"] = value; }
@@ -85,11 +93,8 @@ public class CreatureStatstics : MonoBehaviour
         set { stats["Size"] = value; }
     }
 
-
-
-    // Update is called once per frame
-    void Update()
+    public void RandomizeStats()
     {
-        
+        // Implement randomization logic here, ensuring that values do not exceed max and min limits
     }
 }
