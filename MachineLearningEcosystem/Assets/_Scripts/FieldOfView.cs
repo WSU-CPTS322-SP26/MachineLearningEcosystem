@@ -14,6 +14,7 @@ public class FieldOfView : MonoBehaviour
     private float viewDistance = 20f;
     private int rayCount = 40;
     private float baseAngle = 0f;
+    private float direction = 0f;
 
     void Start()
     {
@@ -23,13 +24,7 @@ public class FieldOfView : MonoBehaviour
 
     void Update()
     {
-        if (viewAngle > 0)
-        {
-            UpdateViewDirection(0, viewAngle - 1);;
-        }
-        else {
-            UpdateViewDirection(0, 350);
-        }
+        SpinFov();
         CreateWedge();
     }
     
@@ -73,15 +68,45 @@ public class FieldOfView : MonoBehaviour
         viewDistance = newDistance;
     }
 
-    public void UpdateViewDirection(float direction, float angle)
+    public void UpdateViewDirection(float newDirection, float angle)
     {
         SetViewAngle(angle);
-        baseAngle = (direction + (angle / 2)) % 360;
+        direction = newDirection;
+        baseAngle = direction + (angle / 2);
     }
 
     private static Vector3 GetVectorFromAngle(float angle)
     {
         float angleRad = angle * (Mathf.PI / 180f);
         return new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+    }
+    private void SpinFov()
+    {
+        if (viewAngle > 0)
+        {
+            viewAngle -= 0.1f;
+        }
+        else {
+            viewAngle = 350;
+        }
+
+        if (direction < 360f)
+        {
+            direction += 0.1f;
+        }
+        else
+        {
+            direction = 0f;
+        }
+
+        if (viewDistance > 50)
+        {
+            viewDistance = 1;
+        }
+        else
+        {
+            viewDistance += 0.1f;
+        }
+        UpdateViewDirection(direction, viewAngle);;
     }
 }
