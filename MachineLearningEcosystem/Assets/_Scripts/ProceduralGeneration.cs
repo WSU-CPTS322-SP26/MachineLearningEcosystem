@@ -21,6 +21,11 @@ public class ProceduralGeneration : MonoBehaviour
     private static int maxIter;
     private static bool isGenerating = false;
     private static WFCCell[,] cells;
+
+    private void Start()
+    {
+        isGenerating = false;
+    }
     public static IEnumerator CollapseWaveFunction(WFCCell[,] cs)
     {
         isGenerating = true;
@@ -175,5 +180,10 @@ public class ProceduralGeneration : MonoBehaviour
     public static void SetAnimationSpeed(int speed)
     {
         animation_speed = speed;
+    }
+    public static void ResetGeneration()
+    {
+        isGenerating = false;
+        iter = 0;
     }
 }

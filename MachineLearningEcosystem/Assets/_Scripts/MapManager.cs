@@ -26,6 +26,11 @@ public class MapManager : MonoBehaviour
         {
             instance = this;
         }
+        else
+        {
+            Destroy(gameObject);
+        }
+        ProceduralGeneration.ResetGeneration();
     }
     public void DisplayMap()
     {

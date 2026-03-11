@@ -8,8 +8,8 @@ public class CreatureMovement : MonoBehaviour
 
     [SerializeField] private float movespeed = 1f;
     [SerializeField] private GameObject creature;
-    [SerializeField] private int width;
-    [SerializeField] private int height;
+    // [SerializeField] private int width;
+    // [SerializeField] private int height;
     [SerializeField] private FieldOfView fov;
     private CreatureStatstics stats;
     private void Awake()
@@ -29,18 +29,14 @@ public class CreatureMovement : MonoBehaviour
 
     private void Update()
     {
-        MapTerrain currentTile = DetectTile();
-        if (currentTile != null)
-        {
-            Debug.Log("Current tile: " + currentTile.GetTerrainData().GetTerrainType());
-        }
+        MapTerrain currentTile = DetectTile(creature.transform.position);
         Move(Random.insideUnitCircle.normalized);
     }
 
-    private MapTerrain DetectTile()
+    private MapTerrain DetectTile(Vector3 position)
     {
         MapTerrain tile = null;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(creature.transform.position, 0.1f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 0.1f);
         // Process the detected colliders to determine the current tile
         foreach (Collider2D collider in colliders)
         {
@@ -58,7 +54,7 @@ public class CreatureMovement : MonoBehaviour
         direction = direction.normalized;
         Vector2 moveAttempt = movespeed * Time.deltaTime * direction;
 
-        if (CheckBoundries(moveAttempt))
+        if (!CheckBoundries(moveAttempt))
         {
             return false;
         }
@@ -69,14 +65,24 @@ public class CreatureMovement : MonoBehaviour
     private bool CheckBoundries(Vector2 moveAttempt)
     {
         Vector2 newPosition = moveAttempt + (Vector2)creature.transform.position;
-        if (newPosition.x < 0
-            || newPosition.x > width
-            || newPosition.y < 0
-            || newPosition.y > height)
+        // if (newPosition.x < 0
+        //     || newPosition.x > width
+        //     || newPosition.y < 0
+        //     || newPosition.y > height)
+        // {
+        //     Debug.Log("Cannot move to target: Out of bounds");
+        //     return false;
+        // }
+        MapTerrain tile = DetectTile(newPosition);
+        if (tile == null || tile.GetTerrainData() == null || tile.GetTerrainData().GetTerrainType() == "water" || tile.GetTerrainData().GetTerrainType() == "Empty")
         {
-            return false;
+            Debug.Log("Cannot move to target");
+            return false; // Must have a tile
+        }
+        else
+        {
+            Debug.Log("Moved to target: " + tile.GetTerrainData().GetTerrainType());
         }
         return true;
     }
-
 }
