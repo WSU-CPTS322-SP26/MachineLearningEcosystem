@@ -1,6 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+
+/// <summary>
+/// NOT IN USE ANYMORE. EVERYTHING FOUND IN CAMERA CONTROLLER
+/// 
+/// </summary>
 public class CameraZoom : MonoBehaviour
 {
 
@@ -33,6 +39,6 @@ public class CameraZoom : MonoBehaviour
             Vector3 diff= mouseWorldPos - cam.transform.position;
             cam.transform.position += diff * scroll * 0.5f;
         }
-        
+
     }
 }
