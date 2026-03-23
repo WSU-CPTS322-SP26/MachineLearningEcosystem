@@ -20,9 +20,9 @@ public class ProceduralGeneration : MonoBehaviour
     private static int iter = 0;
     private static int maxIter;
     private static bool isGenerating = false;
-    private static WFCCell[,] cells;
+    public static WFCCell[,] cells;
 
-    private void Start()
+    public void Start()
     {
         isGenerating = false;
     }
