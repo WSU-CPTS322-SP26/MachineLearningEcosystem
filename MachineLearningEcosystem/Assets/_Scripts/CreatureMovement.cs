@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -25,13 +26,15 @@ public class CreatureMovement : MonoBehaviour
     {
         fov.SetViewDistance(stats.ViewDistance);
         fov.UpdateViewDirection(0, stats.ViewAngle);
+        fov.SetCreature(creature);
     }
 
     private void Update()
     {
-        MapTerrain currentTile = DetectTile(creature.transform.position);
+        MapTerrain currentTile = DetectTile(gameObject.transform.position);
         Move(Random.insideUnitCircle.normalized);
-        UpdateFov(Random.Range(0, 360));
+        UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 5));
+        List<GameObject> detectedObjects = fov.GetDetectedObjects(); // use to track what it sees!
     }
 
     private void UpdateFov(int v)
@@ -64,13 +67,13 @@ public class CreatureMovement : MonoBehaviour
         {
             return false;
         }
-        creature.transform.Translate(moveAttempt);
+        gameObject.transform.Translate(moveAttempt);
         return true;
     }
 
     private bool CheckBoundries(Vector2 moveAttempt)
     {
-        Vector2 newPosition = moveAttempt + (Vector2)creature.transform.position;
+        Vector2 newPosition = moveAttempt + (Vector2)gameObject.transform.position;
         // if (newPosition.x < 0
         //     || newPosition.x > width
         //     || newPosition.y < 0
@@ -82,12 +85,12 @@ public class CreatureMovement : MonoBehaviour
         MapTerrain tile = DetectTile(newPosition);
         if (tile == null || tile.GetTerrainData() == null || tile.GetTerrainData().GetTerrainType() == "water" || tile.GetTerrainData().GetTerrainType() == "Empty")
         {
-            Debug.Log("Cannot move to target");
+            // Debug.Log("Cannot move to target");
             return false; // Must have a tile
         }
         else
         {
-            Debug.Log("Moved to target: " + tile.GetTerrainData().GetTerrainType());
+            // Debug.Log("Moved to target: " + tile.GetTerrainData().GetTerrainType());
         }
         return true;
     }
