@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -31,7 +32,8 @@ public class CreatureMovement : MonoBehaviour
     {
         MapTerrain currentTile = DetectTile(creature.transform.position);
         Move(Random.insideUnitCircle.normalized);
-        UpdateFov(Random.Range(0, 360));
+        UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 5));
+        List<GameObject> detectedObjects = fov.GetDetectedObjects(); // use to track what it sees!
     }
 
     private void UpdateFov(int v)
@@ -82,12 +84,12 @@ public class CreatureMovement : MonoBehaviour
         MapTerrain tile = DetectTile(newPosition);
         if (tile == null || tile.GetTerrainData() == null || tile.GetTerrainData().GetTerrainType() == "water" || tile.GetTerrainData().GetTerrainType() == "Empty")
         {
-            Debug.Log("Cannot move to target");
+            // Debug.Log("Cannot move to target");
             return false; // Must have a tile
         }
         else
         {
-            Debug.Log("Moved to target: " + tile.GetTerrainData().GetTerrainType());
+            // Debug.Log("Moved to target: " + tile.GetTerrainData().GetTerrainType());
         }
         return true;
     }
