@@ -156,4 +156,10 @@ public class MapManager : MonoBehaviour
         corners[3] = new Vector2(-xDim / 2f * terrainSize, yDim / 2f * terrainSize); // Top left
         return corners;
     }
+
+    //getter for map array to get accessed for PlantManager
+    public MapTerrain[,] GetMap()
+    {
+        return map;
+    }
 }

@@ -63,6 +63,18 @@ public class ProceduralGeneration : MonoBehaviour
         }
         isGenerating = false;
         yield return null;
+
+        
+        //Make PlantManager start after map is fully done Generating. 
+        isGenerating = false;
+
+        if (PlantManager.instance != null)
+        {
+            PlantManager.instance.Initialize();
+        }
+
+        yield return null;
+
     }
 
     private static WFCCell GetLowestEntropy()
