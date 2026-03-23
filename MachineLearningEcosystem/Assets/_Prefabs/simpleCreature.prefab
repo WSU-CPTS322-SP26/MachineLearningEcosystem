@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2237366523666578411}
   - component: {fileID: 9184844335226530386}
-  - component: {fileID: 1467659047318388003}
   m_Layer: 0
   m_Name: simpleCreature
   m_TagString: Untagged
@@ -48,23 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureMovement
   movespeed: 10
-  creature: {fileID: 105475358296628045}
-  width: 10
-  height: 10
+  creature: {fileID: 7027422704205062383}
   fov: {fileID: 8177211018528357655}
---- !u!114 &1467659047318388003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105475358296628045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ebe660d48c6beb4abc156d954707648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureStatstics
-  _creatureName: Bobbles
 --- !u!1 &3574396403584331237
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60836ea72cef41a40943640198cd5c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FieldOfView
+  detectedObjects: []
 --- !u!23 &8104642047216614464
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -178,6 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1725579831465656206}
   - component: {fileID: 333175287795747404}
+  - component: {fileID: 2062835449437560789}
   m_Layer: 0
   m_Name: body
   m_TagString: Untagged
@@ -194,7 +180,7 @@ Transform:
   m_GameObject: {fileID: 7027422704205062383}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -259,3 +245,40 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!70 &2062835449437560789
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7027422704205062383}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0

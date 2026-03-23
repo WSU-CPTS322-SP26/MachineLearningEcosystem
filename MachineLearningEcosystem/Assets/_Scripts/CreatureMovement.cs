@@ -26,11 +26,12 @@ public class CreatureMovement : MonoBehaviour
     {
         fov.SetViewDistance(stats.ViewDistance);
         fov.UpdateViewDirection(0, stats.ViewAngle);
+        fov.SetCreature(creature);
     }
 
     private void Update()
     {
-        MapTerrain currentTile = DetectTile(creature.transform.position);
+        MapTerrain currentTile = DetectTile(gameObject.transform.position);
         Move(Random.insideUnitCircle.normalized);
         UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 5));
         List<GameObject> detectedObjects = fov.GetDetectedObjects(); // use to track what it sees!
@@ -66,13 +67,13 @@ public class CreatureMovement : MonoBehaviour
         {
             return false;
         }
-        creature.transform.Translate(moveAttempt);
+        gameObject.transform.Translate(moveAttempt);
         return true;
     }
 
     private bool CheckBoundries(Vector2 moveAttempt)
     {
-        Vector2 newPosition = moveAttempt + (Vector2)creature.transform.position;
+        Vector2 newPosition = moveAttempt + (Vector2)gameObject.transform.position;
         // if (newPosition.x < 0
         //     || newPosition.x > width
         //     || newPosition.y < 0

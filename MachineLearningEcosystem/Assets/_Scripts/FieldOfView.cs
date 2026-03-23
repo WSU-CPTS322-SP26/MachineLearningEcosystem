@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 
 [RequireComponent(typeof(MeshFilter))]
 public class FieldOfView : MonoBehaviour
@@ -14,6 +15,7 @@ public class FieldOfView : MonoBehaviour
     private Vector2[] uv;
     private int[] triangles;
     private Vector3 origin = Vector3.zero;
+    private GameObject creature;
     private float viewAngle = 90f;
     private float viewDistance = 20f;
     private int rayCount = 40;
@@ -32,20 +34,31 @@ public class FieldOfView : MonoBehaviour
         DetectObjects();
     }
 
+    public void SetCreature(GameObject gameObj)
+    {
+        creature = gameObj;
+    }
+
     private void DetectObjects()
     {
         detectedObjects.Clear();
-        Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(transform.position, viewDistance);
+        Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(transform.position, viewDistance); // should return the body of the creature
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
         {
             Transform target = targetsInViewRadius[i].transform;
             Vector2 dirToTarget = (target.position - transform.position).normalized;
-
-            if (Vector2.Angle(transform.up, dirToTarget) < viewAngle / 2)
+            Vector2 fovForward = new(Mathf.Cos(direction * Mathf.Deg2Rad), Mathf.Sin(direction * Mathf.Deg2Rad));
+            if (Vector2.Angle(fovForward, dirToTarget) < viewAngle / 2)
             {
-                // Debug.Log("Target Detected: " + target.name);
-                detectedObjects.Add(target.gameObject);
+                if (target.gameObject != creature)
+                {
+                    // if (target.gameObject.GetComponent<CreatureStatstics>() != null)
+                    // {
+                    //     Debug.Log("Target Detected: " + target.name);
+                    // }
+                    detectedObjects.Add(target.gameObject);
+                }
             }
         }
     }
