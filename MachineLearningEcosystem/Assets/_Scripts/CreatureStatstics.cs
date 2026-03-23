@@ -36,6 +36,12 @@ public class CreatureStatstics : MonoBehaviour
         set { _creatureName = value; }
     }
 
+    public float getStat(string name)
+    {
+        return stats[name];
+    }
+
+
     public float Health
     {
         get { return stats["Health"]; }
