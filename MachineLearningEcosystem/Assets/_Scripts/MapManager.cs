@@ -13,7 +13,7 @@ public class MapManager : MonoBehaviour
     public static MapManager instance;
     [SerializeField] private static int xDim = 80;
     [SerializeField] private static int yDim = 50;
-    [SerializeField] private float terrainSize = 64;
+    [SerializeField] private static float terrainSize = 64;
     [SerializeField] public List<TerrainData> terrainOptions;
     [SerializeField] private GameObject terrainPrefab;
     [SerializeField] private TerrainData emptyData;
@@ -145,6 +145,15 @@ public class MapManager : MonoBehaviour
     public void SetYDim(int y)
     {
         yDim = y;
+    }
+
+    public static float GetTerrainSize()
+    {
+        return terrainSize;
+    }
+    public void SetTerrainSize(float x)
+    {
+        terrainSize = x;
     }
 
     public Vector2[] GetCorners()

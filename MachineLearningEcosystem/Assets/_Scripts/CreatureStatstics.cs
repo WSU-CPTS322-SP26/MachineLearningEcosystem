@@ -8,6 +8,7 @@ public class CreatureStatstics : MonoBehaviour
     private Dictionary<string, float> stats = new();
 
     [SerializeField] private string _creatureName;
+    [SerializeField] private bool _carnivorous;
     private float statTimer = 0f;
     public event Action DeathSignal;
 
@@ -35,6 +36,12 @@ public class CreatureStatstics : MonoBehaviour
     {
         get { return _creatureName; }
         set { _creatureName = value; }
+    }
+
+    public bool IsCarnivore
+    {
+        get { return _carnivorous; }
+        set { _carnivorous = value; }
     }
 
     public float getStat(string name)

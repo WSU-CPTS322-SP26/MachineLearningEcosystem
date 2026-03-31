@@ -3,6 +3,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.TerrainUtils;
+using UnityEngine.Tilemaps;
 
 public class CreatureMovement : MonoBehaviour
 {
@@ -12,7 +13,9 @@ public class CreatureMovement : MonoBehaviour
     // [SerializeField] private int width;
     // [SerializeField] private int height;
     [SerializeField] private FieldOfView fov;
+    private List<GameObject> vision;
     private CreatureStatstics stats;
+    
     private void Awake()
     {
         stats = creature.GetComponent<CreatureStatstics>();
@@ -32,18 +35,52 @@ public class CreatureMovement : MonoBehaviour
 
     private void Update()
     {
-        MapTerrain currentTile = DetectTile(gameObject.transform.position);
+        vision = fov.GetDetectedObjects();
         Move(Random.insideUnitCircle.normalized, 1f);
         UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 6));
     }
 
+    public bool CanDrink()
+    {
+        // Detect tiles in each of four directions, you can use an action to drink if one of them is water
+        // Salt water does not exist in this world (or everything can drink salt, idk)
+        List<MapTerrain> ns = GetNeighbors(0.5f);
+        foreach (MapTerrain tile in ns)
+        {
+            if (tile != null && tile.GetTerrainData().GetTerrainType() == "water")
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    // Get neighboring tiles (if distanceforcheck == 1), if distanceforcheck < 1, get closeby tiles (creature is at edge of one tile)
+    private List<MapTerrain> GetNeighbors(float distanceForCheck)
+    {
+        MapTerrain currentTile = DetectTile(transform.position);
+        List<MapTerrain> ns = new();
+        ns.Add(DetectTile(transform.position + (Vector3.up * MapManager.GetTerrainSize() * distanceForCheck)));
+        ns.Add(DetectTile(transform.position + (Vector3.up * -1 * MapManager.GetTerrainSize() * distanceForCheck)));
+        ns.Add(DetectTile(transform.position + (Vector3.right * MapManager.GetTerrainSize() * distanceForCheck)));
+        ns.Add(DetectTile(transform.position + (Vector3.right * -1 * MapManager.GetTerrainSize() * distanceForCheck)));
+        return ns;
+    }
+    
+    // Get what the creature sees
     public List<GameObject> GetVision()
     {
-        return fov.GetDetectedObjects(); // Track what it sees!
+        return vision;
     }
+
+    // Change where the creature is looking currently
     public void UpdateFov(int v)
     {
         fov.UpdateViewDirection(v, stats.ViewAngle);
+    }
+
+    public MapTerrain GetCurrentTile()
+    {
+        return DetectTile(transform.position);
     }
 
     // Get the tile at the target position
@@ -82,14 +119,6 @@ public class CreatureMovement : MonoBehaviour
     private bool CheckBoundries(Vector2 moveAttempt)
     {
         Vector2 newPosition = moveAttempt + (Vector2)gameObject.transform.position;
-        // if (newPosition.x < 0
-        //     || newPosition.x > width
-        //     || newPosition.y < 0
-        //     || newPosition.y > height)
-        // {
-        //     Debug.Log("Cannot move to target: Out of bounds");
-        //     return false;
-        // }
         MapTerrain tile = DetectTile(newPosition);
         if (tile == null || tile.GetTerrainData() == null || tile.GetTerrainData().GetTerrainType() == "water" || tile.GetTerrainData().GetTerrainType() == "Empty")
         {
