@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -39,18 +40,30 @@ public class CreatureMovement : MonoBehaviour
         Move(Random.insideUnitCircle.normalized, 1f);
         UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 6));
         Drink();
+        Eat();
     }
 
     public void Eat()
     {
-        if (CanEat())
+        GameObject target = CanEat();
+        if (target != null)
         {
-            stats.Hunger += 100f;
+            stats.Hunger += 40f;
+            target.GetComponent<PlantInstance>()?.Consume();
         }
     }
-    public bool CanEat()
+    public GameObject CanEat()
     {
-        return false;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f); // give creature some eating range
+        // Process the detected colliders to determine the current tile
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject.GetComponent<PlantInstance>() != null)
+            {
+                return collider.gameObject;
+            }
+        }
+        return null;
     }
 
     public void Drink()

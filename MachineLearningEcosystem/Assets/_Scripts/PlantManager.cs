@@ -103,6 +103,7 @@ public class PlantManager : MonoBehaviour
         if (plantObjects.Contains(plant))
         {
             plantObjects.Remove(plant);
+            Destroy(plant);
         }
     }
 
