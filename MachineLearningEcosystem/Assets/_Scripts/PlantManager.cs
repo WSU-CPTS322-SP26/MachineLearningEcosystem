@@ -11,6 +11,7 @@ public class PlantManager : MonoBehaviour
     [SerializeField] private float growIntervalMax = 10f; //MAX WAIT SPEED
     private List<MapTerrain> grassTiles;
     private List<GameObject> plantObjects = new();
+    private ObjectPool<PlantInstance> plantPool;
     private bool isGrowing = false;
 
     private void Awake()
@@ -23,6 +24,11 @@ public class PlantManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        plantPool = new(plantPrefab.GetComponent<PlantInstance>(), 150, instance.gameObject.transform);
     }
 
     //run after map generates
@@ -68,8 +74,11 @@ public class PlantManager : MonoBehaviour
             MapTerrain tile = availableTiles[index];
             availableTiles.RemoveAt(index);
 
-            Vector3 spawnPos = tile.transform.position;
-            plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
+            Vector3 spawnPos = tile.transform.position + (Vector3.up * Random.Range(-0.1f, 0.1f)) + (Vector3.right * Random.Range(-0.1f, 0.1f));
+            //plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
+            PlantInstance newPlant = plantPool.Get();
+            plantObjects.Add(newPlant.gameObject);
+            newPlant.transform.position = spawnPos;
         }
     }
 
@@ -84,8 +93,11 @@ public class PlantManager : MonoBehaviour
             MapTerrain tile = availableTiles[index];
             availableTiles.RemoveAt(index);
 
-            Vector3 spawnPos = tile.transform.position;
-            plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
+            Vector3 spawnPos = tile.transform.position + (Vector3.up * Random.Range(-0.1f, 0.1f)) + (Vector3.right * Random.Range(-0.1f, 0.1f));
+            // plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
+            PlantInstance newPlant = plantPool.Get();
+            plantObjects.Add(newPlant.gameObject);
+            newPlant.transform.position = spawnPos;
 
             float waitTime = UnityEngine.Random.Range(growIntervalMin, growIntervalMax);
             yield return new WaitForSeconds(waitTime);
@@ -99,7 +111,7 @@ public class PlantManager : MonoBehaviour
         if (plantObjects.Contains(plant))
         {
             plantObjects.Remove(plant);
-            Destroy(plant);
+            plantPool.ReturnToPool(plant.GetComponent<PlantInstance>());
         }
         if (!isGrowing)
         {
@@ -112,7 +124,7 @@ public class PlantManager : MonoBehaviour
     {
         foreach (GameObject plant in plantObjects)
         {
-            Destroy(plant);
+            plantPool.ReturnToPool(plant.GetComponent<PlantInstance>());
         }
         plantObjects.Clear();
     }
