@@ -9,14 +9,13 @@ public class PlantManager : MonoBehaviour
     private List<MapTerrain> grassTiles;
 
     [SerializeField] private GameObject plantPrefab;
+    private List<GameObject> plantObjects = new();
 
     [SerializeField] private int maxPlants = 50; //MAX AMOUNT OF PLANTS
 
     [SerializeField] private float growIntervalMin = 1f; //MINIMUM WAIT SPEED 
 
     [SerializeField] private float growIntervalMax = 4f; //MAX WAIT SPEED
-
-    private int currentPlantCount = 0;
 
     private void Awake()
     {
@@ -33,7 +32,7 @@ public class PlantManager : MonoBehaviour
     //run after map generates
     public void Initialize()
     {
-        Debug.Log("PlantManager initializing..."); //can delete later
+        //Debug.Log("PlantManager initializing...");
 
 
         //Map from MapManager
@@ -46,67 +45,73 @@ public class PlantManager : MonoBehaviour
         //cell amount.
         int xDim = MapManager.GetXDim();
         int yDim = MapManager.GetYDim();
-        Debug.Log("Mapsize: " + xDim + " x " + yDim); //can erase after
+        //Debug.Log("Mapsize: " + xDim + " x " + yDim);
 
 
         //find all grass tiles
-        for (int x = 0; x < xDim; x++)
-        {
-            for(int y = 0; y < yDim; y++)
+        foreach (MapTerrain tile in map) {
+            if (tile.GetTerrainData() != null && tile.GetTerrainData().GetTerrainType() == "grass")
             {
-                MapTerrain tile = map[x, y];
-                if (tile.GetTerrainData() != null && tile.GetTerrainData().GetTerrainType() == "grass")
-                {
-                    grassTiles.Add(tile);
-                }
+                grassTiles.Add(tile);
             }
         }
 
-        Debug.Log("Found " + grassTiles.Count + " grass tiles!"); //can delete later
-
-
-        StartCoroutine(GrowPlants());
- 
+        maxPlants = (int)(grassTiles.Count * .05f); // ~ 1/20 grass tiles has a plant food
+        GrowInitialPlants();
+        // Debug.Log("Found " + grassTiles.Count + " grass tiles!"); 
     }
 
-
-    //grow plants through interval and have a maximum amount of plants limit
-    private IEnumerator GrowPlants()
+    // Instantly grow max plants
+    private void GrowInitialPlants()
     {
         List<MapTerrain> availableTiles = new List<MapTerrain>(grassTiles);
 
-        while (availableTiles.Count > 0 && currentPlantCount < maxPlants)
+        while (availableTiles.Count > 0 && plantObjects.Count < maxPlants)
         {
             int index = UnityEngine.Random.Range(0, availableTiles.Count);
             MapTerrain tile = availableTiles[index];
             availableTiles.RemoveAt(index);
 
             Vector3 spawnPos = tile.transform.position;
-            Instantiate(plantPrefab, spawnPos, Quaternion.identity);
+            plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
+        }
+    }
 
-            currentPlantCount++;
+    //grow plants through interval and have a maximum amount of plants limit
+    private IEnumerator GrowPlants()
+    {
+        List<MapTerrain> availableTiles = new List<MapTerrain>(grassTiles);
+
+        while (availableTiles.Count > 0 && plantObjects.Count < maxPlants)
+        {
+            int index = UnityEngine.Random.Range(0, availableTiles.Count);
+            MapTerrain tile = availableTiles[index];
+            availableTiles.RemoveAt(index);
+
+            Vector3 spawnPos = tile.transform.position;
+            plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
 
             float waitTime = UnityEngine.Random.Range(growIntervalMin, growIntervalMax);
             yield return new WaitForSeconds(waitTime);
         }
 
-        Debug.Log("Finsihed growing plants!");
+        //Debug.Log("Finsihed growing plants!");
     }
 
- 
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void ClearPlant(GameObject plant)
     {
-        
+        if (plantObjects.Contains(plant))
+        {
+            plantObjects.Remove(plant);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ClearAllPlants()
     {
-        
+        foreach (GameObject plant in plantObjects)
+        {
+            Destroy(plant);
+        }
+        plantObjects.Clear();
     }
-
-    
 }

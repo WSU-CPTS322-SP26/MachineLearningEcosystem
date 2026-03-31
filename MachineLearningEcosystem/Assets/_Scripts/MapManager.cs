@@ -126,6 +126,7 @@ public class MapManager : MonoBehaviour
     }
     public void GenerateMap()
     {
+        PlantManager.instance?.ClearAllPlants();
         InitializeCells();
         DisplayBlankMap();
         StartCoroutine(ProceduralGeneration.CollapseWaveFunction(cells));

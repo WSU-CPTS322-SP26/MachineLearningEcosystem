@@ -67,12 +67,10 @@ public class ProceduralGeneration : MonoBehaviour
         
         //Make PlantManager start after map is fully done Generating. 
         isGenerating = false;
-
         if (PlantManager.instance != null)
         {
             PlantManager.instance.Initialize();
         }
-
         yield return null;
 
     }
