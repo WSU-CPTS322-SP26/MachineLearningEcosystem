@@ -1,0 +1,14 @@
+using UnityEngine;
+
+public class MeatInstance : MonoBehaviour
+{
+    private int bitesLeft = 3;
+    public void Consume()
+    {
+        bitesLeft -= 1;
+        if (bitesLeft <= 0)
+        {
+            Destroy(gameObject); // kill the meat, it hath been eaten
+        }
+    }
+}

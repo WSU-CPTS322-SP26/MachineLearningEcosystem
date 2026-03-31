@@ -50,7 +50,8 @@ public class CameraController : MonoBehaviour
         {
             CameraPosition.x += adjustedSpeed * Time.deltaTime;
         }
-
+        Vector2[] corners = MapManager.instance.GetCorners(); // bot left, bot right, top left, top right
+        CameraPosition = new Vector3(Mathf.Clamp(CameraPosition.x, corners[0].x, corners[1].x), Mathf.Clamp(CameraPosition.y, corners[0].y, corners[3].y), CameraPosition.z);
         transform.position = CameraPosition;
 
         //ZOOM

@@ -1,32 +1,34 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Timeline;
+using System;
 
-//HAVE A FUNCTION WHERE IT RANDOMIZES THE CREATURE STATISTICS WITHOUT 
-//EXCEEDING THE MAX AND MIN VALUES OF THE VARIABLES
 public class CreatureStatstics : MonoBehaviour
 {
     private Dictionary<string, float> stats = new();
 
     [SerializeField] private string _creatureName;
+    [SerializeField] private bool _carnivorous;
+    private float statTimer = 0f;
+    public event Action DeathSignal;
 
     private void Awake()
     {
-        stats.Add("Health", 0);
-        stats.Add("maxHealth", 0);
+        stats.Add("Health", 100);
+        stats.Add("currHealth", 100);
 
         stats.Add("ViewDistance", 20);
         stats.Add("ViewAngle", 70);
 
-        stats.Add("Speed", 0);
-        stats.Add("maxSpeed", 0);
+        stats.Add("Speed", 5);
 
-        stats.Add("Thirst", 0);
-        stats.Add("maxThirst", 0);
+        stats.Add("Thirst", 200);
+        stats.Add("currThirst", 200);
 
-        stats.Add("Hunger", 0);
-        stats.Add("maxHunger", 0);
+        stats.Add("Hunger", 100);
+        stats.Add("currHunger", 100);
 
-        stats.Add("Size", 0);
+        // stats.Add("Size", 2);
     }
 
     //setters and getters
@@ -36,21 +38,32 @@ public class CreatureStatstics : MonoBehaviour
         set { _creatureName = value; }
     }
 
+    public bool IsCarnivore
+    {
+        get { return _carnivorous; }
+        set { _carnivorous = value; }
+    }
+
     public float getStat(string name)
     {
         return stats[name];
     }
-
 
     public float Health
     {
         get { return stats["Health"]; }
         set { stats["Health"] = value; }
     }
-    public float MaxHealth
+    public float CurrHealth
     {
-        get { return stats["maxHealth"]; }
-        set { stats["maxHealth"] = value; }
+        get { return stats["currHealth"]; }
+        set {
+            stats["currHealth"] = Mathf.Clamp(value, 0, Health);
+            if (value <= 0)
+            {
+                DeathSignal?.Invoke();
+            }
+        }
     }
     public float ViewDistance
     {
@@ -67,21 +80,27 @@ public class CreatureStatstics : MonoBehaviour
         get { return stats["Speed"]; }
         set { stats["Speed"] = value; }
     }
-    public float MaxSpeed
-    {
-        get { return stats["maxSpeed"]; }
-        set { stats["maxSpeed"] = value; }
-    }
-
     public float Thirst
     {
         get { return stats["Thirst"]; }
         set { stats["Thirst"] = value; }
+        
     }
-    public float MaxThirst
+    // public float ThirstLossRate
+    // {
+    //     get { return stats["ThirstLossRate"]; }
+    //     set { stats["ThirstLossRate"] = value; }
+    // }
+    public float CurrThirst
     {
-        get { return stats["maxThirst"]; }
-        set { stats["maxThirst"] = value; }
+        get { return stats["currThirst"]; }
+        set {
+            stats["currThirst"] = Mathf.Clamp(value, 0, Thirst);
+            if (value <= 0)
+            {
+                DeathSignal?.Invoke();
+            }
+        }
     }
 
     public float Hunger
@@ -89,20 +108,39 @@ public class CreatureStatstics : MonoBehaviour
         get { return stats["Hunger"]; }
         set { stats["Hunger"] = value; }
     }
-    public float MaxHunger
+    // public float HungerLossRate
+    // {
+    //     get { return stats["HungerLossRate"]; }
+    //     set { stats["HungerLossRate"] = value; }
+    // }
+    public float CurrHunger
     {
-        get { return stats["maxHunger"]; }
-        set { stats["maxHunger"] = value; }
+        get { return stats["currHunger"]; }
+        set {
+            stats["currHunger"] = Mathf.Clamp(value, 0, Hunger);
+            if (value <= 0)
+            {
+                DeathSignal?.Invoke();
+            }
+        }
     }
   
-    public float Size
-    {
-        get { return stats["Size"]; }
-        set { stats["Size"] = value; }
-    }
+    // public float Size
+    // {
+    //     get { return stats["Size"]; }
+    //     set { stats["Size"] = value; }
+    // }
 
-    public void RandomizeStats()
+    private void Update()
     {
-        // Implement randomization logic here, ensuring that values do not exceed max and min limits
+        statTimer += Time.deltaTime;
+        if (statTimer > 1f)
+        {
+            // Every 1 second, hunger and thirst tick down by 1
+            // Other stats that change over time can be added to this check
+            Hunger -= 1f;
+            Thirst -= 1f;
+            statTimer = 0f;
+        }
     }
 }

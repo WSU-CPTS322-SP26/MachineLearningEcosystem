@@ -61,6 +61,7 @@ GameObject:
   - component: {fileID: 8177211018528357655}
   - component: {fileID: 8104642047216614464}
   - component: {fileID: 6596317508238815216}
+  - component: {fileID: 3315024313568308950}
   m_Layer: 0
   m_Name: FieldOfView
   m_TagString: Untagged
@@ -121,7 +122,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ed0dea18c5d324247b058c95020abef7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -153,6 +154,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3574396403584331237}
   m_Mesh: {fileID: 0}
+--- !u!210 &3315024313568308950
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3574396403584331237}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 9
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
 --- !u!1 &7027422704205062383
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +250,7 @@ SpriteRenderer:
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  m_Color: {r: 0.83396226, g: 0.11171948, b: 0.11171948, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
