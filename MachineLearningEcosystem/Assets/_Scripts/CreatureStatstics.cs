@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Timeline;
+using System;
 
 //HAVE A FUNCTION WHERE IT RANDOMIZES THE CREATURE STATISTICS WITHOUT 
 //EXCEEDING THE MAX AND MIN VALUES OF THE VARIABLES
@@ -9,6 +11,7 @@ public class CreatureStatstics : MonoBehaviour
 
     [SerializeField] private string _creatureName;
     private float statTimer = 0f;
+    public event Action DeathSignal;
 
     private void Awake()
     {
@@ -19,6 +22,7 @@ public class CreatureStatstics : MonoBehaviour
         stats.Add("ViewAngle", 70);
 
         stats.Add("Speed", 5);
+        stats.Add("MaxSpeed", 20);
 
         stats.Add("Thirst", 200);
         stats.Add("ThirstLossRate", 1);
@@ -47,7 +51,13 @@ public class CreatureStatstics : MonoBehaviour
     public float Health
     {
         get { return stats["Health"]; }
-        set { stats["Health"] = value; }
+        set {
+            stats["Health"] = Mathf.Clamp(value, 0, MaxHealth);
+            if (value <= 0)
+            {
+                DeathSignal?.Invoke();
+            }
+        }
     }
     public float MaxHealth
     {
@@ -72,7 +82,13 @@ public class CreatureStatstics : MonoBehaviour
     public float Thirst
     {
         get { return stats["Thirst"]; }
-        set { stats["Thirst"] = Mathf.Clamp(value, 0, MaxThirst); }
+        set {
+            stats["Thirst"] = Mathf.Clamp(value, 0, MaxThirst);
+            if (value <= 0)
+            {
+                DeathSignal?.Invoke();
+            }
+        }
     }
     public float ThirstLossRate
     {
@@ -88,7 +104,13 @@ public class CreatureStatstics : MonoBehaviour
     public float Hunger
     {
         get { return stats["Hunger"]; }
-        set { stats["Hunger"] = Mathf.Clamp(value, 0, MaxHunger); }
+        set {
+            stats["Hunger"] = Mathf.Clamp(value, 0, MaxHunger);
+            if (value <= 0)
+            {
+                DeathSignal?.Invoke();
+            }
+        }
     }
     public float HungerLossRate
     {

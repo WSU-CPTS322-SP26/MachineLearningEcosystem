@@ -20,6 +20,7 @@ public class CreatureMovement : MonoBehaviour
         {
             stats = creature.AddComponent<CreatureStatstics>();
         }
+        stats.DeathSignal += DeathScript;
     }
 
     private void Start()
@@ -93,5 +94,18 @@ public class CreatureMovement : MonoBehaviour
             // Debug.Log("Moved to target: " + tile.GetTerrainData().GetTerrainType());
         }
         return true;
+    }
+
+    private void OnDestroy()
+    {
+        if (stats != null)
+        {
+            stats.DeathSignal -= DeathScript;
+        }
+    }
+
+    private void DeathScript()
+    {
+        
     }
 }
