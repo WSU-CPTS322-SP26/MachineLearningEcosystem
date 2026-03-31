@@ -1,10 +1,19 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreatureStatModifer : MonoBehaviour
+public class CreatureStatModifer
 {
     [SerializeField] private float mutationPercentage;
-
+    private static Dictionary<string, Tuple<float, float>> maxMins = new Dictionary<string, Tuple<float, float>>
+        {
+            ["Health"] = new Tuple<float, float>(25f, 500f),
+            ["ViewDistance"] = new Tuple<float, float>(10f, 100f),
+            ["ViewAngle"] = new Tuple<float, float>(20f, 340f),
+            ["Speed"] = new Tuple<float, float>(1f, 20f),
+            ["Thirst"] = new Tuple<float, float>(40f, 1000f),
+            ["Hunger"] = new Tuple<float, float>(40f, 1000f)
+        };
 
     public static Dictionary<string, float> ModifyStats(Dictionary<string, float> seedStats, float mutationPercent, int mutationCount = 3)
     {
@@ -19,29 +28,18 @@ public class CreatureStatModifer : MonoBehaviour
             string statB = keys[UnityEngine.Random.Range(0, keys.Count)];
 
             //if choosen stats are the same :( try again
-            if (statA == statB)
+            // also prevent scaling of current stats, they are set to max on start
+            if (statA == statB || statA.StartsWith("curr") || statB.StartsWith("curr"))
             {
                 i--;
                 continue;
             }
 
-            //prevent scaling of max stats
-            if (statA.StartsWith("max") == true || statB.StartsWith("max") == true)
-            {
-                i--;
-                continue;
-            }
-                
+            // Mutation amount based on % of current value
+            float deltaA = seedStats[statA] * mutationPercent * UnityEngine.Random.Range(0.5f, 1.5f);;
+            float deltaB = seedStats[statB] * mutationPercent * UnityEngine.Random.Range(0.5f, 1.5f);
 
-            // Get max values for scaling
-            float maxA = GetMaxValue(statA, seedStats);
-            float maxB = GetMaxValue(statB, seedStats);
-
-            // Mutation amount based on % of max
-            float deltaA = maxA * mutationPercent * UnityEngine.Random.Range(0.5f, 1.5f);
-            float deltaB = maxB * mutationPercent * UnityEngine.Random.Range(0.5f, 1.5f);
-
-            // Randomly decide which stat goes up
+            // Randomly decide which stat goes up, so each benefit corresponds to a negative
             if (UnityEngine.Random.value > 0.5f)
             {
                 newStats[statA] += deltaA;
@@ -53,26 +51,40 @@ public class CreatureStatModifer : MonoBehaviour
                 newStats[statB] += deltaB;
             }
 
-            // Clamp to prevent negatives or insane values
-            newStats[statA] = Mathf.Clamp(newStats[statA], 0f, maxA * 2f);
-            newStats[statB] = Mathf.Clamp(newStats[statB], 0f, maxB * 2f);
+            // Get min and max values for scaling
+            Tuple<float, float> maxA = GetMaxValue(statA);
+            Tuple<float, float> maxB = GetMaxValue(statB);
+
+            // Clamp to prevent going beyond true min and true max values
+            if (maxA == null)
+            {
+                newStats[statA] = Mathf.Clamp(newStats[statA], maxA.Item1, seedStats[statA] * 2);
+            }
+            else
+            {
+                newStats[statA] = Mathf.Clamp(newStats[statA], maxA.Item1, maxA.Item2);
+            }
+            
+            if (maxB == null)
+            {
+                newStats[statB] = Mathf.Clamp(newStats[statB], maxB.Item1, seedStats[statB] * 2);
+            }
+            else
+            {
+                newStats[statB] = Mathf.Clamp(newStats[statB], maxB.Item1, maxB.Item2);
+            }
         }
 
         return newStats;
     }
 
-
-
-
-    private static float GetMaxValue(string stat, Dictionary<string, float> stats)
+    private static Tuple<float, float> GetMaxValue(string stat)
     {
         // get name of max stat
-        string maxKey = "max" + stat;
+        if (maxMins.ContainsKey(stat))
+            return maxMins[stat];
 
-        if (stats.ContainsKey(maxKey))
-            return stats[maxKey];
-
-        // Fallback: use its own value
-        return stats[stat];
+        // Fallback: use null, registered as no value
+        return null;
     }
 }
