@@ -33,17 +33,21 @@ public class CreatureMovement : MonoBehaviour
     private void Update()
     {
         MapTerrain currentTile = DetectTile(gameObject.transform.position);
-        Move(Random.insideUnitCircle.normalized);
-        UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 5));
-        List<GameObject> detectedObjects = fov.GetDetectedObjects(); // use to track what it sees!
+        Move(Random.insideUnitCircle.normalized, 1f);
+        UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 6));
     }
 
-    private void UpdateFov(int v)
+    public List<GameObject> GetVision()
+    {
+        return fov.GetDetectedObjects(); // Track what it sees!
+    }
+    public void UpdateFov(int v)
     {
         fov.UpdateViewDirection(v, stats.ViewAngle);
     }
 
-    private MapTerrain DetectTile(Vector3 position)
+    // Get the tile at the target position
+    public MapTerrain DetectTile(Vector3 position)
     {
         MapTerrain tile = null;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 0.1f);
@@ -59,10 +63,12 @@ public class CreatureMovement : MonoBehaviour
         return tile;
     }
 
-    private bool Move(Vector2 direction)
+    // Move in the direction a percent of the creature's speed value
+    public bool Move(Vector2 direction, float amount)
     {
+        amount = Mathf.Clamp01(amount); // The percentage of their speed the creature moves, so they dont get trapped
         direction = direction.normalized;
-        Vector2 moveAttempt = movespeed * Time.deltaTime * direction;
+        Vector2 moveAttempt = amount * movespeed * Time.deltaTime * direction;
 
         if (!CheckBoundries(moveAttempt))
         {
@@ -72,6 +78,7 @@ public class CreatureMovement : MonoBehaviour
         return true;
     }
 
+    // Helper function to confirm if a move is valid
     private bool CheckBoundries(Vector2 moveAttempt)
     {
         Vector2 newPosition = moveAttempt + (Vector2)gameObject.transform.position;
@@ -86,12 +93,7 @@ public class CreatureMovement : MonoBehaviour
         MapTerrain tile = DetectTile(newPosition);
         if (tile == null || tile.GetTerrainData() == null || tile.GetTerrainData().GetTerrainType() == "water" || tile.GetTerrainData().GetTerrainType() == "Empty")
         {
-            // Debug.Log("Cannot move to target");
-            return false; // Must have a tile
-        }
-        else
-        {
-            // Debug.Log("Moved to target: " + tile.GetTerrainData().GetTerrainType());
+            return false; // cannot move: must have a tile
         }
         return true;
     }
@@ -104,8 +106,9 @@ public class CreatureMovement : MonoBehaviour
         }
     }
 
+    // TODO: Add to this function all important effects that happen when a creature dies (drop meat to eat, alert the ML system, etc.)
     private void DeathScript()
     {
-        
+        Destroy(gameObject);
     }
 }
