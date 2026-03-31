@@ -38,9 +38,16 @@ public class CreatureMovement : MonoBehaviour
         vision = fov.GetDetectedObjects();
         Move(Random.insideUnitCircle.normalized, 1f);
         UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 6));
+        Drink();
     }
-
-    public bool CanDrink()
+    public void Drink()
+    {
+        if (CanDrink())
+        {
+            stats.Thirst += 20f;
+        }
+    }
+    private bool CanDrink()
     {
         // Detect tiles in each of four directions, you can use an action to drink if one of them is water
         // Salt water does not exist in this world (or everything can drink salt, idk)
