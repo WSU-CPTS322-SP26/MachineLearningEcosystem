@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1767472474622304700}
   - component: {fileID: 3618776767127086579}
-  - component: {fileID: 4722416147451047992}
   - component: {fileID: -3706334914428586633}
+  - component: {fileID: 832870132001067415}
   m_Layer: 0
-  m_Name: Plant
+  m_Name: Meat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  m_Color: {r: 0.5995543, g: 0.9245283, b: 0.047098536, a: 1}
+  m_Color: {r: 0.7283019, g: 0.3222464, b: 0.28994656, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -93,18 +93,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &4722416147451047992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8252028777196891673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 098726e4b68a7754fba013a93b6e86f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!58 &-3706334914428586633
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -141,3 +129,15 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &832870132001067415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8252028777196891673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 259b07eec6c399643a7c1699446efb07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'

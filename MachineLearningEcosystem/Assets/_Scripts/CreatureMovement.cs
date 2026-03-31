@@ -51,7 +51,7 @@ public class CreatureMovement : MonoBehaviour
             if (target != null)
             {
                 stats.Hunger += 40f;
-                // Handle meat disappearing
+                target.GetComponent<MeatInstance>()?.Consume();
             }
         }
         else
@@ -66,13 +66,19 @@ public class CreatureMovement : MonoBehaviour
     }
     public GameObject CanEatMeat()
     {
-        // TODO: meat eating functionality
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f); // give creature some eating range
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject.GetComponent<MeatInstance>() != null)
+            {
+                return collider.gameObject;
+            }
+        }
         return null;
     }
     public GameObject CanEatPlants()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f); // give creature some eating range
-        // Process the detected colliders to determine the current tile
         foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject.GetComponent<PlantInstance>() != null)
