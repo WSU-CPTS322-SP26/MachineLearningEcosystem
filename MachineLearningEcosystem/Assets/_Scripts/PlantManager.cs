@@ -5,17 +5,13 @@ using System.Collections;
 public class PlantManager : MonoBehaviour
 {
     public static PlantManager instance;
-
-    private List<MapTerrain> grassTiles;
-
     [SerializeField] private GameObject plantPrefab;
-    private List<GameObject> plantObjects = new();
-
     [SerializeField] private int maxPlants = 50; //MAX AMOUNT OF PLANTS
-
     [SerializeField] private float growIntervalMin = 1f; //MINIMUM WAIT SPEED 
-
-    [SerializeField] private float growIntervalMax = 4f; //MAX WAIT SPEED
+    [SerializeField] private float growIntervalMax = 10f; //MAX WAIT SPEED
+    private List<MapTerrain> grassTiles;
+    private List<GameObject> plantObjects = new();
+    private bool isGrowing = false;
 
     private void Awake()
     {
@@ -94,7 +90,7 @@ public class PlantManager : MonoBehaviour
             float waitTime = UnityEngine.Random.Range(growIntervalMin, growIntervalMax);
             yield return new WaitForSeconds(waitTime);
         }
-
+        isGrowing = false;
         //Debug.Log("Finsihed growing plants!");
     }
 
@@ -104,6 +100,11 @@ public class PlantManager : MonoBehaviour
         {
             plantObjects.Remove(plant);
             Destroy(plant);
+        }
+        if (!isGrowing)
+        {
+            StartCoroutine(GrowPlants());
+            isGrowing = true;
         }
     }
 
