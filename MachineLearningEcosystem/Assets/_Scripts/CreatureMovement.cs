@@ -45,14 +45,31 @@ public class CreatureMovement : MonoBehaviour
 
     public void Eat()
     {
-        GameObject target = CanEat();
-        if (target != null)
+        if (stats.IsCarnivore)
         {
-            stats.Hunger += 40f;
-            target.GetComponent<PlantInstance>()?.Consume();
+            GameObject target = CanEatMeat();
+            if (target != null)
+            {
+                stats.Hunger += 40f;
+                // Handle meat disappearing
+            }
+        }
+        else
+        {
+            GameObject target = CanEatPlants();
+            if (target != null)
+            {
+                stats.Hunger += 40f;
+                target.GetComponent<PlantInstance>()?.Consume();
+            }
         }
     }
-    public GameObject CanEat()
+    public GameObject CanEatMeat()
+    {
+        // TODO: meat eating functionality
+        return null;
+    }
+    public GameObject CanEatPlants()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f); // give creature some eating range
         // Process the detected colliders to determine the current tile
