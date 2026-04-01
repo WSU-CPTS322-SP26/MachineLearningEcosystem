@@ -5,18 +5,14 @@ using System.Collections;
 public class PlantManager : MonoBehaviour
 {
     public static PlantManager instance;
-
-    private List<MapTerrain> grassTiles;
-
     [SerializeField] private GameObject plantPrefab;
-
     [SerializeField] private int maxPlants = 50; //MAX AMOUNT OF PLANTS
-
     [SerializeField] private float growIntervalMin = 1f; //MINIMUM WAIT SPEED 
-
-    [SerializeField] private float growIntervalMax = 4f; //MAX WAIT SPEED
-
-    private int currentPlantCount = 0;
+    [SerializeField] private float growIntervalMax = 10f; //MAX WAIT SPEED
+    private List<MapTerrain> grassTiles;
+    private List<GameObject> plantObjects = new();
+    private ObjectPool<PlantInstance> plantPool;
+    private bool isGrowing = false;
 
     private void Awake()
     {
@@ -30,10 +26,15 @@ public class PlantManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        plantPool = new(plantPrefab.GetComponent<PlantInstance>(), 150, instance.gameObject.transform);
+    }
+
     //run after map generates
     public void Initialize()
     {
-        Debug.Log("PlantManager initializing..."); //can delete later
+        //Debug.Log("PlantManager initializing...");
 
 
         //Map from MapManager
@@ -46,67 +47,85 @@ public class PlantManager : MonoBehaviour
         //cell amount.
         int xDim = MapManager.GetXDim();
         int yDim = MapManager.GetYDim();
-        Debug.Log("Mapsize: " + xDim + " x " + yDim); //can erase after
+        //Debug.Log("Mapsize: " + xDim + " x " + yDim);
 
 
         //find all grass tiles
-        for (int x = 0; x < xDim; x++)
-        {
-            for(int y = 0; y < yDim; y++)
+        foreach (MapTerrain tile in map) {
+            if (tile.GetTerrainData() != null && tile.GetTerrainData().GetTerrainType() == "grass")
             {
-                MapTerrain tile = map[x, y];
-                if (tile.GetTerrainData() != null && tile.GetTerrainData().GetTerrainType() == "grass")
-                {
-                    grassTiles.Add(tile);
-                }
+                grassTiles.Add(tile);
             }
         }
 
-        Debug.Log("Found " + grassTiles.Count + " grass tiles!"); //can delete later
-
-
-        StartCoroutine(GrowPlants());
- 
+        maxPlants = (int)(grassTiles.Count * .05f); // ~ 1/20 grass tiles has a plant food
+        GrowInitialPlants();
+        // Debug.Log("Found " + grassTiles.Count + " grass tiles!"); 
     }
 
+    // Instantly grow max plants
+    private void GrowInitialPlants()
+    {
+        List<MapTerrain> availableTiles = new List<MapTerrain>(grassTiles);
+
+        while (availableTiles.Count > 0 && plantObjects.Count < maxPlants)
+        {
+            int index = UnityEngine.Random.Range(0, availableTiles.Count);
+            MapTerrain tile = availableTiles[index];
+            availableTiles.RemoveAt(index);
+
+            Vector3 spawnPos = tile.transform.position + (Vector3.up * Random.Range(-0.1f, 0.1f)) + (Vector3.right * Random.Range(-0.1f, 0.1f));
+            //plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
+            PlantInstance newPlant = plantPool.Get();
+            plantObjects.Add(newPlant.gameObject);
+            newPlant.transform.position = spawnPos;
+        }
+    }
 
     //grow plants through interval and have a maximum amount of plants limit
     private IEnumerator GrowPlants()
     {
         List<MapTerrain> availableTiles = new List<MapTerrain>(grassTiles);
 
-        while (availableTiles.Count > 0 && currentPlantCount < maxPlants)
+        while (availableTiles.Count > 0 && plantObjects.Count < maxPlants)
         {
             int index = UnityEngine.Random.Range(0, availableTiles.Count);
             MapTerrain tile = availableTiles[index];
             availableTiles.RemoveAt(index);
 
-            Vector3 spawnPos = tile.transform.position;
-            Instantiate(plantPrefab, spawnPos, Quaternion.identity);
-
-            currentPlantCount++;
+            Vector3 spawnPos = tile.transform.position + (Vector3.up * Random.Range(-0.1f, 0.1f)) + (Vector3.right * Random.Range(-0.1f, 0.1f));
+            // plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
+            PlantInstance newPlant = plantPool.Get();
+            plantObjects.Add(newPlant.gameObject);
+            newPlant.transform.position = spawnPos;
 
             float waitTime = UnityEngine.Random.Range(growIntervalMin, growIntervalMax);
             yield return new WaitForSeconds(waitTime);
         }
-
-        Debug.Log("Finsihed growing plants!");
+        isGrowing = false;
+        //Debug.Log("Finsihed growing plants!");
     }
 
- 
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void ClearPlant(GameObject plant)
     {
-        
+        if (plantObjects.Contains(plant))
+        {
+            plantObjects.Remove(plant);
+            plantPool.ReturnToPool(plant.GetComponent<PlantInstance>());
+        }
+        if (!isGrowing)
+        {
+            StartCoroutine(GrowPlants());
+            isGrowing = true;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ClearAllPlants()
     {
-        
+        foreach (GameObject plant in plantObjects)
+        {
+            plantPool.ReturnToPool(plant.GetComponent<PlantInstance>());
+        }
+        plantObjects.Clear();
     }
-
-    
 }

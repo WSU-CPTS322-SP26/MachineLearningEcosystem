@@ -13,12 +13,13 @@ public class MapManager : MonoBehaviour
     public static MapManager instance;
     [SerializeField] private static int xDim = 80;
     [SerializeField] private static int yDim = 50;
-    [SerializeField] private float terrainSize = 64;
+    [SerializeField] private static float terrainSize = 3;
     [SerializeField] public List<TerrainData> terrainOptions;
     [SerializeField] private GameObject terrainPrefab;
     [SerializeField] private TerrainData emptyData;
     private WFCCell[,] cells;
     private MapTerrain[,] map;
+    private ObjectPool<MapTerrain> terrainPool;
 
     private void Awake()
     {
@@ -32,6 +33,12 @@ public class MapManager : MonoBehaviour
         }
         ProceduralGeneration.ResetGeneration();
     }
+
+    private void Start()
+    {
+        terrainPool = new(terrainPrefab.GetComponent<MapTerrain>(), 4000, gameObject.transform);
+    }
+
     public void DisplayMap()
     {
         for (int i = 0; i < cells.GetLength(0); i++) {
@@ -43,12 +50,14 @@ public class MapManager : MonoBehaviour
                     {
                         Debug.Log("Error: Cell at " + cells[i,j].placement + " has no terrain assigned");
                     }
-                    map[i,j] = Instantiate(terrainPrefab,
-                        new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0),
-                        Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+                    // map[i,j] = Instantiate(terrainPrefab,
+                    //     new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0),
+                    //     Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+                    MapTerrain newTerrain = terrainPool.Get();
+                    map[i,j] = newTerrain;
+                    newTerrain.transform.position = new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0);
                     map[i,j].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
                     map[i,j].SetTerrainData(cells[i,j].GetTerrain());
-                    map[i,j].gameObject.SetActive(true);
                 }
                 else
                 {
@@ -77,9 +86,13 @@ public class MapManager : MonoBehaviour
         Vector2Int pos = cell.placement;
         if (map[pos.x, pos.y] == null)
         {
-            map[pos.x, pos.y] = Instantiate(terrainPrefab,
-                new Vector3(pos.x * terrainSize - (xDim / 2f * terrainSize), pos.y * terrainSize - (yDim / 2f * terrainSize), 0),
-                Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+            // map[pos.x, pos.y] = Instantiate(terrainPrefab,
+            //     new Vector3(pos.x * terrainSize - (xDim / 2f * terrainSize), pos.y * terrainSize - (yDim / 2f * terrainSize), 0),
+            //     Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+            MapTerrain newTerrain = terrainPool.Get();
+            map[pos.x, pos.y].gameObject.SetActive(true);
+            map[pos.x, pos.y] = newTerrain;
+            newTerrain.transform.position = new Vector3(pos.x * terrainSize - (xDim / 2f * terrainSize), pos.y * terrainSize - (yDim / 2f * terrainSize), 0);
             map[pos.x, pos.y].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
         }
         map[pos.x, pos.y].SetTerrainData(cell.GetTerrain());
@@ -93,7 +106,8 @@ public class MapManager : MonoBehaviour
             {
                 for (int j = 0; j < cells.GetLength(1); j++)
                 {
-                    Destroy(map[i, j].gameObject);
+                    terrainPool.ReturnToPool(map[i,j].GetComponent<MapTerrain>());
+                    //Destroy(map[i, j].gameObject);
                 }
             }
         }
@@ -102,9 +116,12 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < cells.GetLength(0); i++) {
             for (int j = 0; j < cells.GetLength(1); j++)
             {
-                map[i, j] = Instantiate(terrainPrefab,
-                    new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0),
-                    Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+                // map[i, j] = Instantiate(terrainPrefab,
+                //     new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0),
+                //     Quaternion.identity, gameObject.transform).GetComponent<MapTerrain>();
+                MapTerrain newTerrain = terrainPool.Get();
+                map[i,j] = newTerrain;
+                newTerrain.transform.position = new Vector3(i * terrainSize - (xDim / 2f * terrainSize), j * terrainSize - (yDim / 2f * terrainSize), 0);
                 map[i,j].gameObject.transform.localScale = new Vector3(terrainSize, terrainSize, 1);
                 cells[i, j] = new WFCCell(i, j)
                 {
@@ -126,6 +143,7 @@ public class MapManager : MonoBehaviour
     }
     public void GenerateMap()
     {
+        PlantManager.instance?.ClearAllPlants();
         InitializeCells();
         DisplayBlankMap();
         StartCoroutine(ProceduralGeneration.CollapseWaveFunction(cells));
@@ -145,6 +163,15 @@ public class MapManager : MonoBehaviour
     public void SetYDim(int y)
     {
         yDim = y;
+    }
+
+    public static float GetTerrainSize()
+    {
+        return terrainSize;
+    }
+    public void SetTerrainSize(float x)
+    {
+        terrainSize = x;
     }
 
     public Vector2[] GetCorners()
