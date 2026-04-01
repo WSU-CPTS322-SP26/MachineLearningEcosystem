@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using System;
 
 
 
@@ -8,6 +10,11 @@ using Random = UnityEngine.Random;
 //does not spawn creatures on water tiles and creatures must spawn inside the bounds of the map.
 public class CreatureRepopluationHandler : MonoBehaviour
 {
+
+    public static CreatureRepopluationHandler instance;
+
+    [SerializeField] private Button playButton;
+
     [SerializeField] private GameObject carnivorCreature;
     [SerializeField] private GameObject herbivoreCreature;
 
@@ -19,14 +26,27 @@ public class CreatureRepopluationHandler : MonoBehaviour
     private List<GameObject> herbivoreList = new List<GameObject>();
 
 
-    //used to get size of generation field and type of tile creature is trying to be placed on
-    private WFCCell[,] terrainCells = ProceduralGeneration.cells;
-    private List<TerrainData> terrainCellOptions = MapManager.instance.terrainOptions;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
 
     void Start()
     {
+
+
+        Console.WriteLine("creature repo here");
+        playButton.onClick.AddListener(OnPlayButtonClicked);
+
         //instantiate all carnivors and herbivores to use object pooling for slight optimization 
         herbivoreList.Clear();
         carnivorList.Clear();
@@ -34,25 +54,41 @@ public class CreatureRepopluationHandler : MonoBehaviour
         for (int i = 0; i < carnivorCount; i++)
         {
             carnivorList[i] = Instantiate(carnivorCreature);
+            carnivorList[i].SetActive(false);
         }
         for (int i = 0; i < herbivoreCount; i++)
         {
             herbivoreList[i] = Instantiate(herbivoreCreature);
+            herbivoreList[i].SetActive(false);
         }
     }
 
     
-    
-    void SpawnCreatures(int carnivoreCount, int herbivoreCount)
+    public static void SpawnCreatures()
     {
-        int xDim = terrainCells.GetLength(0);
-        int yDim = terrainCells.GetLength(1);
+        instance.SpawnCreatures(instance.carnivorCount, instance.herbivoreCount);
+    }
+    
+    private void SpawnCreatures(int carnivoreCount, int herbivoreCount)
+    {
+        Console.WriteLine("spawning creatures");
+
+        MapTerrain[,] map = MapManager.instance.GetMap();
+
+        //map diminsions
+        int xDim = MapManager.GetXDim();
+        int yDim = MapManager.GetYDim();
+
         
+
+        
+
         //spawning for carnivors
         foreach (GameObject creature in carnivorList)
         {
+            creature.SetActive(true);
             Vector2 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
-            while (terrainCells[(int)spawnPoint.x, (int)spawnPoint.y].GetTerrain() == terrainCellOptions[4])
+            while (map[xDim, yDim].GetTerrainData().GetTerrainType() == "water")
             {
                 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
             }
@@ -62,13 +98,27 @@ public class CreatureRepopluationHandler : MonoBehaviour
         //spawning for herbavoris
         foreach (GameObject creature in herbivoreList)
         {
+            creature.SetActive(true);
             Vector2 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
-            while (terrainCells[(int)spawnPoint.x, (int)spawnPoint.y].GetTerrain() == terrainCellOptions[4])
+            while (map[xDim, yDim].GetTerrainData().GetTerrainType() == "water")
             {
                 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
             }
             creature.transform.position = spawnPoint;
         }
 
+    }
+
+
+    private void OnPlayButtonClicked()
+    {
+        Console.WriteLine("start button pressed");
+        if (ProceduralGeneration.IsGenerating())
+        {
+            return;
+        }
+        gameObject.SetActive(false);
+
+        SpawnCreatures(carnivorCount, herbivoreCount);
     }
 }

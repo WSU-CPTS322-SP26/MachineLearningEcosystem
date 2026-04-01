@@ -51,6 +51,7 @@ public class TerrainGenerationUI : MonoBehaviour
             return;
         }
         gameObject.SetActive(false);
+        CreatureRepopluationHandler.SpawnCreatures();
     }
     private void OnAnimationToggleChanged(bool isOn)
     {
