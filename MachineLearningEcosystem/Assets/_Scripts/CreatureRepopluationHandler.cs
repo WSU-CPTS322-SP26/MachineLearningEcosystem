@@ -44,7 +44,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
     {
 
 
-        Console.WriteLine("creature repo here");
+        Debug.Log("creature repo here");
         playButton.onClick.AddListener(OnPlayButtonClicked);
 
         //instantiate all carnivors and herbivores to use object pooling for slight optimization 
@@ -53,12 +53,12 @@ public class CreatureRepopluationHandler : MonoBehaviour
         
         for (int i = 0; i < carnivorCount; i++)
         {
-            carnivorList[i] = Instantiate(carnivorCreature);
+            carnivorList.Add(Instantiate(carnivorCreature));
             carnivorList[i].SetActive(false);
         }
         for (int i = 0; i < herbivoreCount; i++)
         {
-            herbivoreList[i] = Instantiate(herbivoreCreature);
+            herbivoreList.Add(Instantiate(herbivoreCreature));
             herbivoreList[i].SetActive(false);
         }
     }
@@ -71,7 +71,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
     
     private void SpawnCreatures(int carnivoreCount, int herbivoreCount)
     {
-        Console.WriteLine("spawning creatures");
+        Debug.Log("spawning creatures");
 
         MapTerrain[,] map = MapManager.instance.GetMap();
 
@@ -88,7 +88,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
         {
             creature.SetActive(true);
             Vector2 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
-            while (map[xDim, yDim].GetTerrainData().GetTerrainType() == "water")
+            while (map[(int)spawnPoint.x, (int)spawnPoint.y].GetTerrainData().GetTerrainType() == "water")
             {
                 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
             }
@@ -100,7 +100,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
         {
             creature.SetActive(true);
             Vector2 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
-            while (map[xDim, yDim].GetTerrainData().GetTerrainType() == "water")
+            while (map[(int)spawnPoint.x, (int)spawnPoint.y].GetTerrainData().GetTerrainType() == "water")
             {
                 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
             }
@@ -112,7 +112,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
 
     private void OnPlayButtonClicked()
     {
-        Console.WriteLine("start button pressed");
+        Debug.Log("start button pressed");
         if (ProceduralGeneration.IsGenerating())
         {
             return;
