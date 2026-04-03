@@ -12,8 +12,10 @@ public class CreatureStatstics : MonoBehaviour
     private float statTimer = 0f;
     public event Action DeathSignal;
 
+
     private void Awake()
     {
+
         stats.Add("Health", 100);
         stats.Add("currHealth", 100);
 
@@ -29,6 +31,12 @@ public class CreatureStatstics : MonoBehaviour
         stats.Add("currHunger", 100);
 
         // stats.Add("Size", 2);
+    }
+
+    //NEW
+    private void OnMouseDown()
+    {
+        StatsBox.Instance.DisplayStats(this);
     }
 
     //setters and getters
