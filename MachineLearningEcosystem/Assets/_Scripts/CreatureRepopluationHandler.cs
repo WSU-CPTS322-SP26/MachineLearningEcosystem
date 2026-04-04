@@ -79,32 +79,37 @@ public class CreatureRepopluationHandler : MonoBehaviour
         int xDim = MapManager.GetXDim();
         int yDim = MapManager.GetYDim();
 
-        
 
-        
 
-        //spawning for carnivors
+
+
+        // Spawning carnivores
         foreach (GameObject creature in carnivorList)
         {
             creature.SetActive(true);
-            Vector2 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
-            while (map[(int)spawnPoint.x, (int)spawnPoint.y].GetTerrainData().GetTerrainType() == "water")
+            int x = Random.Range(0, xDim);
+            int y = Random.Range(0, yDim);
+            while (map[x, y].GetTerrainData().GetTerrainType() == "water")
             {
-                spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
+                x = Random.Range(0, xDim);
+                y = Random.Range(0, yDim);
             }
-            creature.transform.position = spawnPoint;
+            // Use the tile's actual world position instead of the raw index
+            creature.transform.position = map[x, y].transform.position;
         }
 
-        //spawning for herbavoris
+        // Spawning herbivores
         foreach (GameObject creature in herbivoreList)
         {
             creature.SetActive(true);
-            Vector2 spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
-            while (map[(int)spawnPoint.x, (int)spawnPoint.y].GetTerrainData().GetTerrainType() == "water")
+            int x = Random.Range(0, xDim);
+            int y = Random.Range(0, yDim);
+            while (map[x, y].GetTerrainData().GetTerrainType() == "water")
             {
-                spawnPoint = new Vector2(Random.Range(0, xDim), Random.Range(0, yDim));
+                x = Random.Range(0, xDim);
+                y = Random.Range(0, yDim);
             }
-            creature.transform.position = spawnPoint;
+            creature.transform.position = map[x, y].transform.position;
         }
 
     }
