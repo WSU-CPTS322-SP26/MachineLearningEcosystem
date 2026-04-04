@@ -74,7 +74,7 @@ public class PlantManager : MonoBehaviour
             MapTerrain tile = availableTiles[index];
             availableTiles.RemoveAt(index);
 
-            Vector3 spawnPos = tile.transform.position + (Vector3.up * Random.Range(-0.1f, 0.1f)) + (Vector3.right * Random.Range(-0.1f, 0.1f));
+            Vector3 spawnPos = tile.transform.position + (Vector3.up * Random.Range(-2f, 2f)) + (Vector3.right * Random.Range(-2f, 2f));
             //plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
             PlantInstance newPlant = plantPool.Get();
             plantObjects.Add(newPlant.gameObject);
@@ -93,7 +93,7 @@ public class PlantManager : MonoBehaviour
             MapTerrain tile = availableTiles[index];
             availableTiles.RemoveAt(index);
 
-            Vector3 spawnPos = tile.transform.position + (Vector3.up * Random.Range(-0.1f, 0.1f)) + (Vector3.right * Random.Range(-0.1f, 0.1f));
+            Vector3 spawnPos = tile.transform.position + (Vector3.up * Random.Range(-2f, 2f)) + (Vector3.right * Random.Range(-2f, 2f));
             // plantObjects.Add(Instantiate(plantPrefab, spawnPos, Quaternion.identity));
             PlantInstance newPlant = plantPool.Get();
             plantObjects.Add(newPlant.gameObject);

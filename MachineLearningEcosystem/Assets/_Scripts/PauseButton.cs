@@ -7,7 +7,7 @@ public class PauseButton : MonoBehaviour
 
     [SerializeField] private GameObject pausePanel;
     private float currentTimeScale;
-
+    private static bool isPaused = false;
 
     void Start()
     {
@@ -22,14 +22,20 @@ public class PauseButton : MonoBehaviour
             pausePanel.SetActive(true);
             currentTimeScale = Time.timeScale;
             Time.timeScale = 0f;
-
+            isPaused = true;
         }
         //if esc pressed and shown: unshow
         else if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             pausePanel.SetActive(false);
             Time.timeScale = currentTimeScale;
+            isPaused = false;
         }
 
+    }
+
+    public static bool IsPaused()
+    {
+        return isPaused;
     }
 }
