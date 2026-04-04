@@ -54,9 +54,7 @@ Here are links to issues we worked on but did not complete in this sprint:
 
 ## Code Files for Review 
 
-Please review the following code files, which were actively developed during this 
-
-sprint, for quality: 
+Please review the following code files, which were actively developed during this sprint, for quality: 
 
 * Creature Statistics: https://github.com/WSU-CPTS322-SP26/MachineLearningEcosystem/pull/12/changes#diff-29aeea842a2d54f028c851d27445a90ab554a3794202728ec6a3bdc523349cfb  
 
