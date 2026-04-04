@@ -8,7 +8,15 @@ public class MeatInstance : MonoBehaviour
         bitesLeft -= 1;
         if (bitesLeft <= 0)
         {
-            Destroy(gameObject); // kill the meat, it hath been eaten
+            MeatManager.instance.ClearMeat(gameObject);
         }
+    }
+    public int GetBitesLeft()
+    {
+        return bitesLeft;
+    }
+    public void SetBitesLeft(int value)
+    {
+        bitesLeft = value;
     }
 }
