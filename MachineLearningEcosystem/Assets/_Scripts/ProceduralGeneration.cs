@@ -38,23 +38,26 @@ public class ProceduralGeneration : MonoBehaviour
 
         while (!fullyCollapsed)
         {
-            if (iter >= maxIter)
-            {
-                Debug.Log("Error: Did not properly collapse!");
-                break;
-            }
-            
-            WFCCell cell = GetLowestEntropy();
-            if (cell.placement == new Vector2Int(-1, -1))
-            {
-                fullyCollapsed = true;
-                //Debug.Log("Finished collapsing");
-            }
-            else
-            {
-                cell.Collapse();
-                PropagateChanges(cell);
-                iter++;
+            if (!PauseButton.IsPaused()) 
+            {       
+                if (iter >= maxIter)
+                {
+                    Debug.Log("Error: Did not properly collapse!");
+                    break;
+                }
+                
+                WFCCell cell = GetLowestEntropy();
+                if (cell.placement == new Vector2Int(-1, -1))
+                {
+                    fullyCollapsed = true;
+                    //Debug.Log("Finished collapsing");
+                }
+                else
+                {
+                    cell.Collapse();
+                    PropagateChanges(cell);
+                    iter++;
+                }
             }
             if (animated && iter % animation_speed == 0)
             {
@@ -64,15 +67,12 @@ public class ProceduralGeneration : MonoBehaviour
         isGenerating = false;
         yield return null;
 
-        
         //Make PlantManager start after map is fully done Generating. 
-        isGenerating = false;
         if (PlantManager.instance != null)
         {
             PlantManager.instance.Initialize();
         }
         yield return null;
-
     }
 
     private static WFCCell GetLowestEntropy()
