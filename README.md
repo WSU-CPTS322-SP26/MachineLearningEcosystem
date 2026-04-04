@@ -21,8 +21,8 @@ Allows the user to enter the procedural generation phase of the simulation, wher
 - Performance issues can occur when running terrain generation at max speed or with maximum size (200 x 200)
 ## Additional Documentation
 Sprint reports:
-* "Sprint1.md", [Youtube Video](https://www.youtube.com/watch?v=MkfPcHMPpAM)
-* "Sprint2.md", [Youtube Video]()
+* "Sprint1.md", [Sprint 1 Report Video](https://www.youtube.com/watch?v=MkfPcHMPpAM)
+* "Sprint2.md", [Sprint 2 Report Video](https://www.youtube.com/watch?v=GG4l9nynSWY)
 
 User links:
 * [Used as a basis for WFC](https://www.uproomgames.com/dev-log/wave-function-collapse)
