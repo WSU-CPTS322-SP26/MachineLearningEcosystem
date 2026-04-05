@@ -119,19 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
-<<<<<<< HEAD
---- !u!114 &303647028 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2490716408329161883, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-  m_PrefabInstance: {fileID: 1205632161}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-=======
 --- !u!1 &212212558
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +164,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> 2e1fb5d6c84e19bf00752438b475c2ff1a44cb59
+--- !u!114 &303647028 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2490716408329161883, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+  m_PrefabInstance: {fileID: 1205632161}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &508927687
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,7 +597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   CameraSpeed: 180
   Speed: 5
-  MinZoom: 2
+  MinZoom: 15
   MaxZoom: 200
   zoomSpeedFactor: 0.0001
 --- !u!1 &1605920128
@@ -691,8 +688,5 @@ SceneRoots:
   - {fileID: 508927689}
   - {fileID: 1205632161}
   - {fileID: 650153532}
-<<<<<<< HEAD
-  - {fileID: 1204601486}
-=======
   - {fileID: 212212560}
->>>>>>> 2e1fb5d6c84e19bf00752438b475c2ff1a44cb59
+  - {fileID: 1204601486}
