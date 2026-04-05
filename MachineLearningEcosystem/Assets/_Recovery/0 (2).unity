@@ -119,7 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
-<<<<<<< HEAD
 --- !u!114 &303647028 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2490716408329161883, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
@@ -131,53 +130,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-=======
---- !u!1 &212212558
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 212212560}
-  - component: {fileID: 212212559}
-  m_Layer: 0
-  m_Name: MeatManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &212212559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 212212558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 098df3527383fef40926cb972731dadb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MeatManager
-  meatPrefab: {fileID: 8252028777196891673, guid: 8976cd5f22bda75489e103ab956d4469, type: 3}
---- !u!4 &212212560
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 212212558}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.43995, y: -43.26424, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> 2e1fb5d6c84e19bf00752438b475c2ff1a44cb59
 --- !u!1 &508927687
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,6 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894272e260b23394db763967a70d30e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
+  terrainSize: 3
   terrainOptions:
   - {fileID: 11400000, guid: fdc7bc1436cced240aea1391c3e8dc12, type: 2}
   - {fileID: 11400000, guid: 33959da24f4c75a43abaf9d5de228fa9, type: 2}
@@ -691,8 +644,4 @@ SceneRoots:
   - {fileID: 508927689}
   - {fileID: 1205632161}
   - {fileID: 650153532}
-<<<<<<< HEAD
   - {fileID: 1204601486}
-=======
-  - {fileID: 212212560}
->>>>>>> 2e1fb5d6c84e19bf00752438b475c2ff1a44cb59
