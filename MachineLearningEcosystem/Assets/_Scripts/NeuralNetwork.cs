@@ -3,6 +3,7 @@ using UnityEngine;
 
 //using UnityEngine.Random;
 
+
 public class NeuralNetwork
 {
     private float[][] neurons;      // neuron values per layer
@@ -37,7 +38,7 @@ public class NeuralNetwork
                 for (int k = 0; k < layerSizes[i + 1]; k++)
                 {
                     // Xavier: keeps signals from vanishing or exploding
-                    //weights[i][j][k] = (float)(rng.NextDouble() * 2 - 1) * scale;
+                    weights[i][j][k] = (float)(UnityEngine.Random.value * 2 - 1) * scale;
                 }
             }
         }
