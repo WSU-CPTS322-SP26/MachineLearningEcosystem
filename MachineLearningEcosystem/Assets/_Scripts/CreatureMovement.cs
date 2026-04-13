@@ -40,7 +40,20 @@ public class CreatureMovement : MonoBehaviour
     // Total input size = (10 * 5) + 3 = 53
     private const int STATE_SIZE = MAX_VISIBLE_OBJECTS * FEATURES_PER_OBJECT + INTERNAL_STATS_COUNT;
     private const int ACTION_SIZE = 6;
-    // Actions: 0=MoveRandom, 1=MoveToward, 2=TurnLeft, 3=TurnRight, 4=Eat, 5=Drink
+
+
+    //creature action to be able to get what action was preformed 
+    public enum CreatureAction
+    {
+        MoveRandom = 0,
+        MoveToward = 1,
+        TurnLeft = 2,
+        TurnRight = 3,
+        Eat = 4,
+        Drink = 5
+    }
+
+
 
     private void Awake()
     {

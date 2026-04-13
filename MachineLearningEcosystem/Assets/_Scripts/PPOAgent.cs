@@ -55,6 +55,10 @@ public class PPOAgent : MonoBehaviour
     }
 
 
+    // Add these inside the PPOAgent class
+    public NeuralNetwork GetActor() => actor;
+    public NeuralNetwork GetCritic() => critic;
+
 
     // --- Step 1: Choose an action ---
     public (int action, float logProb, float value) SelectAction(float[] state)
