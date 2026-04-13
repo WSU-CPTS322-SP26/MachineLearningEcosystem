@@ -20,7 +20,7 @@ public struct Experience
 
 
 
-public class PPOAgent : MonoBehaviour
+public class PPOAgent
 {
     private NeuralNetwork actor;
     private NeuralNetwork critic;
