@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine.Timeline;
 using System;
 
+using Random = UnityEngine.Random;
+using Unity.VisualScripting.AssemblyQualifiedNameParser;
+
 public class CreatureStatstics : MonoBehaviour
 {
     private Dictionary<string, float> stats = new();
+
+    private static List<string> possible_names = new();
 
     [SerializeField] private string _creatureName;
     [SerializeField] private bool _carnivorous;
@@ -15,6 +20,11 @@ public class CreatureStatstics : MonoBehaviour
 
     private void Awake()
     {
+        if (possible_names.Count == 0)
+        {
+            Parse("names");
+        }
+        _creatureName = possible_names[Random.Range(0, possible_names.Count)];
 
         stats.Add("Health", 100);
         stats.Add("currHealth", 100);
@@ -32,6 +42,20 @@ public class CreatureStatstics : MonoBehaviour
 
         // stats.Add("Size", 2);
     }
+
+    private void Parse(string filename)
+    {
+        TextAsset asset = Resources.Load<TextAsset>(filename);
+        string[] lines = asset.text.Split('\n');
+        for (int i = 1; i < lines.Length; i++)
+        {
+            string[] columns = lines[i].Split(',');
+            foreach (string name in columns)
+            {
+                possible_names.Add(name);
+            }
+        }
+    }    
 
     //NEW
     private void OnMouseDown()
