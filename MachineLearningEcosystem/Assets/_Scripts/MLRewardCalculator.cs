@@ -18,8 +18,7 @@ public class MLRewardCalculator
 
     //creature action to disincentivive doing nothing
     //CreatureAction action,
-    public float CalculateReward(CreatureMovement creature, 
-                                  float previousDistToFood, float previousDistToWater)
+    public float CalculateReward(CreatureMovement creature, float previousDistToFood, float previousDistToWater)
     {
         float reward = 0f;
 
@@ -50,7 +49,7 @@ public class MLRewardCalculator
 
         // --- Shaping reward: reward moving TOWARD food when hungry ---
         // This helps the creature learn faster (optional but powerful)
-        /*
+        
         if (creature.stats.CurrHunger / creature.stats.Hunger < 0.6f)
         {
             float currentDistToFood = creature.DistanceToNearestFood;
@@ -59,15 +58,16 @@ public class MLRewardCalculator
         }
 
         // --- Shaping reward: reward moving TOWARD water when thirsty ---
-        if (creature.Thirst < 0.6f)
+        if (creature.stats.CurrThirst/creature.stats.Thirst < 0.6f)
         {
             float currentDistToWater = creature.DistanceToNearestWater;
             float improvement = previousDistToWater - currentDistToWater;
             if (improvement > 0) reward += APPROACH_WATER_REWARD * improvement;
         }
-        */
+        
 
-        // --- Idle penalty: discourage doing nothing ---
+        // --- Idle penalty: discourage doing nothing
+        //doing nothing is not an option and therefore cannnot happen
         //if (action == CreatureAction.StayStill)
         //    reward += IDLE_PENALTY;
 

@@ -36,6 +36,26 @@ public class PPOAgent : MonoBehaviour
     private const int BatchSize = 64;
     private const int UpdateEpochs = 4;       // reuse each batch 4x
 
+
+    //constructor
+    // layerSizes defines the full network shape e.g. { 53, 128, 128, 6 }
+    // The actor and critic share the same shape, critic output is always size 1
+    public PPOAgent(int[] layerSizes)
+    {
+        // Actor uses the full layerSizes as given (output = action count)
+        actor = new NeuralNetwork(layerSizes);
+
+        // Critic output is always 1 (estimates state value)
+        // So we replace the last layer size with 1
+        int[] criticLayerSizes = new int[layerSizes.Length];
+        layerSizes.CopyTo(criticLayerSizes, 0);
+        criticLayerSizes[criticLayerSizes.Length - 1] = 1;
+
+        critic = new NeuralNetwork(criticLayerSizes);
+    }
+
+
+
     // --- Step 1: Choose an action ---
     public (int action, float logProb, float value) SelectAction(float[] state)
     {
