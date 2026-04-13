@@ -93,7 +93,7 @@ public class CreatureMovement : MonoBehaviour
     {
         if (CanDrink())
         {
-            stats.Thirst += 20f;
+            stats.CurrThirst += 20f;
         }
     }
     public bool CanDrink()
@@ -194,6 +194,7 @@ public class CreatureMovement : MonoBehaviour
     // TODO: Add to this function all important effects that happen when a creature dies (drop meat to eat, alert the ML system, etc.)
     private void DeathScript()
     {
+        MeatManager.instance?.PlaceMeat(gameObject.transform.position, Random.Range(3,6));
         Destroy(gameObject);
     }
 }

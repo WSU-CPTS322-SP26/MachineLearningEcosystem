@@ -22,7 +22,7 @@ public class CreatureStatstics : MonoBehaviour
         stats.Add("ViewDistance", 20);
         stats.Add("ViewAngle", 70);
 
-        stats.Add("Speed", 5);
+        stats.Add("Speed", 8);
 
         stats.Add("Thirst", 200);
         stats.Add("currThirst", 200);
@@ -146,8 +146,8 @@ public class CreatureStatstics : MonoBehaviour
         {
             // Every 1 second, hunger and thirst tick down by 1
             // Other stats that change over time can be added to this check
-            Hunger -= 1f;
-            Thirst -= 1f;
+            CurrHunger -= 1f;
+            CurrThirst -= 1f;
             statTimer = 0f;
         }
     }

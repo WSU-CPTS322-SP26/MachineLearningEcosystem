@@ -132,6 +132,10 @@ GameObject:
   - component: {fileID: 121850094}
   m_Layer: 0
   m_Name: ThirstText
+  - component: {fileID: 212212560}
+  - component: {fileID: 212212559}
+  m_Layer: 0
+  m_Name: MeatManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,6 +254,15 @@ MonoBehaviour:
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &121850095
 CanvasRenderer:
+  m_GameObject: {fileID: 212212558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 098df3527383fef40926cb972731dadb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeatManager
+  meatPrefab: {fileID: 8252028777196891673, guid: 8976cd5f22bda75489e103ab956d4469, type: 3}
+--- !u!4 &212212560
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -393,6 +406,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 285191790}
   m_CullTransparentMesh: 1
+  m_GameObject: {fileID: 212212558}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.43995, y: -43.26424, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &303647028 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2490716408329161883, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+  m_PrefabInstance: {fileID: 1205632161}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &508927687
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,6 +539,10 @@ GameObject:
   - component: {fileID: 1107524247}
   m_Layer: 0
   m_Name: SpeedText
+  - component: {fileID: 1204601486}
+  - component: {fileID: 1204601485}
+  m_Layer: 0
+  m_Name: CreatureManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -624,6 +661,19 @@ MonoBehaviour:
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1107524248
 CanvasRenderer:
+  m_GameObject: {fileID: 1204601484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a521f1dbcc747241b26ae174a3c4af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureRepopluationHandler
+  playButton: {fileID: 303647028}
+  carnivorCreature: {fileID: 105475358296628045, guid: 21705dc5fecf39640b820c4033ff9aa4, type: 3}
+  herbivoreCreature: {fileID: 105475358296628045, guid: 21705dc5fecf39640b820c4033ff9aa4, type: 3}
+  carnivorCount: 20
+  herbivoreCount: 20
+--- !u!4 &1204601486
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -767,6 +817,15 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1136885228}
   m_CullTransparentMesh: 1
+  m_GameObject: {fileID: 1204601484}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 531.7494, y: 197.90947, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1205632161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -778,6 +837,22 @@ PrefabInstance:
     - target: {fileID: 1530657388151097399, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
       propertyPath: m_Name
       value: UICanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490716408329161883, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490716408329161883, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490716408329161883, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11500000, guid: 8a521f1dbcc747241b26ae174a3c4af8, type: 3}
+    - target: {fileID: 2490716408329161883, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4275462865623520270, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1164,7 +1239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   CameraSpeed: 180
   Speed: 5
-  MinZoom: 2
+  MinZoom: 15
   MaxZoom: 200
   zoomSpeedFactor: 0.0001
 --- !u!1 &1435674693
@@ -1512,3 +1587,5 @@ SceneRoots:
   - {fileID: 1205632161}
   - {fileID: 650153532}
   - {fileID: 1641562575}
+  - {fileID: 212212560}
+  - {fileID: 1204601486}
