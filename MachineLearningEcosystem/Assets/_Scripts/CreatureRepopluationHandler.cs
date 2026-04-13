@@ -42,8 +42,6 @@ public class CreatureRepopluationHandler : MonoBehaviour
 
     void Start()
     {
-
-
         Debug.Log("creature repo here");
         playButton.onClick.AddListener(OnPlayButtonClicked);
 
