@@ -438,10 +438,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1159021721818065410, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-      propertyPath: m_Color.a
-      value: 0.81960785
-      objectReference: {fileID: 0}
     - target: {fileID: 1530657388151097399, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
       propertyPath: m_Name
       value: UICanvas
