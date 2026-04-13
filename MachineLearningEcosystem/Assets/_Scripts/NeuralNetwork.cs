@@ -117,4 +117,56 @@ public class NeuralNetwork
             for (int j = 0; j < biases[l].Length; j++)
                 biases[l][j] = flatBiases[bi++];
     }
+
+
+
+    //back propagation to change the weights so the neural network learns
+    public void Backpropagate(float[] inputs, int targetAction, float loss, float lr)
+    {
+        // 1. Forward pass to get all layer activations
+        FeedForward(inputs);
+
+        // 2. Compute output layer gradients
+        float[][] deltas = new float[layerSizes.Length][];
+        for (int l = 0; l < layerSizes.Length; l++)
+            deltas[l] = new float[layerSizes[l]];
+
+        // Output layer delta (from policy loss)
+        for (int j = 0; j < layerSizes[^1]; j++)
+        {
+            float target = (j == targetAction) ? 1f : 0f;
+            deltas[^1][j] = neurons[^1][j] - target;
+            deltas[^1][j] *= loss; // scale by loss magnitude
+        }
+
+        // 3. Propagate deltas backward through hidden layers
+        for (int l = layerSizes.Length - 2; l >= 1; l--)
+        {
+            for (int i = 0; i < layerSizes[l]; i++)
+            {
+                float error = 0f;
+                for (int j = 0; j < layerSizes[l + 1]; j++)
+                    error += deltas[l + 1][j] * weights[l][i][j];
+
+                // ReLU derivative: 1 if neuron was active, 0 if not
+                deltas[l][i] = error * (neurons[l][i] > 0 ? 1f : 0f);
+            }
+        }
+
+        // 4. Update weights using gradient descent
+        for (int l = 0; l < layerSizes.Length - 1; l++)
+        {
+            for (int i = 0; i < layerSizes[l]; i++)
+            {
+                for (int j = 0; j < layerSizes[l + 1]; j++)
+                {
+                    // w = w - lr * gradient
+                    weights[l][i][j] -= lr * neurons[l][i] * deltas[l + 1][j];
+                }
+            }
+            // Update biases
+            for (int j = 0; j < layerSizes[l + 1]; j++)
+                biases[l + 1][j] -= lr * deltas[l + 1][j];
+        }
+    }
 }

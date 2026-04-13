@@ -147,9 +147,9 @@ public class PPOAgent : MonoBehaviour
             // Total loss
             float totalLoss = policyLoss + valueLoss - entropyBonus;
 
-            // Backpropagate (you need a backprop implementation)
-            //actor.Backpropagate(exp.State, exp.ActionTaken, totalLoss, LearningRate);
-            //critic.Backpropagate(exp.State, 0, valueLoss, LearningRate);
+            // Backpropagate
+            actor.Backpropagate(exp.State, exp.ActionTaken, totalLoss, LearningRate);
+            critic.Backpropagate(exp.State, 0, valueLoss, LearningRate);
         }
     }
     private int SampleFromDistribution(float[] probs)
