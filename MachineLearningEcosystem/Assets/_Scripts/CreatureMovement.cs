@@ -43,30 +43,57 @@ public class CreatureMovement : MonoBehaviour
         Eat();
     }
 
+    public void Hurt(int damage)
+    {
+        stats.Health -= damage;
+    }
+
+    public void Attack()
+    {
+        GameObject target = CanAttack();
+        if (target != null && target.GetComponent<CreatureMovement>() != null)
+        {
+            target.GetComponent<CreatureMovement>().Hurt((int)stats.Damage);
+        }
+    }
+
+    public GameObject CanAttack()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, stats.Range); // give creature some eating range
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject.GetComponent<CreatureMovement>() != null)
+            {
+                return collider.gameObject;
+            }
+        }
+        return null;
+    }
+
     public void Eat()
     {
         if (stats.IsCarnivore)
         {
             GameObject target = CanEatMeat();
-            if (target != null)
+            if (target != null && target.GetComponent<MeatInstance>() != null)
             {
                 stats.CurrHunger += 40f;
-                target.GetComponent<MeatInstance>()?.Consume();
+                target.GetComponent<MeatInstance>().Consume();
             }
         }
         else
         {
             GameObject target = CanEatPlants();
-            if (target != null)
+            if (target != null && target.GetComponent<PlantInstance>() != null)
             {
                 stats.CurrHunger += 40f;
-                target.GetComponent<PlantInstance>()?.Consume();
+                target.GetComponent<PlantInstance>().Consume();
             }
         }
     }
     public GameObject CanEatMeat()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f); // give creature some eating range
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, stats.Range); // give creature some eating range
         foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject.GetComponent<MeatInstance>() != null)
@@ -78,7 +105,7 @@ public class CreatureMovement : MonoBehaviour
     }
     public GameObject CanEatPlants()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f); // give creature some eating range
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, stats.Range); // give creature some eating range
         foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject.GetComponent<PlantInstance>() != null)

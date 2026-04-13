@@ -17,6 +17,9 @@ public class CreatureStatstics : MonoBehaviour
         stats.Add("Health", 100);
         stats.Add("currHealth", 100);
 
+        stats.Add("Damage", 20);
+        stats.Add("Range", 1);
+
         stats.Add("ViewDistance", 20);
         stats.Add("ViewAngle", 70);
 
@@ -64,6 +67,17 @@ public class CreatureStatstics : MonoBehaviour
                 DeathSignal?.Invoke();
             }
         }
+    }
+
+    public float Damage
+    {
+        get { return stats["Damage"]; }
+        set { stats["Damage"] = value; }
+    }
+    public float Range
+    {
+        get { return stats["Range"]; }
+        set { stats["Range"] = value; }
     }
     public float ViewDistance
     {
