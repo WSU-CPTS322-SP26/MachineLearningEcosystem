@@ -48,19 +48,19 @@ public class CreatureMovement : MonoBehaviour
         if (stats.IsCarnivore)
         {
             GameObject target = CanEatMeat();
-            if (target != null)
+            if (target != null && target.GetComponent<MeatInstance>() != null)
             {
                 stats.Hunger += 40f;
-                target.GetComponent<MeatInstance>()?.Consume();
+                target.GetComponent<MeatInstance>().Consume();
             }
         }
         else
         {
             GameObject target = CanEatPlants();
-            if (target != null)
+            if (target != null && target.GetComponent<PlantInstance>() != null)
             {
                 stats.Hunger += 40f;
-                target.GetComponent<PlantInstance>()?.Consume();
+                target.GetComponent<PlantInstance>().Consume();
             }
         }
     }
@@ -115,10 +115,10 @@ public class CreatureMovement : MonoBehaviour
     {
         MapTerrain currentTile = DetectTile(transform.position);
         List<MapTerrain> ns = new();
-        ns.Add(DetectTile(transform.position + (Vector3.up * MapManager.GetTerrainSize() * distanceForCheck)));
-        ns.Add(DetectTile(transform.position + (Vector3.up * -1 * MapManager.GetTerrainSize() * distanceForCheck)));
-        ns.Add(DetectTile(transform.position + (Vector3.right * MapManager.GetTerrainSize() * distanceForCheck)));
-        ns.Add(DetectTile(transform.position + (Vector3.right * -1 * MapManager.GetTerrainSize() * distanceForCheck)));
+        ns.Add(DetectTile(transform.position + (distanceForCheck * MapManager.GetTerrainSize() * Vector3.up)));
+        ns.Add(DetectTile(transform.position + (-1 * distanceForCheck * MapManager.GetTerrainSize() * Vector3.up)));
+        ns.Add(DetectTile(transform.position + (distanceForCheck * MapManager.GetTerrainSize() * Vector3.right)));
+        ns.Add(DetectTile(transform.position + (-1 * distanceForCheck * MapManager.GetTerrainSize() * Vector3.right)));
         return ns;
     }
     
