@@ -16,6 +16,7 @@ public class MLRewardCalculator
     [SerializeField] private const float APPROACH_WATER_REWARD = 0.3f;
 
 
+    //creature action to disincentivive doing nothing
     //CreatureAction action,
     public float CalculateReward(CreatureMovement creature, 
                                   float previousDistToFood, float previousDistToWater)
