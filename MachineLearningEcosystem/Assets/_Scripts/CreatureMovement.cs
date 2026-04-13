@@ -15,8 +15,15 @@ public class CreatureMovement : MonoBehaviour
     // [SerializeField] private int height;
     [SerializeField] private FieldOfView fov;
     private List<GameObject> vision;
-    private CreatureStatstics stats;
-    
+    public CreatureStatstics stats;
+
+
+    // --- State flags (reset each step) ---
+    public bool JustAte { get; private set; }
+    public bool JustDrank { get; private set; }
+    public bool IsDead { get; private set; }
+    public bool JustDied { get; private set; }
+
     private void Awake()
     {
         stats = creature.GetComponent<CreatureStatstics>();
@@ -36,6 +43,13 @@ public class CreatureMovement : MonoBehaviour
 
     private void Update()
     {
+        //updating states
+        JustAte = false;
+        JustDrank = false;
+        JustDied = false;
+
+        //Debug.Log(vision);
+
         vision = fov.GetDetectedObjects();
         Move(Random.insideUnitCircle.normalized, 1f);
         UpdateFov((int)fov.GetViewDirection() + Random.Range(-5, 6));
@@ -51,6 +65,7 @@ public class CreatureMovement : MonoBehaviour
             if (target != null)
             {
                 stats.CurrHunger += 40f;
+                JustAte = true;
                 target.GetComponent<MeatInstance>()?.Consume();
             }
         }
@@ -60,6 +75,7 @@ public class CreatureMovement : MonoBehaviour
             if (target != null)
             {
                 stats.CurrHunger += 40f;
+                JustAte = true;
                 target.GetComponent<PlantInstance>()?.Consume();
             }
         }
@@ -93,6 +109,7 @@ public class CreatureMovement : MonoBehaviour
     {
         if (CanDrink())
         {
+            JustDrank = true;
             stats.CurrThirst += 20f;
         }
     }
@@ -194,6 +211,7 @@ public class CreatureMovement : MonoBehaviour
     // TODO: Add to this function all important effects that happen when a creature dies (drop meat to eat, alert the ML system, etc.)
     private void DeathScript()
     {
+        JustDied = true;
         MeatManager.instance?.PlaceMeat(gameObject.transform.position, Random.Range(3,6));
         Destroy(gameObject);
     }
