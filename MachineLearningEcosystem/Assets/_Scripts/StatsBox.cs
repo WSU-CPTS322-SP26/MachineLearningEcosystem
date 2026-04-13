@@ -7,10 +7,7 @@ public class StatsBox : MonoBehaviour
 
     [Header("Text Fields")]
     public TextMeshProUGUI NameText;
-    public TextMeshProUGUI HealthText;
-    public TextMeshProUGUI HungerText;
-    public TextMeshProUGUI ThirstText;
-    public TextMeshProUGUI SpeedText;
+    public TextMeshProUGUI StatsText;
 
     public GameObject save_creature = null;
 
@@ -34,10 +31,14 @@ public class StatsBox : MonoBehaviour
     {
         save_creature = creature.gameObject;
         NameText.text = creature.CreatureName;
-        HealthText.text = "Health: " + creature.CurrHealth + "/" + creature.Health;
-        HungerText.text = "Hunger: " + creature.CurrHunger + "/" + creature.Hunger;
-        ThirstText.text = "Thirst: " + creature.CurrThirst + "/" + creature.Thirst;
-        SpeedText.text = "Speed: " + creature.Speed;
+        StatsText.text = "Health: " + creature.CurrHealth + "/" + creature.Health;
+        StatsText.text += "\nHunger: " + creature.CurrHunger + "/" + creature.Hunger;
+        StatsText.text += "\nThirst: " + creature.CurrThirst + "/" + creature.Thirst;
+        StatsText.text += "\nSpeed: " + creature.Speed;
+        StatsText.text += "\nDamage: " + creature.Damage;
+        StatsText.text += "\nInteraction Range: " + creature.Range + " Units";
+        StatsText.text += "\nView Distance: " + creature.ViewDistance + " Units";
+        StatsText.text += "\nField of View: " + creature.ViewAngle + " Units";
     }
 
 }

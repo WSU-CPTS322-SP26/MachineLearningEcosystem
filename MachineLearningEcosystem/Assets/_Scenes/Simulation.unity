@@ -438,29 +438,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1159021721818065410, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+      propertyPath: m_Color.a
+      value: 0.81960785
+      objectReference: {fileID: 0}
     - target: {fileID: 1530657388151097399, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
       propertyPath: m_Name
       value: UICanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 1713276605081807628, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-      propertyPath: m_text
-      value: health
-      objectReference: {fileID: 0}
-    - target: {fileID: 2125456540950960654, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-      propertyPath: m_text
-      value: hunger
-      objectReference: {fileID: 0}
     - target: {fileID: 4275462865623520270, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5018964480560739337, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-      propertyPath: m_text
-      value: speed
-      objectReference: {fileID: 0}
-    - target: {fileID: 5227652142663745617, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-      propertyPath: m_text
-      value: thirst
       objectReference: {fileID: 0}
     - target: {fileID: 5337313672023552427, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
       propertyPath: m_AnchorMax.y
@@ -545,18 +533,6 @@ PrefabInstance:
     - target: {fileID: 5628368071170599231, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6923797140704022542, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-      propertyPath: m_text
-      value: Name
-      objectReference: {fileID: 0}
-    - target: {fileID: 6923797140704022542, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-      propertyPath: m_fontSize
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 6923797140704022542, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
