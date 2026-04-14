@@ -16,6 +16,8 @@ public struct Experience
     // For PPO specifically, we also store:
     public float LogProbability; // log prob of the action taken
     public float ValueEstimate;  // critic's value prediction
+
+    public int CreatureId;
 }
 
 

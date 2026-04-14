@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
@@ -76,6 +77,7 @@ public class CreatureMovement : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(Path.Combine(Application.persistentDataPath, "creature_{1}_actor.json"));
         // Reset per-frame flags
         JustAte = false;
         JustDrank = false;
