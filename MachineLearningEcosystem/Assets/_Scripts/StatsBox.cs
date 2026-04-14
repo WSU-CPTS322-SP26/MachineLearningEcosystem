@@ -61,7 +61,15 @@ public class StatsBox : MonoBehaviour
         EnableBox();
         save_creature = creature.gameObject;
         NameText.text = creature.CreatureName;
-        StatsText.text = "Health: " + creature.CurrHealth + "/" + creature.Health;
+        if (creature.IsCarnivore)
+        {
+            StatsText.text = "Type: Carnivore";
+        }
+        else
+        {
+            StatsText.text = "Type: Herbivore";
+        }
+        StatsText.text += "\nHealth: " + creature.CurrHealth + "/" + creature.Health;
         StatsText.text += "\nHunger: " + creature.CurrHunger + "/" + creature.Hunger;
         StatsText.text += "\nThirst: " + creature.CurrThirst + "/" + creature.Thirst;
         StatsText.text += "\nSpeed: " + creature.Speed;
