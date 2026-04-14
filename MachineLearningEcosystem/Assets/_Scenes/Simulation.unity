@@ -304,8 +304,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a30dce48311fa74bafedfd4d446e407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SimulationManager
+  creaturePrefab: {fileID: 0}
   learnIntervalSteps: 2048
-  autoSave: 0
+  autoSave: 1
   autoSaveInterval: 10000
 --- !u!4 &1128458038
 Transform:
@@ -354,8 +355,10 @@ MonoBehaviour:
   playButton: {fileID: 303647028}
   carnivorCreature: {fileID: 105475358296628045, guid: 21705dc5fecf39640b820c4033ff9aa4, type: 3}
   herbivoreCreature: {fileID: 105475358296628045, guid: 21705dc5fecf39640b820c4033ff9aa4, type: 3}
-  carnivorCount: 5
-  herbivoreCount: 5
+  carnivorCount: 20
+  herbivoreCount: 20
+  autoRespawn: 1
+  respawnIntervalSec: 120
 --- !u!4 &1204601486
 Transform:
   m_ObjectHideFlags: 0

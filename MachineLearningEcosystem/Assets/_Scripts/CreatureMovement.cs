@@ -18,7 +18,8 @@ public class CreatureMovement : MonoBehaviour
     public CreatureStatstics stats;
 
     // --- Neural Network Brain ---
-    public PPOAgent Agent { get; private set; }
+    public int CreatureId { get; private set; }    // unique ID for elite tracking
+    private SharedBrain brain;                      // reference to the shared network
     private MLRewardCalculator rewardCalc = new MLRewardCalculator();
 
     // --- State flags (reset each step) ---
@@ -39,8 +40,8 @@ public class CreatureMovement : MonoBehaviour
     private const int FEATURES_PER_OBJECT = 5;
     private const int INTERNAL_STATS_COUNT = 3; // hunger, thirst, fov direction
     // Total input size = (10 * 5) + 3 = 53
-    private const int STATE_SIZE = MAX_VISIBLE_OBJECTS * FEATURES_PER_OBJECT + INTERNAL_STATS_COUNT;
-    private const int ACTION_SIZE = 6;
+    public const int STATE_SIZE = MAX_VISIBLE_OBJECTS * FEATURES_PER_OBJECT + INTERNAL_STATS_COUNT;
+    public const int ACTION_SIZE = 6;
 
 
     //creature action to be able to get what action was preformed 
@@ -63,9 +64,6 @@ public class CreatureMovement : MonoBehaviour
             stats = creature.AddComponent<CreatureStatstics>();
 
         stats.DeathSignal += DeathScript;
-
-        // Initialize the neural network brain
-        Agent = new PPOAgent(new int[] { STATE_SIZE, 128, 128, ACTION_SIZE });
     }
 
     private void Start()
@@ -75,9 +73,48 @@ public class CreatureMovement : MonoBehaviour
         fov.SetCreature(creature);
     }
 
+    // Called by SimulationManager when this creature is re-registered
+    // after a respawn so it gets a fresh ID and brain reference
+    public void Initialize(int id, SharedBrain sharedBrain)
+    {
+        CreatureId = id;
+        brain = sharedBrain;
+        IsDead = false;  // make sure dead flag is cleared
+    }
+
+
+    // Resets hunger, thirst and flags back to starting values
+    // Called by CreatureRepopulationHandler before re-activating
+    public void ResetCreature()
+    {
+        IsDead = false;
+        JustDied = false;
+        JustAte = false;
+        JustDrank = false;
+
+        // Reset stats to full
+        stats.CurrHunger = stats.Hunger;
+        stats.CurrThirst = stats.Thirst;
+
+        DistanceToNearestFood = float.MaxValue;
+        DistanceToNearestWater = float.MaxValue;
+    }
+
+
+    // Called before deactivating so the update loop stops immediately
+    // without waiting for the death signal
+    public void ForceDeactivate()
+    {
+        IsDead = true;
+    }
+
     private void Update()
     {
-        Debug.Log(Path.Combine(Application.persistentDataPath, "creature_{1}_actor.json"));
+        // Guard: don't run if brain hasn't been assigned yet
+        // This can happen in the first frame before Initialize() is called
+        if (brain == null) return;
+
+        //Debug.Log(Path.Combine(Application.persistentDataPath, "creature_{1}_actor.json"));
         // Reset per-frame flags
         JustAte = false;
         JustDrank = false;
@@ -97,7 +134,7 @@ public class CreatureMovement : MonoBehaviour
         float[] state = GetObservation();
 
         // --- 4. Brain chooses action ---
-        var (actionIndex, logProb, value) = Agent.SelectAction(state);
+        var (actionIndex, logProb, value) = brain.SelectAction(state);
         PerformAction(actionIndex);
 
         // --- 5. Calculate reward ---
@@ -106,7 +143,7 @@ public class CreatureMovement : MonoBehaviour
         float reward = rewardCalc.CalculateReward(this, prevFoodDist, prevWaterDist);
 
         // --- 6. Store experience for learning ---
-        Agent.StoreExperience(new Experience
+        brain.StoreExperience(new Experience
         {
             State = state,
             ActionTaken = actionIndex,
@@ -114,8 +151,9 @@ public class CreatureMovement : MonoBehaviour
             NextState = GetObservation(),
             Done = IsDead,
             LogProbability = logProb,
-            ValueEstimate = value
-        });
+            ValueEstimate = value,
+            CreatureId = CreatureId     // the only new field
+        }, CreatureId, reward);
     }
 
     // --- Build the observation vector from vision + internal stats ---

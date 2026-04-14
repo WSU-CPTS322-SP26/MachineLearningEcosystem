@@ -1,73 +1,94 @@
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SimulationManager : MonoBehaviour
 {
+    public static SimulationManager instance { get; private set; }
+
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject creaturePrefab;
+
     [Header("Settings")]
+    private int creatureCount;
     [SerializeField] private int learnIntervalSteps = 2048;
     [SerializeField] private bool autoSave = true;
     [SerializeField] private int autoSaveInterval = 10000;
 
+    // The ONE shared brain
+    private SharedBrain sharedBrain;
     private List<CreatureMovement> creatures = new();
     private int stepCount = 0;
+    private int nextId = 0;
+
+    // Network architecture — must match CreatureMovement constants
+    private static readonly int[] NetworkShape ={ CreatureMovement.STATE_SIZE, 128, 128, CreatureMovement.ACTION_SIZE };
+
+
+
+    void Awake()
+    {
+        // ADD singleton setup
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
 
     void Start()
     {
-        // Find all creatures already in the scene
-        RefreshCreatureList();
+        //creatureCount = CreatureRepopluationHandler.carinavorCount
+
+        // Create the single shared brain
+        sharedBrain = new SharedBrain(NetworkShape);
+
+        // Find initial creatures
+        CreatureMovement[] existing = FindObjectsOfType<CreatureMovement>();
+        foreach (CreatureMovement c in existing)
+            RegisterCreature(c);
+    }
+
+
+    // Used by CreatureRepopulationHandler just before a full respawn
+    // so buffered experiences aren't thrown away
+    public void ForceLearningUpdate()
+    {
+        sharedBrain.Update();
+        Debug.Log($"[SimulationManager] Forced learning update at step {stepCount}");
     }
 
     void Update()
     {
         stepCount++;
 
-        // Trigger PPO learning update every N steps
+        // Trigger the shared brain update every N steps
         if (stepCount % learnIntervalSteps == 0)
-        {
-            foreach (CreatureMovement creature in creatures)
-            {
-                if (creature != null && !creature.IsDead)
-                    creature.Agent.Update();
-            }
-        }
+            sharedBrain.Update();
 
-        // Auto save brains periodically
+        // Auto save
         if (autoSave && stepCount % autoSaveInterval == 0)
-            SaveAllBrains();
+            SaveBrain();
 
-        // Clean up dead creatures and find any new ones
-        RefreshCreatureList();
+        // Clean up destroyed creatures
+        creatures.RemoveAll(c => c == null);
     }
 
-    // Scan the scene for all CreatureMovement components
-    public void RefreshCreatureList()
+    // Call this whenever a new creature is spawned
+    public void RegisterCreature(CreatureMovement creature)
     {
-        creatures.Clear();
-        CreatureMovement[] found = FindObjectsOfType<CreatureMovement>();
-        creatures.AddRange(found);
+        creature.Initialize(nextId++, sharedBrain);
+        creatures.Add(creature);
     }
 
-    public void SaveAllBrains()
+    public void SaveBrain()
     {
-        for (int i = 0; i < creatures.Count; i++)
-        {
-            if (creatures[i] == null) continue;
-            NeuralNetworkSaver.Save(creatures[i].Agent.GetActor(), $"creature_{i}_actor");
-            NeuralNetworkSaver.Save(creatures[i].Agent.GetCritic(), $"creature_{i}_critic");
-        }
-        Debug.Log($"Saved {creatures.Count} brains at step {stepCount}");
+        NeuralNetworkSaver.Save(sharedBrain.GetActor(), "shared_actor");
+        NeuralNetworkSaver.Save(sharedBrain.GetCritic(), "shared_critic");
+        Debug.Log($"Shared brain saved at step {stepCount}");
     }
 
-    public void LoadAllBrains()
+    public void LoadBrain()
     {
-        RefreshCreatureList();
-        for (int i = 0; i < creatures.Count; i++)
-        {
-            if (creatures[i] == null) continue;
-            NeuralNetworkSaver.Load(creatures[i].Agent.GetActor(), $"creature_{i}_actor");
-            NeuralNetworkSaver.Load(creatures[i].Agent.GetCritic(), $"creature_{i}_critic");
-        }
+        NeuralNetworkSaver.Load(sharedBrain.GetActor(), "shared_actor");
+        NeuralNetworkSaver.Load(sharedBrain.GetCritic(), "shared_critic");
+        Debug.Log("Shared brain loaded");
     }
 }
-
