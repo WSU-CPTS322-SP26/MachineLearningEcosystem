@@ -6,17 +6,15 @@ using UnityEngine;
 
 public class MapTerrain : MonoBehaviour
 {
-    [SerializeField] private Dictionary<string, float> possibleNs; // possible neighbors
-    private TerrainData terrainData = null;
+    [SerializeField] private TerrainData terrainData = null;
     public MapTerrain(TerrainData data)
     {
         terrainData = data;
-        possibleNs = terrainData.GetPossibleNS();
     }
-    public Dictionary<string, float> GetPossibleNS()
+    public MapTerrain ResetMapTerrain()
     {
-        possibleNs = terrainData.GetPossibleNS();
-        return possibleNs;
+        terrainData = null;
+        return this;
     }
     public void SetTerrainData(TerrainData data)
     {

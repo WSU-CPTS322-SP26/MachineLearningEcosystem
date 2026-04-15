@@ -8,6 +8,8 @@ public class CreatureStatModifer
     private static Dictionary<string, Tuple<float, float>> maxMins = new Dictionary<string, Tuple<float, float>>
         {
             ["Health"] = new Tuple<float, float>(25f, 500f),
+            ["Damage"] = new Tuple<float, float>(1f, 150f),
+            ["Range"] = new Tuple<float, float>(0.2f, 4f),
             ["ViewDistance"] = new Tuple<float, float>(10f, 100f),
             ["ViewAngle"] = new Tuple<float, float>(20f, 340f),
             ["Speed"] = new Tuple<float, float>(1f, 20f),

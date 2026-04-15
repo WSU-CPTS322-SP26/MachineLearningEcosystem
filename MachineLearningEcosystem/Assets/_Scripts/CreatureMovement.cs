@@ -310,12 +310,39 @@ public class CreatureMovement : MonoBehaviour
         DistanceToNearestWater = nearestWater;
     }
 
+    public void Hurt(int damage)
+    {
+        stats.Health -= damage;
+    }
+
+    public void Attack()
+    {
+        GameObject target = CanAttack();
+        if (target != null && target.GetComponent<CreatureMovement>() != null)
+        {
+            target.GetComponent<CreatureMovement>().Hurt((int)stats.Damage);
+        }
+    }
+
+    public GameObject CanAttack()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, stats.Range); // give creature some eating range
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject.GetComponent<CreatureMovement>() != null)
+            {
+                return collider.gameObject;
+            }
+        }
+        return null;
+    }
+
     public void Eat()
     {
         if (stats.IsCarnivore)
         {
             GameObject target = CanEatMeat();
-            if (target != null)
+            if (target != null && target.GetComponent<MeatInstance>() != null)
             {
                 stats.CurrHunger += 40f;
                 JustAte = true;
@@ -325,7 +352,7 @@ public class CreatureMovement : MonoBehaviour
         else
         {
             GameObject target = CanEatPlants();
-            if (target != null)
+            if (target != null && target.GetComponent<PlantInstance>() != null)
             {
                 stats.CurrHunger += 40f;
                 JustAte = true;
@@ -335,7 +362,7 @@ public class CreatureMovement : MonoBehaviour
     }
     public GameObject CanEatMeat()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f); // give creature some eating range
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, stats.Range); // give creature some eating range
         foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject.GetComponent<MeatInstance>() != null)
@@ -347,7 +374,7 @@ public class CreatureMovement : MonoBehaviour
     }
     public GameObject CanEatPlants()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f); // give creature some eating range
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, stats.Range); // give creature some eating range
         foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject.GetComponent<PlantInstance>() != null)
@@ -385,10 +412,10 @@ public class CreatureMovement : MonoBehaviour
     {
         MapTerrain currentTile = DetectTile(transform.position);
         List<MapTerrain> ns = new();
-        ns.Add(DetectTile(transform.position + (Vector3.up * MapManager.GetTerrainSize() * distanceForCheck)));
-        ns.Add(DetectTile(transform.position + (Vector3.up * -1 * MapManager.GetTerrainSize() * distanceForCheck)));
-        ns.Add(DetectTile(transform.position + (Vector3.right * MapManager.GetTerrainSize() * distanceForCheck)));
-        ns.Add(DetectTile(transform.position + (Vector3.right * -1 * MapManager.GetTerrainSize() * distanceForCheck)));
+        ns.Add(DetectTile(transform.position + (distanceForCheck * MapManager.GetTerrainSize() * Vector3.up)));
+        ns.Add(DetectTile(transform.position + (-1 * distanceForCheck * MapManager.GetTerrainSize() * Vector3.up)));
+        ns.Add(DetectTile(transform.position + (distanceForCheck * MapManager.GetTerrainSize() * Vector3.right)));
+        ns.Add(DetectTile(transform.position + (-1 * distanceForCheck * MapManager.GetTerrainSize() * Vector3.right)));
         return ns;
     }
     
