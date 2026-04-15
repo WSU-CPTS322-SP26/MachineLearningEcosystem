@@ -116,7 +116,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
     private void OnPlayButtonClicked()
     {
         Debug.Log("start button pressed");
-        if (ProceduralGeneration.IsGenerating())
+        if (ProceduralGeneration.IsGenerating() || !MapManager.instance.IsMapGenerated())
         {
             return;
         }

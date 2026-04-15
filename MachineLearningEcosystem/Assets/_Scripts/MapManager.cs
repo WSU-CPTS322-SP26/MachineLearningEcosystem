@@ -34,11 +34,6 @@ public class MapManager : MonoBehaviour
         ProceduralGeneration.ResetGeneration();
     }
 
-    private void OnDestroy()
-    {
-        instance = null;
-    }
-
     private void Start()
     {
         terrainPool = new(terrainPrefab.GetComponent<MapTerrain>(), 4000, gameObject.transform);
@@ -183,5 +178,14 @@ public class MapManager : MonoBehaviour
     public MapTerrain[,] GetMap()
     {
         return map;
+    }
+
+    public bool IsMapGenerated()
+    {
+        if (map == null || cells == null)
+        {
+            return false;
+        }
+        return true;
     }
 }
