@@ -45,7 +45,7 @@ public class TerrainGenerationUI : MonoBehaviour
     }
     private void OnPlayButtonClicked()
     {
-        if (ProceduralGeneration.IsGenerating())
+        if (ProceduralGeneration.IsGenerating() || !MapManager.instance.IsMapGenerated())
         {
             StartCoroutine(ButtonFlash(playButton));
             return;
