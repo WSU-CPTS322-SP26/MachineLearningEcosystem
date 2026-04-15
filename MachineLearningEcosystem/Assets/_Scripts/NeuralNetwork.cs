@@ -1,14 +1,15 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-//using UnityEngine.Random;
+
 
 public class NeuralNetwork
 {
     private float[][] neurons;      // neuron values per layer
     private float[][][] weights;    // weights[layer][from][to]
     private float[][] biases;       // biases[layer][neuron]
-    private int[] layerSizes;
+    public int[] layerSizes;
 
     public NeuralNetwork(int[] layerSizes)
     {
@@ -25,7 +26,6 @@ public class NeuralNetwork
         }
 
         // Initialize weights with small random values (Xavier initialization)
-        //Random rng = new Random();
         for (int i = 0; i < layerSizes.Length - 1; i++)
         {
             weights[i] = new float[layerSizes[i]][];
@@ -37,7 +37,7 @@ public class NeuralNetwork
                 for (int k = 0; k < layerSizes[i + 1]; k++)
                 {
                     // Xavier: keeps signals from vanishing or exploding
-                    //weights[i][j][k] = (float)(rng.NextDouble() * 2 - 1) * scale;
+                    weights[i][j][k] = (float)(UnityEngine.Random.value * 2 - 1) * scale;
                 }
             }
         }
@@ -74,5 +74,99 @@ public class NeuralNetwork
         float[] exps = logits.Select(x => Mathf.Exp(x - max)).ToArray();
         float sum = exps.Sum();
         return exps.Select(e => e / sum).ToArray();
+    }
+
+
+
+    // Flatten all weights into a single 1D array for JSON saving
+    public float[] GetFlatWeights()
+    {
+        List<float> flat = new List<float>();
+        for (int l = 0; l < weights.Length; l++)
+            for (int i = 0; i < weights[l].Length; i++)
+                for (int j = 0; j < weights[l][i].Length; j++)
+                    flat.Add(weights[l][i][j]);
+        return flat.ToArray();
+    }
+
+
+    // Flatten all biases into a single 1D array for JSON saving
+    public float[] GetFlatBiases()
+    {
+        List<float> flat = new List<float>();
+        for (int l = 0; l < biases.Length; l++)
+            for (int j = 0; j < biases[l].Length; j++)
+                flat.Add(biases[l][j]);
+        return flat.ToArray();
+    }
+
+
+    // Restore weights and biases from flat arrays (used when loading)
+    public void SetWeightsAndBiases(float[] flatWeights, float[] flatBiases)
+    {
+        // Restore weights
+        int wi = 0; // index into flatWeights
+        for (int l = 0; l < weights.Length; l++)
+            for (int i = 0; i < weights[l].Length; i++)
+                for (int j = 0; j < weights[l][i].Length; j++)
+                    weights[l][i][j] = flatWeights[wi++];
+
+        // Restore biases
+        int bi = 0; // index into flatBiases
+        for (int l = 0; l < biases.Length; l++)
+            for (int j = 0; j < biases[l].Length; j++)
+                biases[l][j] = flatBiases[bi++];
+    }
+
+
+
+    //back propagation to change the weights so the neural network learns
+    public void Backpropagate(float[] inputs, int targetAction, float loss, float lr)
+    {
+        // 1. Forward pass to get all layer activations
+        FeedForward(inputs);
+
+        // 2. Compute output layer gradients
+        float[][] deltas = new float[layerSizes.Length][];
+        for (int l = 0; l < layerSizes.Length; l++)
+            deltas[l] = new float[layerSizes[l]];
+
+        // Output layer delta (from policy loss)
+        for (int j = 0; j < layerSizes[^1]; j++)
+        {
+            float target = (j == targetAction) ? 1f : 0f;
+            deltas[^1][j] = neurons[^1][j] - target;
+            deltas[^1][j] *= loss; // scale by loss magnitude
+        }
+
+        // 3. Propagate deltas backward through hidden layers
+        for (int l = layerSizes.Length - 2; l >= 1; l--)
+        {
+            for (int i = 0; i < layerSizes[l]; i++)
+            {
+                float error = 0f;
+                for (int j = 0; j < layerSizes[l + 1]; j++)
+                    error += deltas[l + 1][j] * weights[l][i][j];
+
+                // ReLU derivative: 1 if neuron was active, 0 if not
+                deltas[l][i] = error * (neurons[l][i] > 0 ? 1f : 0f);
+            }
+        }
+
+        // 4. Update weights using gradient descent
+        for (int l = 0; l < layerSizes.Length - 1; l++)
+        {
+            for (int i = 0; i < layerSizes[l]; i++)
+            {
+                for (int j = 0; j < layerSizes[l + 1]; j++)
+                {
+                    // w = w - lr * gradient
+                    weights[l][i][j] -= lr * neurons[l][i] * deltas[l + 1][j];
+                }
+            }
+            // Update biases
+            for (int j = 0; j < layerSizes[l + 1]; j++)
+                biases[l + 1][j] -= lr * deltas[l + 1][j];
+        }
     }
 }
