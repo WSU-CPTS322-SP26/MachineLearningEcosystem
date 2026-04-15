@@ -6,8 +6,6 @@ public class SimulationManager : MonoBehaviour
     public static SimulationManager instance { get; private set; }
 
 
-    [Header("Prefabs")]
-    [SerializeField] private GameObject creaturePrefab;
 
     [Header("Settings")]
     private int creatureCount;
