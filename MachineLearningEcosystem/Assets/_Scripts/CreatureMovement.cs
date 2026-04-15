@@ -14,6 +14,15 @@ public class CreatureMovement : MonoBehaviour
     [SerializeField] private GameObject creature;
     [SerializeField] private FieldOfView fov;
 
+    [Space]
+    [SerializeField] private AudioSource source;
+    private static List<AudioClip> attackingSound;
+    private static List<AudioClip> eatingSound;
+    private static AudioClip drinkingSound;
+    private static AudioClip deathSound;
+    private static AudioClip hurtSound;
+    
+
     private List<GameObject> vision;
     public CreatureStatstics stats;
 
@@ -64,6 +73,22 @@ public class CreatureMovement : MonoBehaviour
             stats = creature.AddComponent<CreatureStatstics>();
 
         stats.DeathSignal += DeathScript;
+
+        // SFX Loading
+        if (attackingSound == null)
+        {
+            for (int i = 1; i <= 5; i++)
+            {
+                attackingSound.Add(Resources.Load($"SFX/Attacking_{i}").GetComponent<AudioClip>());
+            }
+            for (int i = 1; i <= 4; i++)
+            {
+                eatingSound.Add(Resources.Load($"SFX/Eating_{i}").GetComponent<AudioClip>());
+            }
+            drinkingSound = Resources.Load("SFX/Drinking").GetComponent<AudioClip>();
+            // deathSound;
+            hurtSound = Resources.Load("SFX/Hurt").GetComponent<AudioClip>();
+        }
     }
 
     private void Start()
@@ -71,6 +96,7 @@ public class CreatureMovement : MonoBehaviour
         fov.SetViewDistance(stats.ViewDistance);
         fov.UpdateViewDirection(0, stats.ViewAngle);
         fov.SetCreature(creature);
+        source = gameObject.GetComponent<AudioSource>();
     }
 
     // Called by SimulationManager when this creature is re-registered
@@ -313,6 +339,7 @@ public class CreatureMovement : MonoBehaviour
     public void Hurt(int damage)
     {
         stats.Health -= damage;
+        source.PlayOneShot(hurtSound);
     }
 
     public void Attack()
@@ -321,6 +348,7 @@ public class CreatureMovement : MonoBehaviour
         if (target != null && target.GetComponent<CreatureMovement>() != null)
         {
             target.GetComponent<CreatureMovement>().Hurt((int)stats.Damage);
+            source.PlayOneShot(attackingSound[Random.Range(0, attackingSound.Count)]);
         }
     }
 
@@ -347,6 +375,7 @@ public class CreatureMovement : MonoBehaviour
                 stats.CurrHunger += 40f;
                 JustAte = true;
                 target.GetComponent<MeatInstance>()?.Consume();
+                source.PlayOneShot(eatingSound[Random.Range(0, eatingSound.Count)]);
             }
         }
         else
@@ -357,6 +386,7 @@ public class CreatureMovement : MonoBehaviour
                 stats.CurrHunger += 40f;
                 JustAte = true;
                 target.GetComponent<PlantInstance>()?.Consume();
+                source.PlayOneShot(eatingSound[Random.Range(0, eatingSound.Count)]);
             }
         }
     }
@@ -391,6 +421,7 @@ public class CreatureMovement : MonoBehaviour
         {
             JustDrank = true;
             stats.CurrThirst += 20f;
+            source.PlayOneShot(drinkingSound);
         }
     }
     public bool CanDrink()
