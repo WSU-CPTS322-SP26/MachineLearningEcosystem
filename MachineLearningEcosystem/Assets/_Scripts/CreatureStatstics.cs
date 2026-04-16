@@ -46,6 +46,8 @@ public class CreatureStatstics : MonoBehaviour
         // stats.Add("Size", 2);
     }
 
+
+
     private void Parse(string filename)
     {
         TextAsset asset = Resources.Load<TextAsset>(filename);
@@ -187,6 +189,12 @@ public class CreatureStatstics : MonoBehaviour
             CurrHunger -= 1f;
             CurrThirst -= 1f;
             statTimer = 0f;
+        }
+
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        if (sprite != null)
+        {
+            sprite.color = new(CurrHealth / Health, CurrHunger / Hunger, CurrThirst / Thirst);
         }
     }
 }
