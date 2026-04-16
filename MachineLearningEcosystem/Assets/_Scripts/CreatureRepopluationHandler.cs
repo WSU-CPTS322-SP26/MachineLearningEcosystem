@@ -194,4 +194,9 @@ public class CreatureRepopluationHandler : MonoBehaviour
     {
         playButton.onClick.RemoveAllListeners();
     }
+
+    public void SetSeedStats(Dictionary<string, float> eliteStats)
+    {
+        seedStats = eliteStats;
+    }
 }
