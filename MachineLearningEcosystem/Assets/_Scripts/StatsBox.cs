@@ -69,14 +69,14 @@ public class StatsBox : MonoBehaviour
         {
             StatsText.text = "Type: Herbivore";
         }
-        StatsText.text += "\nHealth: " + creature.CurrHealth + "/" + creature.Health;
-        StatsText.text += "\nHunger: " + creature.CurrHunger + "/" + creature.Hunger;
-        StatsText.text += "\nThirst: " + creature.CurrThirst + "/" + creature.Thirst;
+        StatsText.text += "\nHealth: " + (int)creature.CurrHealth + "/" + (int)creature.Health;
+        StatsText.text += "\nHunger: " + (int)creature.CurrHunger + "/" + (int)creature.Hunger;
+        StatsText.text += "\nThirst: " + (int)creature.CurrThirst + "/" + (int)creature.Thirst;
         StatsText.text += "\nSpeed: " + creature.Speed;
         StatsText.text += "\nDamage: " + creature.Damage;
-        StatsText.text += "\nAction Range: " + creature.Range + " Units";
-        StatsText.text += "\nView Distance: " + creature.ViewDistance + " Units";
-        StatsText.text += "\nField of View: " + creature.ViewAngle + " Units";
+        StatsText.text += "\nRange: " + creature.Range + "u";
+        StatsText.text += "\nView Dist: " + creature.ViewDistance + "u";
+        StatsText.text += "\nFov: " + creature.ViewAngle + "u";
     }
 
 }

@@ -35,8 +35,8 @@ public class CreatureStatistics : MonoBehaviour
         {
             { "Health", 100 },
             { "currHealth", 100 },
-            { "Damage", 20 },
-            { "Range", 1 },
+            { "Damage", 25 },
+            { "Range", 3 },
             { "ViewDistance", 20 },
             { "ViewAngle", 70 },
             { "Speed", 8 },
@@ -91,7 +91,7 @@ public class CreatureStatistics : MonoBehaviour
     public float Health
     {
         get { return stats["Health"]; }
-        set { stats["Health"] = value; }
+        set { stats["Health"] = (int)value; }
     }
     public float CurrHealth
     {
@@ -108,7 +108,7 @@ public class CreatureStatistics : MonoBehaviour
     public float Damage
     {
         get { return stats["Damage"]; }
-        set { stats["Damage"] = value; }
+        set { stats["Damage"] = (int)value; }
     }
     public float Range
     {
@@ -133,7 +133,7 @@ public class CreatureStatistics : MonoBehaviour
     public float Thirst
     {
         get { return stats["Thirst"]; }
-        set { stats["Thirst"] = value; }
+        set { stats["Thirst"] = (int)value; }
         
     }
     // public float ThirstLossRate
@@ -156,7 +156,7 @@ public class CreatureStatistics : MonoBehaviour
     public float Hunger
     {
         get { return stats["Hunger"]; }
-        set { stats["Hunger"] = value; }
+        set { stats["Hunger"] = (int)value; }
     }
     // public float HungerLossRate
     // {

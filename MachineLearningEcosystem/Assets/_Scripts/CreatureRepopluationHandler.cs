@@ -143,7 +143,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
             {
                 cm.ResetCreature();
                 SimulationManager.instance?.RegisterCreature(cm);
-                cm.SetStats(CreatureStatModifer.ModifyStats(seedStats, Random.Range(0.3f, 0.8f), Random.Range(2, 6)));
+                cm.SetStats(CreatureStatModifer.ModifyStats(seedStats, Random.Range(0.1f, 0.5f)));
             }
         }
 
@@ -184,7 +184,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
         {
             return;
         }
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
 
         SpawnCreatures(carnivorCount, herbivoreCount);
     }
