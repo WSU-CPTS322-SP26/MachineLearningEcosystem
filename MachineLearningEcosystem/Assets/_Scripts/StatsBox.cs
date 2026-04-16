@@ -72,11 +72,11 @@ public class StatsBox : MonoBehaviour
         StatsText.text += "\nHealth: " + (int)creature.CurrHealth + "/" + (int)creature.Health;
         StatsText.text += "\nHunger: " + (int)creature.CurrHunger + "/" + (int)creature.Hunger;
         StatsText.text += "\nThirst: " + (int)creature.CurrThirst + "/" + (int)creature.Thirst;
-        StatsText.text += "\nSpeed: " + creature.Speed;
-        StatsText.text += "\nDamage: " + creature.Damage;
-        StatsText.text += "\nRange: " + creature.Range + "u";
-        StatsText.text += "\nView Dist: " + creature.ViewDistance + "u";
-        StatsText.text += "\nFov: " + creature.ViewAngle + "u";
+        StatsText.text += "\nSpeed: " + creature.Speed.ToString("F2");
+        StatsText.text += "\nDamage: " + creature.Damage.ToString("F2");
+        StatsText.text += "\nRange: " + creature.Range.ToString("F2") + " u";
+        StatsText.text += "\nView Dist: " + creature.ViewDistance.ToString("F2") + " u";
+        StatsText.text += "\nFov: " + creature.ViewAngle.ToString("F2") + " deg";
     }
 
 }
