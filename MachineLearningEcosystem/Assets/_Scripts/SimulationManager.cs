@@ -19,7 +19,7 @@ public class SimulationManager : MonoBehaviour
     private int stepCount = 0;
     private int nextId = 0;
 
-    // Network architecture — must match CreatureMovement constants
+    // Network architecture ï¿½ must match CreatureMovement constants
     private static readonly int[] NetworkShape ={ CreatureMovement.STATE_SIZE, 128, 128, CreatureMovement.ACTION_SIZE };
 
 
@@ -31,6 +31,7 @@ public class SimulationManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    [System.Obsolete] // TODO: Remove and fix the findobjectsoftype call
     void Start()
     {
         //creatureCount = CreatureRepopluationHandler.carinavorCount

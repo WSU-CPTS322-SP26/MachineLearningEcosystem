@@ -72,6 +72,8 @@ public class SharedBrain
 
             Debug.Log($"Elite creature this cycle: ID {eliteCreatureId} " +
                       $"with reward {creatureTotalRewards[eliteCreatureId]:F2}");
+
+            // TODO: Seed the stats for mutation with the elite's stats
         }
 
         var (returns, advantages) = ComputeGAE();

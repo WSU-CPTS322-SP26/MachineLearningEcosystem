@@ -5,8 +5,9 @@ using System;
 
 using Random = UnityEngine.Random;
 using Unity.VisualScripting.AssemblyQualifiedNameParser;
+using Unity.VisualScripting;
 
-public class CreatureStatstics : MonoBehaviour
+public class CreatureStatistics : MonoBehaviour
 {
     private Dictionary<string, float> stats = new();
 
@@ -26,25 +27,28 @@ public class CreatureStatstics : MonoBehaviour
         }
         _creatureName = possible_names[Random.Range(0, possible_names.Count)];
 
-        stats.Add("Health", 100);
-        stats.Add("currHealth", 100);
-
-        stats.Add("Damage", 20);
-        stats.Add("Range", 1);
-
-        stats.Add("ViewDistance", 20);
-        stats.Add("ViewAngle", 70);
-
-        stats.Add("Speed", 8);
-
-        stats.Add("Thirst", 200);
-        stats.Add("currThirst", 200);
-
-        stats.Add("Hunger", 100);
-        stats.Add("currHunger", 100);
-
-        // stats.Add("Size", 2);
+        stats.AddRange(GetBaseStats());
     }
+
+    public static Dictionary<string, float> GetBaseStats() {
+        Dictionary<string, float> dict = new()
+        {
+            { "Health", 100 },
+            { "currHealth", 100 },
+            { "Damage", 25 },
+            { "Range", 3 },
+            { "ViewDistance", 20 },
+            { "ViewAngle", 70 },
+            { "Speed", 8 },
+            { "Thirst", 100 },
+            { "currThirst", 100 },
+            { "Hunger", 150 },
+            { "currHunger", 150 }
+        };
+
+        return dict;
+    }
+
 
     private void Parse(string filename)
     {
@@ -87,7 +91,7 @@ public class CreatureStatstics : MonoBehaviour
     public float Health
     {
         get { return stats["Health"]; }
-        set { stats["Health"] = value; }
+        set { stats["Health"] = (int)value; }
     }
     public float CurrHealth
     {
@@ -104,7 +108,7 @@ public class CreatureStatstics : MonoBehaviour
     public float Damage
     {
         get { return stats["Damage"]; }
-        set { stats["Damage"] = value; }
+        set { stats["Damage"] = (int)value; }
     }
     public float Range
     {
@@ -129,7 +133,7 @@ public class CreatureStatstics : MonoBehaviour
     public float Thirst
     {
         get { return stats["Thirst"]; }
-        set { stats["Thirst"] = value; }
+        set { stats["Thirst"] = (int)value; }
         
     }
     // public float ThirstLossRate
@@ -152,7 +156,7 @@ public class CreatureStatstics : MonoBehaviour
     public float Hunger
     {
         get { return stats["Hunger"]; }
-        set { stats["Hunger"] = value; }
+        set { stats["Hunger"] = (int)value; }
     }
     // public float HungerLossRate
     // {
@@ -188,5 +192,19 @@ public class CreatureStatstics : MonoBehaviour
             CurrThirst -= 1f;
             statTimer = 0f;
         }
+
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        if (sprite != null)
+        {
+            sprite.color = new(CurrHealth / Health, CurrHunger / Hunger, CurrThirst / Thirst);
+        }
+    }
+
+    public void SetStats(Dictionary<string, float> newStats)
+    {
+        stats = newStats;
+        CurrThirst = Thirst;
+        CurrHealth = Health;
+        CurrHunger = Hunger;
     }
 }

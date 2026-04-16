@@ -14,8 +14,16 @@ public class CreatureMovement : MonoBehaviour
     [SerializeField] private GameObject creature;
     [SerializeField] private FieldOfView fov;
 
+    [Space]
+    private static List<AudioClip> attackingSound;
+    private static List<AudioClip> eatingSound;
+    private static AudioClip drinkingSound;
+    private static AudioClip deathSound;
+    private static AudioClip hurtSound;
+    
+
     private List<GameObject> vision;
-    public CreatureStatstics stats;
+    public CreatureStatistics stats;
 
     // --- Neural Network Brain ---
     public int CreatureId { get; private set; }    // unique ID for elite tracking
@@ -59,11 +67,29 @@ public class CreatureMovement : MonoBehaviour
 
     private void Awake()
     {
-        stats = creature.GetComponent<CreatureStatstics>();
+        stats = creature.GetComponent<CreatureStatistics>();
         if (stats == null)
-            stats = creature.AddComponent<CreatureStatstics>();
+            stats = creature.AddComponent<CreatureStatistics>();
 
         stats.DeathSignal += DeathScript;
+
+        // SFX Loading
+        if (attackingSound == null)
+        {
+            attackingSound = new();
+            eatingSound = new();
+            for (int i = 1; i <= 5; i++)
+            {
+                attackingSound.Add(Resources.Load<AudioClip>($"SFX/Attacking_{i}"));
+            }
+            for (int i = 1; i <= 4; i++)
+            {
+                eatingSound.Add(Resources.Load<AudioClip>($"SFX/Eating_{i}"));
+            }
+            drinkingSound = Resources.Load<AudioClip>("SFX/Drinking");
+            // deathSound;
+            hurtSound = Resources.Load<AudioClip>("SFX/Hurt");
+        }
     }
 
     private void Start()
@@ -313,6 +339,7 @@ public class CreatureMovement : MonoBehaviour
     public void Hurt(int damage)
     {
         stats.Health -= damage;
+        SFXManager.instance.PlayAudioClip(hurtSound, transform, .7f, 1f + Random.Range(-.3f, .3f), 10f, 200f);
     }
 
     public void Attack()
@@ -321,6 +348,7 @@ public class CreatureMovement : MonoBehaviour
         if (target != null && target.GetComponent<CreatureMovement>() != null)
         {
             target.GetComponent<CreatureMovement>().Hurt((int)stats.Damage);
+            SFXManager.instance.PlayAudioClip(attackingSound[Random.Range(0, attackingSound.Count)], transform, 1f, 1f + Random.Range(-.3f, .3f), 30f, 300f);
         }
     }
 
@@ -347,6 +375,7 @@ public class CreatureMovement : MonoBehaviour
                 stats.CurrHunger += 40f;
                 JustAte = true;
                 target.GetComponent<MeatInstance>()?.Consume();
+                SFXManager.instance.PlayAudioClip(eatingSound[Random.Range(0, eatingSound.Count)], transform, 1f, 1f + Random.Range(-.3f, .3f), 20f, 100f);
             }
         }
         else
@@ -357,6 +386,7 @@ public class CreatureMovement : MonoBehaviour
                 stats.CurrHunger += 40f;
                 JustAte = true;
                 target.GetComponent<PlantInstance>()?.Consume();
+                SFXManager.instance.PlayAudioClip(eatingSound[Random.Range(0, eatingSound.Count)], transform, 1f, 1f + Random.Range(-.3f, .3f), 20f, 100f);
             }
         }
     }
@@ -391,6 +421,7 @@ public class CreatureMovement : MonoBehaviour
         {
             JustDrank = true;
             stats.CurrThirst += 20f;
+            SFXManager.instance.PlayAudioClip(drinkingSound, transform, 1f, 1f + Random.Range(-.3f, .3f), 20f, 100f);
         }
     }
     public bool CanDrink()
@@ -423,6 +454,16 @@ public class CreatureMovement : MonoBehaviour
     public List<GameObject> GetVision()
     {
         return vision;
+    }
+
+    public CreatureStatistics GetStats()
+    {
+        return stats;
+    }
+
+    public void SetStats(Dictionary<string, float> newStats)
+    {
+        stats.SetStats(newStats);
     }
 
     // Change where the creature is looking currently
@@ -493,6 +534,6 @@ public class CreatureMovement : MonoBehaviour
     {
         JustDied = true;
         MeatManager.instance?.PlaceMeat(gameObject.transform.position, Random.Range(3,6));
-        Destroy(gameObject);
+        Destroy(gameObject); // TODO: return to pool not destroy
     }
 }
