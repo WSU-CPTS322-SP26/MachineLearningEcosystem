@@ -143,7 +143,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
             {
                 cm.ResetCreature();
                 SimulationManager.instance?.RegisterCreature(cm);
-                cm.SetStats(CreatureStatModifer.ModifyStats(seedStats, Random.Range(0.1f, 0.5f)));
+                cm.SetStats(CreatureStatModifer.ModifyStats(seedStats, Random.Range(0.1f, 0.3f)));
             }
         }
 
@@ -159,6 +159,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
             {
                 cm.ResetCreature();
                 SimulationManager.instance?.RegisterCreature(cm);
+                cm.SetStats(CreatureStatModifer.ModifyStats(seedStats, Random.Range(0.1f, 0.3f)));
             }
         }
     }
