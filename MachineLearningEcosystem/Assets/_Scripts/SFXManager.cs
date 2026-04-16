@@ -33,6 +33,7 @@ public class SFXManager : MonoBehaviour
         source.pitch = pitch;
         source.spatialBlend = 0f;
         source.Play();
+        StartCoroutine(KillSFXPlayer(source));
     }
 
     // Sound that needs to be a 3d positioning
@@ -47,6 +48,7 @@ public class SFXManager : MonoBehaviour
         source.minDistance = minDist;
         source.maxDistance = maxDist;
         source.Play();
+        StartCoroutine(KillSFXPlayer(source));
     }
 
     private IEnumerator KillSFXPlayer(AudioSource source)
