@@ -15,7 +15,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
 
     [SerializeField] private Button playButton;
 
-    [SerializeField] private GameObject carnivorCreature;
+    [SerializeField] private GameObject carnivorCreature; // Prefabs
     [SerializeField] private GameObject herbivoreCreature;
 
     [SerializeField] public int carnivorCount = 20;
@@ -25,7 +25,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
     [SerializeField] private bool autoRespawn = true;
     [SerializeField] private float respawnIntervalSec = 120f; // respawn every 2 minutes
 
-
+    private static Dictionary<string, float> seedStats; // Used to mutate stats
     private List<GameObject> carnivorList = new List<GameObject>();
     private List<GameObject> herbivoreList = new List<GameObject>();
 
@@ -37,6 +37,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            seedStats = CreatureStatistics.GetBaseStats();
         }
         else
         {
@@ -47,8 +48,6 @@ public class CreatureRepopluationHandler : MonoBehaviour
 
     void Start()
     {
-
-
         //Debug.Log("creature repo here");
         playButton.onClick.AddListener(OnPlayButtonClicked);
 
@@ -144,6 +143,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
             {
                 cm.ResetCreature();
                 SimulationManager.instance?.RegisterCreature(cm);
+                cm.SetStats(CreatureStatModifer.ModifyStats(seedStats, Random.Range(0.3f, 0.8f), Random.Range(2, 6)));
             }
         }
 
@@ -187,5 +187,10 @@ public class CreatureRepopluationHandler : MonoBehaviour
         gameObject.SetActive(false);
 
         SpawnCreatures(carnivorCount, herbivoreCount);
+    }
+
+    private void OnDestroy()
+    {
+        playButton.onClick.RemoveAllListeners();
     }
 }

@@ -23,7 +23,7 @@ public class CreatureMovement : MonoBehaviour
     
 
     private List<GameObject> vision;
-    public CreatureStatstics stats;
+    public CreatureStatistics stats;
 
     // --- Neural Network Brain ---
     public int CreatureId { get; private set; }    // unique ID for elite tracking
@@ -67,9 +67,9 @@ public class CreatureMovement : MonoBehaviour
 
     private void Awake()
     {
-        stats = creature.GetComponent<CreatureStatstics>();
+        stats = creature.GetComponent<CreatureStatistics>();
         if (stats == null)
-            stats = creature.AddComponent<CreatureStatstics>();
+            stats = creature.AddComponent<CreatureStatistics>();
 
         stats.DeathSignal += DeathScript;
 
@@ -456,6 +456,16 @@ public class CreatureMovement : MonoBehaviour
         return vision;
     }
 
+    public CreatureStatistics GetStats()
+    {
+        return stats;
+    }
+
+    public void SetStats(Dictionary<string, float> newStats)
+    {
+        stats.SetStats(newStats);
+    }
+
     // Change where the creature is looking currently
     public void UpdateFov(int v)
     {
@@ -524,6 +534,6 @@ public class CreatureMovement : MonoBehaviour
     {
         JustDied = true;
         MeatManager.instance?.PlaceMeat(gameObject.transform.position, Random.Range(3,6));
-        Destroy(gameObject);
+        Destroy(gameObject); // TODO: return to pool not destroy
     }
 }

@@ -35,7 +35,7 @@ public class StatsBox : MonoBehaviour
     {
         if (save_creature != null)
         {
-            DisplayStats(save_creature.GetComponent<CreatureStatstics>());
+            DisplayStats(save_creature.GetComponent<CreatureStatistics>());
         }
     }
 
@@ -56,7 +56,7 @@ public class StatsBox : MonoBehaviour
         closeButton.gameObject.SetActive(true);
     }
 
-    public void DisplayStats(CreatureStatstics creature)
+    public void DisplayStats(CreatureStatistics creature)
     {
         EnableBox();
         save_creature = creature.gameObject;
