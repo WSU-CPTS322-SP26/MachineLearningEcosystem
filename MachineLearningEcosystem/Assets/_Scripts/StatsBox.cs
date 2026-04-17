@@ -9,6 +9,10 @@ public class StatsBox : MonoBehaviour
     [SerializeField] private TextMeshProUGUI NameText;
     [SerializeField] private TextMeshProUGUI StatsText;
     [SerializeField] private Button closeButton;
+    private static AudioClip openSound = null;
+    private static AudioClip closeSound = null;
+    private bool displaying = false;
+
 
     private GameObject save_creature = null;
 
@@ -23,7 +27,15 @@ public class StatsBox : MonoBehaviour
     private void Start()
     {
         // closeButton.onClick.AddListener(DisableBox);
-        DisableBox();
+        openSound = Resources.Load<AudioClip>("SFX/Inspect");
+        closeSound = Resources.Load<AudioClip>("SFX/CloseInspect");
+        // disable without sfx reference
+        displaying = false;
+        save_creature = null;
+        gameObject.GetComponent<Image>().enabled = false;
+        NameText.gameObject.SetActive(false);
+        StatsText.gameObject.SetActive(false);
+        closeButton.gameObject.SetActive(false);
     }
 
     private void OnDestroy()
@@ -41,15 +53,21 @@ public class StatsBox : MonoBehaviour
 
     public void DisableBox()
     {
+        displaying = false;
         save_creature = null;
         gameObject.GetComponent<Image>().enabled = false;
         NameText.gameObject.SetActive(false);
         StatsText.gameObject.SetActive(false);
         closeButton.gameObject.SetActive(false);
+        if (closeSound != null)
+        {
+            SFXManager.instance.PlayOmnicientAudioClip(closeSound);
+        }
     }
 
     public void EnableBox()
     {
+        displaying = true;
         gameObject.GetComponent<Image>().enabled = true;
         NameText.gameObject.SetActive(true);
         StatsText.gameObject.SetActive(true);
@@ -58,9 +76,17 @@ public class StatsBox : MonoBehaviour
 
     public void DisplayStats(CreatureStatistics creature)
     {
-        EnableBox();
-        save_creature = creature.gameObject;
-        NameText.text = creature.CreatureName;
+        if (!displaying)
+            EnableBox();
+        if (save_creature != creature.gameObject)
+        {
+            save_creature = creature.gameObject;
+            NameText.text = creature.CreatureName;
+            if (openSound != null)
+            {
+                SFXManager.instance.PlayOmnicientAudioClip(openSound);
+            }
+        }
         if (creature.IsCarnivore)
         {
             StatsText.text = "Type: Carnivore";
