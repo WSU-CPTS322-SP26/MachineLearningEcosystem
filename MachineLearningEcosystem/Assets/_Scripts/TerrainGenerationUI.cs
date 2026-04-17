@@ -13,9 +13,11 @@ public class TerrainGenerationUI : MonoBehaviour
     [SerializeField] private Toggle animationToggle;
     [SerializeField] private Slider animationSpeedSlider;
     private Color originalColor;
+    private static AudioClip clickSound = null;
 
     void Start()
     {
+        clickSound = Resources.Load<AudioClip>("SFX/UIClick_Proto");
         generateButton.onClick.AddListener(OnGenerateButtonClicked);
         playButton.onClick.AddListener(OnPlayButtonClicked);
         animationToggle.onValueChanged.AddListener(OnAnimationToggleChanged);
@@ -28,6 +30,10 @@ public class TerrainGenerationUI : MonoBehaviour
     }
     private void OnGenerateButtonClicked()
     {
+        if (clickSound != null)
+        {
+            SFXManager.instance.PlayOmnicientAudioClip(clickSound);
+        }
         if (ProceduralGeneration.IsGenerating())
         {
             StartCoroutine(ButtonFlash(generateButton));
@@ -45,6 +51,10 @@ public class TerrainGenerationUI : MonoBehaviour
     }
     private void OnPlayButtonClicked()
     {
+        if (clickSound != null)
+        {
+            SFXManager.instance.PlayOmnicientAudioClip(clickSound);
+        }
         if (ProceduralGeneration.IsGenerating() || !MapManager.instance.IsMapGenerated())
         {
             StartCoroutine(ButtonFlash(playButton));
