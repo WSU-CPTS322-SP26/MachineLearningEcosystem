@@ -22,10 +22,6 @@ public class ProceduralGeneration : MonoBehaviour
     private static bool isGenerating = false;
     public static WFCCell[,] cells;
 
-    public void Start()
-    {
-        isGenerating = false;
-    }
     public static IEnumerator CollapseWaveFunction(WFCCell[,] cs)
     {
         isGenerating = true;
@@ -195,5 +191,6 @@ public class ProceduralGeneration : MonoBehaviour
     {
         isGenerating = false;
         iter = 0;
+        cells = null;
     }
 }

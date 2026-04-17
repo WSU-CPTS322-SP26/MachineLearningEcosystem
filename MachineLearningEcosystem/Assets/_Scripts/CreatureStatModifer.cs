@@ -7,10 +7,12 @@ public class CreatureStatModifer
     [SerializeField] private float mutationPercentage;
     private static Dictionary<string, Tuple<float, float>> maxMins = new Dictionary<string, Tuple<float, float>>
         {
-            ["Health"] = new Tuple<float, float>(25f, 500f),
+            ["Health"] = new Tuple<float, float>(25f, 800f),
+            ["Damage"] = new Tuple<float, float>(1f, 200f),
+            ["Range"] = new Tuple<float, float>(1f, 20f),
             ["ViewDistance"] = new Tuple<float, float>(10f, 100f),
             ["ViewAngle"] = new Tuple<float, float>(20f, 340f),
-            ["Speed"] = new Tuple<float, float>(1f, 20f),
+            ["Speed"] = new Tuple<float, float>(1f, 30f),
             ["Thirst"] = new Tuple<float, float>(40f, 1000f),
             ["Hunger"] = new Tuple<float, float>(40f, 1000f)
         };
