@@ -1520,6 +1520,10 @@ PrefabInstance:
       propertyPath: m_MaxValue
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3562655957083505931, guid: 568c3c8d2f013d54b97857c7b3fca344, type: 3}
+      propertyPath: m_MinValue
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5980070018358161020, guid: 568c3c8d2f013d54b97857c7b3fca344, type: 3}
       propertyPath: m_text
       value: 'Bloom Intensity
