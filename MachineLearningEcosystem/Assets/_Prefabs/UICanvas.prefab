@@ -2902,6 +2902,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   nextScene: {fileID: 102900000, guid: b337f9a4de4b12e419967d4329257486, type: 3}
   menuScene: {fileID: 102900000, guid: b337f9a4de4b12e419967d4329257486, type: 3}
+  creditsScene: {fileID: 0}
 --- !u!1 &6249415376681103952
 GameObject:
   m_ObjectHideFlags: 0
@@ -3941,6 +3942,10 @@ PrefabInstance:
     - target: {fileID: 6075418476089271010, guid: 1d70d2bbffd92ba4183e0649a95c135e, type: 3}
       propertyPath: m_Name
       value: Settings Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 6075418476089271010, guid: 1d70d2bbffd92ba4183e0649a95c135e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6589633895099576669, guid: 1d70d2bbffd92ba4183e0649a95c135e, type: 3}
       propertyPath: m_AnchorMax.x

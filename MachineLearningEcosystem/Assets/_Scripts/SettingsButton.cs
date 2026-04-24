@@ -7,7 +7,7 @@ public class SettingsButton : MonoBehaviour
 
     private void Start()
     {
-        settingsPanel.SetActive(false);
+        //settingsPanel.SetActive(false);
     }
     public void OpenSettingsPanel()
     {
