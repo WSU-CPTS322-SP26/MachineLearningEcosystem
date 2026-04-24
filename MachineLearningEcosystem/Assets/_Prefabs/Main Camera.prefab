@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6840124160359795674}
   - component: {fileID: 6844850408509863161}
   - component: {fileID: 7292566233501089789}
+  - component: {fileID: 621855758607360314}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -156,6 +157,21 @@ MonoBehaviour:
   MinZoom: 15
   MaxZoom: 200
   zoomSpeedFactor: 0.02
+--- !u!114 &621855758607360314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3620825161517219756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7a18f0b209903f429aca82f820b515a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsInitializer
+  crtShader: {fileID: -876546973899608171, guid: f8bb884fb9f9e164aaa3cf542d487063, type: 3}
+  globalVolume: {fileID: 4458981038328472371}
+  targetMixer: {fileID: 24100000, guid: 964720a960b94fc47ad05884a2743973, type: 2}
 --- !u!1 &6693361860425871241
 GameObject:
   m_ObjectHideFlags: 0

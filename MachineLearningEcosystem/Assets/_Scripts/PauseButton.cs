@@ -8,7 +8,7 @@ public class PauseButton : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
     private float currentTimeScale;
     private static bool isPaused = false;
-
+    
     void Start()
     {
         isPaused = false;

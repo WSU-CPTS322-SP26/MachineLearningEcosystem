@@ -14,18 +14,9 @@ public class ResetSettingsToDefault : MonoBehaviour
     [SerializeField] private Slider scanlineCount;
     [SerializeField] private Slider bloom;
     [SerializeField] private Button button;
+
     private void Awake()
     {
-        if (PlayerPrefs.GetInt("New") == 0)
-        {
-            PlayerPrefs.SetFloat("mainVolume", 1f);
-            PlayerPrefs.SetFloat("sfxVolume", 1f);
-            PlayerPrefs.SetFloat("musicVolume", 1f);
-            PlayerPrefs.SetFloat("bloomIntensity", 0.5f);
-            PlayerPrefs.SetFloat("scanlineSpeed", 0.08f);
-            PlayerPrefs.SetFloat("scanlineCount", 175f);
-            PlayerPrefs.SetInt("New", 1);
-        }
         button.onClick.AddListener(ResetSettings);
     }
 
