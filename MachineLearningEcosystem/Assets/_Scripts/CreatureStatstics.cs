@@ -38,8 +38,10 @@ public class CreatureStatistics : MonoBehaviour
             { "Damage", 25 },
             { "Range", 3 },
             { "ViewDistance", 20 },
+            { "currViewDistance", 20},
             { "ViewAngle", 70 },
             { "Speed", 8 },
+            { "currSpeed", 8},
             { "Thirst", 100 },
             { "currThirst", 100 },
             { "Hunger", 150 },
@@ -120,6 +122,11 @@ public class CreatureStatistics : MonoBehaviour
         get { return stats["ViewDistance"]; }
         set { stats["ViewDistance"] = value; }
     }
+    public float CurrViewDistance
+    {
+        get { return stats["currViewDistance"]; }
+        set { stats["currViewDistance"] = value; }
+    }
     public float ViewAngle
     {
         get { return stats["ViewAngle"]; }
@@ -129,6 +136,11 @@ public class CreatureStatistics : MonoBehaviour
     {
         get { return stats["Speed"]; }
         set { stats["Speed"] = value; }
+    }
+    public float CurrSpeed
+    {
+        get { return stats["currSpeed"]; }
+        set { stats["currSpeed"] = value; }
     }
     public float Thirst
     {
