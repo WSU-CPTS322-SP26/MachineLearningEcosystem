@@ -10,7 +10,7 @@ using UnityEngine.Tilemaps;
 
 public class CreatureMovement : MonoBehaviour
 {
-    [SerializeField] private float movespeed = 1f;
+    // [SerializeField] private float movespeed = 1f;
     [SerializeField] private GameObject creature;
     [SerializeField] private FieldOfView fov;
 
@@ -94,7 +94,7 @@ public class CreatureMovement : MonoBehaviour
 
     private void Start()
     {
-        fov.SetViewDistance(stats.ViewDistance);
+        fov.SetViewDistance(stats.CurrViewDistance);
         fov.UpdateViewDirection(0, stats.ViewAngle);
         fov.SetCreature(creature);
     }
@@ -147,6 +147,29 @@ public class CreatureMovement : MonoBehaviour
         JustDied = false;
 
         if (IsDead) return;
+
+        // Update current stats based on tile the creature is on
+        TerrainData data = GetCurrentTile().GetTerrainData();
+        if (data.GetTerrainType() == "rocks" || data.GetTerrainType() == "forest")
+        {
+            // vision dist halved
+            stats.CurrViewDistance = stats.ViewDistance / 2f;
+            if (data.GetTerrainType() == "rocks")
+            {
+                // speed halved
+                stats.CurrSpeed = stats.Speed / 2f;
+            }
+            else
+            {
+                stats.CurrSpeed = stats.Speed;
+            }
+        }
+        else
+        {
+            stats.CurrViewDistance = stats.ViewDistance;
+        }
+        fov.SetViewDistance(stats.CurrViewDistance);
+
 
         // --- 1. Get vision ---
         vision = fov.GetDetectedObjects();
@@ -499,7 +522,7 @@ public class CreatureMovement : MonoBehaviour
     {
         amount = Mathf.Clamp01(amount); // The percentage of their speed the creature moves, so they dont get trapped
         direction = direction.normalized;
-        Vector2 moveAttempt = amount * movespeed * Time.deltaTime * direction;
+        Vector2 moveAttempt = amount * stats.CurrSpeed * Time.deltaTime * direction;
 
         if (!CheckBoundries(moveAttempt))
         {
@@ -529,11 +552,10 @@ public class CreatureMovement : MonoBehaviour
         }
     }
 
-    // TODO: Add to this function all important effects that happen when a creature dies (drop meat to eat, alert the ML system, etc.)
     private void DeathScript()
     {
         JustDied = true;
         MeatManager.instance?.PlaceMeat(gameObject.transform.position, Random.Range(3,6));
-        Destroy(gameObject); // TODO: return to pool not destroy
+        gameObject.SetActive(false);
     }
 }
