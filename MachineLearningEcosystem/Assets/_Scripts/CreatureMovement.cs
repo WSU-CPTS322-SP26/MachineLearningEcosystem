@@ -552,11 +552,10 @@ public class CreatureMovement : MonoBehaviour
         }
     }
 
-    // TODO: Add to this function all important effects that happen when a creature dies (drop meat to eat, alert the ML system, etc.)
     private void DeathScript()
     {
         JustDied = true;
         MeatManager.instance?.PlaceMeat(gameObject.transform.position, Random.Range(3,6));
-        Destroy(gameObject); // TODO: return to pool not destroy
+        gameObject.SetActive(false);
     }
 }
