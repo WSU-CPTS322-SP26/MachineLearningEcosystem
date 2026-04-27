@@ -79,6 +79,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
         {
             respawnTimer = 0f;
             RespawnAll();
+            timer.NewGeneration();
         }
     }
 
@@ -188,7 +189,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
             return;
         }
         // gameObject.SetActive(false);
-
+        simStarted = true;
         SpawnCreatures(carnivorCount, herbivoreCount);
         timer.StartTimer();
     }
