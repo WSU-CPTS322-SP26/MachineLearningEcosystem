@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using System;
+using System.Threading;
 
 
 
@@ -14,6 +15,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
     public static CreatureRepopluationHandler instance;
 
     [SerializeField] private Button playButton;
+    [SerializeField] private GenerationTimer timer;
 
     [SerializeField] private GameObject carnivorCreature; // Prefabs
     [SerializeField] private GameObject herbivoreCreature;
@@ -188,6 +190,7 @@ public class CreatureRepopluationHandler : MonoBehaviour
         // gameObject.SetActive(false);
 
         SpawnCreatures(carnivorCount, herbivoreCount);
+        timer.StartTimer();
     }
 
     private void OnDestroy()

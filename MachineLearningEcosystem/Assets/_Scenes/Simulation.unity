@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &4860862 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3301890837557934058, guid: dac5908ea3b22f34dbbf2a45facb6ac4, type: 3}
+  m_PrefabInstance: {fileID: 1585899255}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec239c4b13227244593fb28ab848ab87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &358692177
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,6 +737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureRepopluationHandler
   playButton: {fileID: 999945129}
+  timer: {fileID: 4860862}
   carnivorCreature: {fileID: 105475358296628045, guid: 21705dc5fecf39640b820c4033ff9aa4, type: 3}
   herbivoreCreature: {fileID: 105475358296628045, guid: 21705dc5fecf39640b820c4033ff9aa4, type: 3}
   carnivorCount: 10
