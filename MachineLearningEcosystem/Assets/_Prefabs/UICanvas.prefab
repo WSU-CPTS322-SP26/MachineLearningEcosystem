@@ -2901,9 +2901,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea8b053c7199234591213015e8bb769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  nextScene: {fileID: 102900000, guid: b337f9a4de4b12e419967d4329257486, type: 3}
-  menuScene: {fileID: 102900000, guid: b337f9a4de4b12e419967d4329257486, type: 3}
-  creditsScene: {fileID: 0}
+  nextScene: 
+  menuScene: main
+  creditsScene: 
 --- !u!1 &6249415376681103952
 GameObject:
   m_ObjectHideFlags: 0

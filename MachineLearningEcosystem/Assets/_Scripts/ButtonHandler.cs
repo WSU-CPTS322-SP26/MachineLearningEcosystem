@@ -4,24 +4,24 @@ using UnityEngine.SceneManagement;
 
 public class ButtonHandler : MonoBehaviour
 {
-    [SerializeField] private SceneAsset nextScene;
-    [SerializeField] private SceneAsset menuScene;
-    [SerializeField] private SceneAsset creditsScene;
+    // [SerializeField] private string nextScene;
+    // [SerializeField] private string menuScene;
+    // [SerializeField] private string creditsScene;
 
     public void PlayNextScene()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(nextScene.name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
     public void GoToCredits()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(creditsScene.name);
+        SceneManager.LoadScene(2);
     }
     public void GoToMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(menuScene.name);
+        SceneManager.LoadScene(0);
     }
     public void QuitGame()
     {
