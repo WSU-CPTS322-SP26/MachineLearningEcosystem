@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
-using UnityEditor.TerrainTools;
-using UnityEditor.U2D.Aseprite;
+// using UnityEditor.TerrainTools;
+// using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.UI;
