@@ -16,13 +16,16 @@ serves in your app.
 * Open the project and then open the "Main Menu" scene
 * Run the project with the play button at the top of the unity editor
 ## Functionality
-Allows the user to enter the procedural generation phase of the simulation, where you can input the size of the map's x and y dimensions (clamped between 40 and 200 units), and generate a map based on the Wave Function Collapse implementation the program uses. You can adjust the animation speed, make the map display everything at once (non-animated), and regenerate the map at the same or a new size. When you have a map you like, select begin to start the program with that map. After selecting begin, creatures and plants will randomly spawn on viable spawning tiles, currently creatures have only random movement and will eat or drink only if they randomly move to water or food. You can pause at any time with the escape key, and you can move the camera with W,A,S, and D to control panning and the mouse scroll wheel for zooming in and out.
+Allows the user to enter the procedural generation phase of the simulation, where you can input the size of the map's x and y dimensions (clamped between 40 and 200 units), and generate a map based on the Wave Function Collapse implementation the program uses. You can adjust the animation speed, make the map display everything at once (non-animated), and regenerate the map at the same or a new size. When you have a map you like, select begin to start the program with that map. After selecting begin, creatures and plants will randomly spawn on viable spawning tiles. Creatures use machine learning rewards to move, eat, and drink. Over time, the creatures will get better at surviving, and new generations will be created after certain periods. You can pause at any time with the escape key, and you can move the camera with W, A, S, and D to control panning, and the mouse scroll wheel to zoom in and out.
 ## Known Problems
 - Performance issues can occur when running terrain generation at max speed or with maximum size (200 x 200)
+- There can be big lag spikes with saving and loading neural networks
+- After about two or three learning updates, the algorithms break due to having infinite reward, causing them to stop moving entirely
 ## Additional Documentation
 Sprint reports:
 * "Sprint1.md", [Sprint 1 Report Video](https://www.youtube.com/watch?v=MkfPcHMPpAM)
 * "Sprint2.md", [Sprint 2 Report Video](https://www.youtube.com/watch?v=GG4l9nynSWY)
+* "Sprint3.md", [Sprint 3 Report Video]
 
 User links:
 * [Used as a basis for WFC](https://www.uproomgames.com/dev-log/wave-function-collapse)
