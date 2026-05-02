@@ -25,7 +25,7 @@ Allows the user to enter the procedural generation phase of the simulation, wher
 Sprint reports:
 * "Sprint1.md", [Sprint 1 Report Video](https://www.youtube.com/watch?v=MkfPcHMPpAM)
 * "Sprint2.md", [Sprint 2 Report Video](https://www.youtube.com/watch?v=GG4l9nynSWY)
-* "Sprint3.md", [Sprint 3 Report Video]
+* "Sprint3.md", [Sprint 3 Report Video](https://youtu.be/27BjKF2Jl_A)
 
 User links:
 * [Used as a basis for WFC](https://www.uproomgames.com/dev-log/wave-function-collapse)
